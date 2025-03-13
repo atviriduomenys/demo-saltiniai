@@ -1,0 +1,101 @@
+[tool.pytest.ini_options]
+python_files = "tests.py test_*.py tests_*.py"
+addopts = "--numprocesses=auto -v -s"
+DJANGO_SETTINGS_MODULE = "conf.settings_test"
+filterwarnings = [
+	# To ignore a warning: copy begging of the warning message and
+	# escape special characters (like brackets) with "\\", e.g.:
+	#
+	#	"ignore:django.utils.translation.ugettext_lazy\\(\\) is deprecated in favor of",
+	#
+	"ignore:::^(?!apps)",
+	"error:::^apps",
+]
+norecursedirs = "requirements .github"
+
+[tool.coverage.report]
+fail_under = 87.0
+
+[tool.coverage.run]
+include = [
+	"apps/*",
+	"conf/settings.py",
+]
+omit = [
+	"*/migrations/*",
+	"*/tests.py",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+exclude = [
+	".git",
+	".idea",
+	".pytest_cache",
+	"docker",
+	"docs",
+	"*.egg-info",
+	"migrations",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+	# flake8-django
+	"DJ",
+	# pycodestyle
+	"E",
+	# Pyflakes
+	"F",
+	# pep8-naming
+	"N",
+	# flake8-bugbear
+	"B",
+	# isort
+	"I",
+	# flake8-blind-except
+	"BLE",
+	# flake8-builtins
+	"A",
+	# flake8-comprehensions
+	"C4",
+	#flake8-logging-format
+	"G",
+	# flake8-print
+	"T20",
+	# eradicate
+	"ERA",
+	# flake8-pytest-style
+	"PT",
+	# flake8-return
+	"RET",
+	# flake8-simplify
+	"SIM",
+	# pyupgrade
+	"UP",
+	# invalid-pyproject-toml
+	"RUF200",
+	# Missing newline eof
+	"W292",
+	# mccabe code complexity
+	"C90"
+]
+
+ignore = [
+	# Unnecessary return assignment (sometimes it makes code clearer)
+	"RET504",
+	# pytest-fixture-param-without-value
+	"PT019"
+]
+
+per-file-ignores = { "conf/*" = ["F405", "F403", "N999"] }
+
+[tool.ruff.lint.mccabe]
+# Flag errors (`C901`) whenever the complexity level exceeds 7
+max-complexity = 7
+
+
