@@ -20,6 +20,7 @@ urlpatterns += [
     path("schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # Local apps
     path("health/", include("health_check.urls")),
+    path("api/v1/", include("apps.address_registry.urls")),
 ]
 
 admin.autodiscover()

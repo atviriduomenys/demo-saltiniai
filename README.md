@@ -2,12 +2,12 @@
 
 This repository is small Django service to create and expose test data that can be used for testing `spinta`. 
 
-[TBD] Test data can be created via Django admin page.
+Test data can be created via Django admin page.
 
-[TBD] Endpoints are written using `spyne` package that can return data in different formats including:
-  - [TBD] JSON
-  - [TBD] XML
-  - [TBD] SOAP
+Endpoints are written using `spyne` package that can return data in different formats including:
+  - JSON
+  - XML
+  - SOAP
   - [TBD] WSDL
 
 ## OpenAPI documentation
