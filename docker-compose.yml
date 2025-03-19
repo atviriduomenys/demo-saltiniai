@@ -1,0 +1,35 @@
+volumes:
+    data:
+services:
+    postgres:
+        image: postgres:14-alpine
+        environment:
+            POSTGRES_USER: django
+            POSTGRES_PASSWORD: django
+        volumes:
+            - "data:/var/lib/postgresql/data"
+        ports:
+            - "9432:5432"
+    django:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ".:/app"
+        command: ./entrypoint.sh
+        ports:
+            - "8000:8000"
+        environment:
+            DJANGO_SUPERUSER_EMAIL: test@test.com
+            DJANGO_SUPERUSER_PASSWORD: test
+            DJANGO_SETTINGS_MODULE: conf.settings_test
+            DB_NAME: django
+            DB_USER: django
+            DB_PASSWORD: django
+            DB_HOST: postgres
+            DB_PORT: 5432
+            RUN_MODE: "DEVELOPMENT"
+        env_file:
+          - .env
+        depends_on:
+            - postgres
