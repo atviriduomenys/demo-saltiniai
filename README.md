@@ -9,6 +9,8 @@ Endpoints are written using `spyne` package that can return data in different fo
   - XML
   - SOAP
   - [TBD] WSDL
+  - [TBD] CSV
+  - [TBD] XLSX
 
 ## OpenAPI documentation
 

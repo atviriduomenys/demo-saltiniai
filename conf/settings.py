@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "solo",
     "ckeditor",
     "ckeditor_uploader",
-    "drf_spectacular",
+    "drf_yasg",
     "health_check",
     "health_check.db",
     "health_check.contrib.migrations",
