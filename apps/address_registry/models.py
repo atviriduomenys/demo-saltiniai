@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
+from model_bakery.baker import make_recipe
 
 VIETOVES_TIPAI = ["MIESTAS", "MIESTELIS", "KAIMAS", "VIENSEDIS"]
 LINKSNIAI = ["VARDININKAS", "KILMININKAS"]
@@ -29,7 +30,13 @@ def get_dokumento_pozymis() -> dict[str, str]:
     return {i: i for i in DOKUMENTO_POZYMIS}
 
 
-class Salis(models.Model):
+class GenerateTestDataMixin:
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs):
+        raise NotImplementedError("generate_test_data method is not implemented")
+
+
+class Salis(GenerateTestDataMixin, models.Model):
     kodas = models.CharField(max_length=20)
     pavadinimas = models.CharField(max_length=255)
     pavadinimas_lt = models.CharField(max_length=255)
@@ -50,8 +57,12 @@ class Salis(models.Model):
             "pavadinimas_en": self.pavadinimas_en,
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Salis"]:
+        return make_recipe("address_registry.salis", _fill_optional=True, _quantity=quantity)
 
-class Gyvenviete(models.Model):
+
+class Gyvenviete(GenerateTestDataMixin, models.Model):
     isregistruota = models.DateField()
     registruota = models.DateField()
     pavadinimas = models.CharField(max_length=255)
@@ -89,6 +100,28 @@ class Gyvenviete(models.Model):
             "salies_kodas": self.salies_kodas,
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Gyvenviete"]:
+        gyvenvietes = []
+        for _ in range(quantity):
+            salis = kwargs.get("salis") or Salis.generate_test_data()[0]
+            gyvenviete = make_recipe("address_registry.gyvenviete", salis=salis, _fill_optional=True)
+            make_recipe(
+                "address_registry.pavadinimas",
+                linksnis="VARDININKAS",
+                gyvenviete=gyvenviete,
+                _fill_optional=True,
+            )
+            make_recipe(
+                "address_registry.pavadinimas",
+                linksnis="KILMININKAS",
+                gyvenviete=gyvenviete,
+                _fill_optional=True,
+            )
+            gyvenvietes.append(gyvenviete)
+
+        return gyvenvietes
+
 
 class Pavadinimas(models.Model):
     pavadinimas = models.CharField(max_length=255)
@@ -122,7 +155,7 @@ class Pavadinimas(models.Model):
         }
 
 
-class Dokumentas(models.Model):
+class Dokumentas(GenerateTestDataMixin, models.Model):
     numeris = models.CharField(max_length=255)
     priimta = models.DateField()
     rusis = models.CharField(choices=get_dokumento_rusis, max_length=255)  # type: ignore
@@ -148,6 +181,14 @@ class Dokumentas(models.Model):
             "sukurimo_laikas": self.sukurimo_laikas,
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Dokumentas"]:
+        return make_recipe(
+            "address_registry.dokumento_autorius",
+            _fill_optional=True,
+            _quantity=quantity,
+        )
+
 
 class DokumentoAutorius(models.Model):
     dokumentas = models.OneToOneField(Dokumentas, null=True, on_delete=models.SET_NULL)
@@ -170,7 +211,7 @@ class DokumentoAutorius(models.Model):
         }
 
 
-class AdministracinisVienetas(models.Model):
+class AdministracinisVienetas(GenerateTestDataMixin, models.Model):
     uuid = models.UUIDField(unique=True, editable=False, default=uuid4)
     tipas = models.CharField(choices=get_administracinio_vieneto_tipai, max_length=255)  # type: ignore
     kodas = models.IntegerField(unique=True, null=True)
@@ -223,6 +264,22 @@ class Apskritis(AdministracinisVienetas):
             **super().to_dict(),
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Apskritis"]:
+        apskritys = []
+        for _ in range(quantity):
+            gyvenviete = Gyvenviete.generate_test_data()[0]
+            apskritys.append(
+                make_recipe(
+                    "address_registry.apskritis",
+                    centras=gyvenviete,
+                    salis=gyvenviete.salis,
+                    _fill_optional=True,
+                )
+            )
+
+        return apskritys
+
 
 class Savivaldybe(AdministracinisVienetas):
     apskritis = models.ForeignKey(Apskritis, on_delete=models.CASCADE, null=True)
@@ -240,6 +297,25 @@ class Savivaldybe(AdministracinisVienetas):
             **super().to_dict(),
             "apskritis_id": self.apskritis_id,
         }
+
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Savivaldybe"]:
+        savivaldybes = []
+        for _ in range(quantity):
+            apskritis = Apskritis.generate_test_data()[0]
+            gyvenviete = Gyvenviete.generate_test_data(salis=apskritis.salis)[0]
+
+            savivaldybes.append(
+                make_recipe(
+                    "address_registry.savivaldybe",
+                    apskritis=apskritis,
+                    centras=gyvenviete,
+                    salis=gyvenviete.salis,
+                    _fill_optional=True,
+                )
+            )
+
+        return savivaldybes
 
 
 class Seniunija(AdministracinisVienetas):
@@ -259,6 +335,25 @@ class Seniunija(AdministracinisVienetas):
             "savivaldybe_id": self.savivaldybe_id,
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Seniunija"]:
+        seniunijos = []
+        for _ in range(quantity):
+            savivaldybe = Savivaldybe.generate_test_data()[0]
+            gyvenviete = Gyvenviete.generate_test_data(salis=savivaldybe.salis)[0]
+
+            seniunijos.append(
+                make_recipe(
+                    "address_registry.seniunija",
+                    savivaldybe=savivaldybe,
+                    centras=gyvenviete,
+                    salis=gyvenviete.salis,
+                    _fill_optional=True,
+                )
+            )
+
+        return seniunijos
+
 
 class Organizacija(models.Model):
     class Meta:
@@ -274,7 +369,7 @@ class Organizacija(models.Model):
         }
 
 
-class JuridinisAsmuo(Organizacija):
+class JuridinisAsmuo(GenerateTestDataMixin, Organizacija):
     pavadinimas = models.CharField(max_length=255)
 
     class Meta:
@@ -290,8 +385,12 @@ class JuridinisAsmuo(Organizacija):
             "pavadinimas": self.pavadinimas,
         }
 
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["JuridinisAsmuo"]:
+        return make_recipe("address_registry.juridinis_asmuo", _fill_optional=True, _quantity=quantity)
 
-class NejuridinisAsmuo(Organizacija):
+
+class NejuridinisAsmuo(GenerateTestDataMixin, Organizacija):
     pavadinimas = models.CharField(max_length=255)
 
     class Meta:
@@ -306,3 +405,7 @@ class NejuridinisAsmuo(Organizacija):
             "id": self.id,
             "pavadinimas": self.pavadinimas,
         }
+
+    @classmethod
+    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["NejuridinisAsmuo"]:
+        return make_recipe("address_registry.nejuridinis_asmuo", _fill_optional=True, _quantity=quantity)
