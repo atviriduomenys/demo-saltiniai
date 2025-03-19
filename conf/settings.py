@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # local
     # https://docs.djangoproject.com/en/3.1/ref/applications/#django.apps.AppConfig.ready
     "apps.home.apps.HomeConfig",
+    "apps.address_registry.apps.AddressRegistryConfig",
     "corsheaders",
     "django_cleanup.apps.CleanupConfig",
 ]

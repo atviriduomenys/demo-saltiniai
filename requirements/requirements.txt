@@ -26,7 +26,7 @@ click-plugins==1.1.1
     # via celery
 click-repl==0.3.0
     # via celery
-coverage==7.6.12
+coverage==7.7.0
     # via pytest-cov
 dj-database-url==2.3.0
     # via -r requirements/requirements.in
@@ -86,6 +86,8 @@ jsonschema-specifications==2024.10.1
     # via jsonschema
 kombu==5.5.0
     # via celery
+lxml==5.3.1
+    # via -r requirements/requirements.in
 model-bakery==1.20.4
     # via -r requirements/requirements.in
 packaging==24.2
@@ -116,6 +118,8 @@ pytest-xdist==3.6.1
     # via -r requirements/requirements.in
 python-dateutil==2.9.0.post0
     # via celery
+pytz==2025.1
+    # via spyne
 pyyaml==6.0.2
     # via drf-spectacular
 referencing==0.36.2
@@ -128,6 +132,8 @@ rpds-py==0.23.1
     #   referencing
 six==1.17.0
     # via python-dateutil
+spyne==2.14.0
+    # via -r requirements/requirements.in
 sqlparse==0.5.3
     # via django
 tomli==2.2.1

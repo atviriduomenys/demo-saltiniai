@@ -55,7 +55,7 @@ click-repl==0.3.0
     # via
     #   -r requirements/requirements.txt
     #   celery
-coverage==7.6.12
+coverage==7.7.0
     # via
     #   -r requirements/requirements.txt
     #   pytest-cov
@@ -162,6 +162,8 @@ kombu==5.5.0
     # via
     #   -r requirements/requirements.txt
     #   celery
+lxml==5.3.1
+    # via -r requirements/requirements.txt
 markdown-it-py==3.0.0
     # via rich
 markupsafe==3.0.2
@@ -244,6 +246,10 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/requirements.txt
     #   celery
+pytz==2025.1
+    # via
+    #   -r requirements/requirements.txt
+    #   spyne
 pyyaml==6.0.2
     # via
     #   -r requirements/requirements.txt
@@ -270,13 +276,13 @@ ruamel-yaml==0.18.10
     #   safety-schemas
 ruamel-yaml-clib==0.2.12
     # via ruamel-yaml
-ruff==0.10.0
+ruff==0.11.0
     # via -r requirements/requirements.dev.in
 safety==3.3.1
     # via -r requirements/requirements.dev.in
 safety-schemas==0.0.11
     # via safety
-setuptools==76.0.0
+setuptools==76.1.0
     # via safety
 shellingham==1.5.4
     # via typer
@@ -284,6 +290,8 @@ six==1.17.0
     # via
     #   -r requirements/requirements.txt
     #   python-dateutil
+spyne==2.14.0
+    # via -r requirements/requirements.txt
 sqlparse==0.5.3
     # via
     #   -r requirements/requirements.txt

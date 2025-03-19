@@ -4,8 +4,8 @@ from django.contrib.admin import apps
 
 
 class AdminSite(Site):
-    site_header = "Django admin"
-    site_title = "Django site"
+    site_header = "Demo šaltiniai"
+    site_title = "Demo šaltiniai"
 
     def each_context(self, request) -> dict:
         context = super().each_context(request)

@@ -20,3 +20,5 @@ pytest-django
 pytest-xdist
 django-cleanup
 django-extensions
+spyne
+lxml
