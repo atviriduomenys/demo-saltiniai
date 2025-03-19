@@ -25,6 +25,10 @@ class TestSalis:
             "pavadinimas_en": salis.pavadinimas_en,
         }
 
+    def test_generate_test_data(self) -> None:
+        Salis.generate_test_data(quantity=2)
+        assert Salis.objects.count() == 2
+
 
 class TestGyvenviete:
     def test_to_dict(self) -> None:
@@ -40,6 +44,11 @@ class TestGyvenviete:
             "salis_id": gyvenviete.salis_id,
             "salies_kodas": gyvenviete.salies_kodas,
         }
+
+    def test_generate_test_data(self) -> None:
+        Gyvenviete.generate_test_data(quantity=2)
+        assert Gyvenviete.objects.count() == 2
+        assert Pavadinimas.objects.count() == 4
 
 
 class TestPavadinimas:
@@ -66,6 +75,11 @@ class TestDokumentas:
             "sukurimo_data": dokumentas.sukurimo_data,
             "sukurimo_laikas": dokumentas.sukurimo_laikas,
         }
+
+    def test_generate_test_data(self) -> None:
+        Dokumentas.generate_test_data(quantity=2)
+        assert Dokumentas.objects.count() == 2
+        assert DokumentoAutorius.objects.count() == 2
 
 
 class TestDokumentoAutorius:
@@ -105,6 +119,11 @@ class TestApskritis:
             "salies_kodas": apskritis.salies_kodas,
         }
 
+    def test_generate_test_dataa(self) -> None:
+        Apskritis.generate_test_data(quantity=2)
+        assert Apskritis.objects.count() == 2
+        assert Salis.objects.count() == 2
+
 
 class TestSavivaldybe:
     def test_to_dict(self) -> None:
@@ -123,6 +142,11 @@ class TestSavivaldybe:
             "salies_kodas": savivaldybe.salies_kodas,
             "apskritis_id": savivaldybe.apskritis_id,
         }
+
+    def test_generate_test_data(self) -> None:
+        Savivaldybe.generate_test_data(quantity=2)
+        assert Savivaldybe.objects.count() == 2
+        assert Salis.objects.count() == 2
 
 
 class TestSeniunija:
@@ -143,6 +167,11 @@ class TestSeniunija:
             "savivaldybe_id": seniunija.savivaldybe_id,
         }
 
+    def test_generate_test_data(self) -> None:
+        Seniunija.generate_test_data(quantity=2)
+        assert Seniunija.objects.count() == 2
+        assert Salis.objects.count() == 2
+
 
 class TestOrganizacija:
     def test_to_dict(self) -> None:
@@ -162,6 +191,10 @@ class TestJuridinisAsmuo:
             "pavadinimas": juridinis_asmuo.pavadinimas,
         }
 
+    def test_generate_test_data(self) -> None:
+        JuridinisAsmuo.generate_test_data(quantity=2)
+        assert JuridinisAsmuo.objects.count() == 2
+
 
 class TestNejuridinisAsmuo:
     def test_to_dict(self) -> None:
@@ -170,3 +203,7 @@ class TestNejuridinisAsmuo:
             "id": nejuridinis_asmuo.id,
             "pavadinimas": nejuridinis_asmuo.pavadinimas,
         }
+
+    def test_generate_test_data(self) -> None:
+        NejuridinisAsmuo.generate_test_data(quantity=2)
+        assert NejuridinisAsmuo.objects.count() == 2
