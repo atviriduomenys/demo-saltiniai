@@ -7,7 +7,7 @@ from apps.address_registry.models import (
     DokumentoAutorius,
     Gyvenviete,
     JuridinisAsmuo,
-    NeJuridinisAsmuo,
+    NejuridinisAsmuo,
     Organizacija,
     Pavadinimas,
     Salis,
@@ -70,9 +70,9 @@ class JuridinisAsmuoModel(DjangoComplexModel):
         django_model = JuridinisAsmuo
 
 
-class NeJuridinisAsmuoModel(DjangoComplexModel):
+class NejuridinisAsmuoModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = NeJuridinisAsmuo
+        django_model = NejuridinisAsmuo
 
 
 class AddressRegistryResponseModel(ComplexModel):
@@ -86,4 +86,4 @@ class AddressRegistryResponseModel(ComplexModel):
     seniunijos = Array(SeniunijaModel)
     organizacijos = Array(OrganizacijaModel)
     juridiniai_asmenys = Array(JuridinisAsmuoModel)
-    ne_juridiniai_asmenys = Array(NeJuridinisAsmuoModel)
+    nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)

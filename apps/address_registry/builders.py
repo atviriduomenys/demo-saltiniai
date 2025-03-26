@@ -7,7 +7,7 @@ from apps.address_registry.models import (
     DokumentoAutorius,
     Gyvenviete,
     JuridinisAsmuo,
-    NeJuridinisAsmuo,
+    NejuridinisAsmuo,
     Organizacija,
     Pavadinimas,
     Salis,
@@ -28,7 +28,7 @@ def build_address_registry() -> dict:
         "seniunijos": Seniunija.objects.all(),
         "organizacijos": Organizacija.objects.all(),
         "juridiniai_asmenys": JuridinisAsmuo.objects.all(),
-        "ne_juridiniai_asmenys": NeJuridinisAsmuo.objects.all(),
+        "nejuridiniai_asmenys": NejuridinisAsmuo.objects.all(),
     }
 
 
@@ -101,7 +101,7 @@ def build_address_registry_nested() -> dict:
         "savivaldybes": savivaldybes_dict,
         "seniunijos": seniunijos_dict,
         "juridiniai_asmenys": JuridinisAsmuo.objects.all(),
-        "ne_juridiniai_asmenys": NeJuridinisAsmuo.objects.all(),
+        "nejuridiniai_asmenys": NejuridinisAsmuo.objects.all(),
     }
 
 

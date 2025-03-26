@@ -235,7 +235,7 @@ class TestAddressRegistry:
                     "pavadinimas": "TestJuridinis",
                 }
             ],
-            "ne_juridiniai_asmenys": [
+            "nejuridiniai_asmenys": [
                 {
                     "id": nejuridinis_asmuo.id,
                     "organizacija_ptr_id": nejuridinis_asmuo.id,
@@ -377,7 +377,7 @@ class TestAddressRegistryNested:
             "juridiniai_asmenys": [
                 {"id": juridinis_asmuo.id, "organizacija_ptr_id": juridinis_asmuo.id, "pavadinimas": "TestJuridinis"},
             ],
-            "ne_juridiniai_asmenys": [
+            "nejuridiniai_asmenys": [
                 {
                     "id": nejuridinis_asmuo.id,
                     "organizacija_ptr_id": nejuridinis_asmuo.id,

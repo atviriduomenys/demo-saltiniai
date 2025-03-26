@@ -161,7 +161,7 @@ class TestJuridinisAsmuo:
         }
 
 
-class TestNeJuridinisAsmuo:
+class TestNejuridinisAsmuo:
     def test_to_dict(self) -> None:
         nejuridinis_asmuo = create_nejuridinis_asmuo()
         assert nejuridinis_asmuo.to_dict() == {

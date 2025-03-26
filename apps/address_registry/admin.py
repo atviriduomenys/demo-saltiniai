@@ -6,7 +6,7 @@ from apps.address_registry.models import (
     DokumentoAutorius,
     Gyvenviete,
     JuridinisAsmuo,
-    NeJuridinisAsmuo,
+    NejuridinisAsmuo,
     Organizacija,
     Pavadinimas,
     Salis,
@@ -24,4 +24,4 @@ admin.site.register(Savivaldybe)
 admin.site.register(Seniunija)
 admin.site.register(Organizacija)
 admin.site.register(JuridinisAsmuo)
-admin.site.register(NeJuridinisAsmuo)
+admin.site.register(NejuridinisAsmuo)

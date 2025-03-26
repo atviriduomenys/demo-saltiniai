@@ -7,7 +7,7 @@ from apps.address_registry.models import (
     DokumentoAutorius,
     Gyvenviete,
     JuridinisAsmuo,
-    NeJuridinisAsmuo,
+    NejuridinisAsmuo,
     Pavadinimas,
     Salis,
     Savivaldybe,
@@ -177,7 +177,7 @@ def create_juridinis_asmuo() -> JuridinisAsmuo:
     )
 
 
-def create_nejuridinis_asmuo() -> NeJuridinisAsmuo:
-    return NeJuridinisAsmuo.objects.create(
+def create_nejuridinis_asmuo() -> NejuridinisAsmuo:
+    return NejuridinisAsmuo.objects.create(
         pavadinimas="TestNeJuridinis",
     )

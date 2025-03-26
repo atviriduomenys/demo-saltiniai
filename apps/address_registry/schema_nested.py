@@ -7,7 +7,7 @@ from apps.address_registry.schema import (
     DokumentoAutoriusModel,
     GyvenvieteModel,
     JuridinisAsmuoModel,
-    NeJuridinisAsmuoModel,
+    NejuridinisAsmuoModel,
     PavadinimasModel,
     SalisModel,
     SavivaldybeModel,
@@ -64,7 +64,7 @@ class AddressRegistryNestedResponseModel(ComplexModel):
     savivaldybes = Array(SavivaldybeNestedResponseModel)
     seniunijos = Array(SeniunijosNestedResponseModel)
     juridiniai_asmenys = Array(JuridinisAsmuoModel)
-    ne_juridiniai_asmenys = Array(NeJuridinisAsmuoModel)
+    nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)
 
 
 class GyvenvietePavadinimasNestedModel(GyvenvieteModel):

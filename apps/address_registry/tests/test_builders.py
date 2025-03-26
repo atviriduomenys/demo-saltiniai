@@ -186,7 +186,7 @@ class TestBuildAddressRegistryNested:
         assert result["savivaldybes"] == []
         assert result["seniunijos"] == []
         assert list(result["juridiniai_asmenys"]) == []
-        assert list(result["ne_juridiniai_asmenys"]) == []
+        assert list(result["nejuridiniai_asmenys"]) == []
 
     def test_gyvenvietes(self) -> None:
         gyvenviete1 = create_gyvenviete()
@@ -298,4 +298,4 @@ class TestBuildAddressRegistryNested:
         result = build_address_registry_nested()
 
         assert set(result["juridiniai_asmenys"]) == {juridinis_asmuo1, juridinis_asmuo2}
-        assert set(result["ne_juridiniai_asmenys"]) == {nejuridinis_asmuo1, nejuridinis_asmuo2}
+        assert set(result["nejuridiniai_asmenys"]) == {nejuridinis_asmuo1, nejuridinis_asmuo2}

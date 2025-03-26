@@ -17,7 +17,7 @@ def get_linksniai() -> dict[str, str]:
     return {i: i for i in LINKSNIAI}
 
 
-def get_admisitracinio_vieneto_tipai() -> dict[str, str]:
+def get_administracinio_vieneto_tipai() -> dict[str, str]:
     return {i: i for i in ADMINISTRACINIO_VIENETO_TIPAI}
 
 
@@ -172,7 +172,7 @@ class DokumentoAutorius(models.Model):
 
 class AdministracinisVienetas(models.Model):
     uuid = models.UUIDField(unique=True, editable=False, default=uuid4)
-    tipas = models.CharField(choices=get_admisitracinio_vieneto_tipai, max_length=255)  # type: ignore
+    tipas = models.CharField(choices=get_administracinio_vieneto_tipai, max_length=255)  # type: ignore
     kodas = models.IntegerField(unique=True, null=True)
     iregistruota = models.DateTimeField(null=True)
     isregistruota = models.DateTimeField(null=True)
@@ -218,10 +218,9 @@ class Apskritis(AdministracinisVienetas):
         return self.pavadinimas
 
     def to_dict(self) -> dict:
-        adm_vienetas_dict = super().to_dict()
         return {
             "id": self.id,
-            **adm_vienetas_dict,
+            **super().to_dict(),
         }
 
 
@@ -236,10 +235,9 @@ class Savivaldybe(AdministracinisVienetas):
         return self.pavadinimas
 
     def to_dict(self) -> dict:
-        adm_vienetas_dict = super().to_dict()
         return {
             "id": self.id,
-            **adm_vienetas_dict,
+            **super().to_dict(),
             "apskritis_id": self.apskritis_id,
         }
 
@@ -255,10 +253,9 @@ class Seniunija(AdministracinisVienetas):
         return self.pavadinimas
 
     def to_dict(self) -> dict:
-        adm_vienetas_dict = super().to_dict()
         return {
             "id": self.id,
-            **adm_vienetas_dict,
+            **super().to_dict(),
             "savivaldybe_id": self.savivaldybe_id,
         }
 
@@ -294,7 +291,7 @@ class JuridinisAsmuo(Organizacija):
         }
 
 
-class NeJuridinisAsmuo(Organizacija):
+class NejuridinisAsmuo(Organizacija):
     pavadinimas = models.CharField(max_length=255)
 
     class Meta:
