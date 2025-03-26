@@ -8,7 +8,7 @@ Endpoints are written using `spyne` package that can return data in different fo
   - JSON
   - XML
   - SOAP
-  - [TBD] WSDL
+  - WSDL
   - [TBD] CSV
   - [TBD] XLSX
 
