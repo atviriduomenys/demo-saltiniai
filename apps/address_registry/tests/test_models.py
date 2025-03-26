@@ -1,21 +1,23 @@
-from apps.address_registry.models import DokumentoAutorius, Organizacija
-from apps.address_registry.tests.utils import (
-    create_apskritis,
-    create_dokumentas,
-    create_dokumento_autorius,
-    create_gyvenviete,
-    create_juridinis_asmuo,
-    create_nejuridinis_asmuo,
-    create_pavadinimas,
-    create_salis,
-    create_savivaldybe,
-    create_seniunija,
+from model_bakery.baker import make
+
+from apps.address_registry.models import (
+    Apskritis,
+    Dokumentas,
+    DokumentoAutorius,
+    Gyvenviete,
+    JuridinisAsmuo,
+    NejuridinisAsmuo,
+    Organizacija,
+    Pavadinimas,
+    Salis,
+    Savivaldybe,
+    Seniunija,
 )
 
 
 class TestSalis:
     def test_to_dict(self) -> None:
-        salis = create_salis()
+        salis = make(Salis)
         assert salis.to_dict() == {
             "id": salis.id,
             "kodas": salis.kodas,
@@ -26,7 +28,7 @@ class TestSalis:
 
 class TestGyvenviete:
     def test_to_dict(self) -> None:
-        gyvenviete = create_gyvenviete()
+        gyvenviete = make(Gyvenviete)
         assert gyvenviete.to_dict() == {
             "id": gyvenviete.id,
             "isregistruota": gyvenviete.isregistruota,
@@ -42,7 +44,7 @@ class TestGyvenviete:
 
 class TestPavadinimas:
     def test_to_dict(self) -> None:
-        pavadinimas = create_pavadinimas()
+        pavadinimas = make(Pavadinimas)
         assert pavadinimas.to_dict() == {
             "id": pavadinimas.id,
             "pavadinimas": pavadinimas.pavadinimas,
@@ -54,7 +56,7 @@ class TestPavadinimas:
 
 class TestDokumentas:
     def test_to_dict(self) -> None:
-        dokumentas = create_dokumentas()
+        dokumentas = make(Dokumentas)
         assert dokumentas.to_dict() == {
             "id": dokumentas.id,
             "numeris": dokumentas.numeris,
@@ -68,7 +70,7 @@ class TestDokumentas:
 
 class TestDokumentoAutorius:
     def test_to_dict_without_dokumentas(self) -> None:
-        dokumento_autorius = DokumentoAutorius.objects.create(vardas="Vardenis", pavarde="Pavardenis")
+        dokumento_autorius = make(DokumentoAutorius, dokumentas=None)
         assert dokumento_autorius.to_dict() == {
             "id": dokumento_autorius.id,
             "vardas": dokumento_autorius.vardas,
@@ -77,7 +79,7 @@ class TestDokumentoAutorius:
         }
 
     def test_to_dict_with_dokumentas(self) -> None:
-        dokumento_autorius = create_dokumento_autorius(dokumentas=create_dokumentas())
+        dokumento_autorius = make(DokumentoAutorius)
         assert dokumento_autorius.to_dict() == {
             "id": dokumento_autorius.id,
             "vardas": dokumento_autorius.vardas,
@@ -88,7 +90,7 @@ class TestDokumentoAutorius:
 
 class TestApskritis:
     def test_to_dict(self) -> None:
-        apskritis = create_apskritis()
+        apskritis = make(Apskritis)
         assert apskritis.to_dict() == {
             "id": apskritis.id,
             "uuid": apskritis.uuid,
@@ -106,7 +108,7 @@ class TestApskritis:
 
 class TestSavivaldybe:
     def test_to_dict(self) -> None:
-        savivaldybe = create_savivaldybe()
+        savivaldybe = make(Savivaldybe)
         assert savivaldybe.to_dict() == {
             "id": savivaldybe.id,
             "uuid": savivaldybe.uuid,
@@ -125,7 +127,7 @@ class TestSavivaldybe:
 
 class TestSeniunija:
     def test_to_dict(self) -> None:
-        seniunija = create_seniunija()
+        seniunija = make(Seniunija)
         assert seniunija.to_dict() == {
             "id": seniunija.id,
             "uuid": seniunija.uuid,
@@ -144,7 +146,7 @@ class TestSeniunija:
 
 class TestOrganizacija:
     def test_to_dict(self) -> None:
-        create_juridinis_asmuo()
+        make(JuridinisAsmuo)
         organizacija = Organizacija.objects.first()
 
         assert organizacija.to_dict() == {
@@ -154,7 +156,7 @@ class TestOrganizacija:
 
 class TestJuridinisAsmuo:
     def test_to_dict(self) -> None:
-        juridinis_asmuo = create_juridinis_asmuo()
+        juridinis_asmuo = make(JuridinisAsmuo)
         assert juridinis_asmuo.to_dict() == {
             "id": juridinis_asmuo.id,
             "pavadinimas": juridinis_asmuo.pavadinimas,
@@ -163,7 +165,7 @@ class TestJuridinisAsmuo:
 
 class TestNejuridinisAsmuo:
     def test_to_dict(self) -> None:
-        nejuridinis_asmuo = create_nejuridinis_asmuo()
+        nejuridinis_asmuo = make(NejuridinisAsmuo)
         assert nejuridinis_asmuo.to_dict() == {
             "id": nejuridinis_asmuo.id,
             "pavadinimas": nejuridinis_asmuo.pavadinimas,

@@ -1,6 +1,7 @@
 from typing import Any
 
 import pytest
+from model_bakery.baker import make
 
 from apps.address_registry.builders import (
     _get_administracinis_vienetas_dict,
@@ -8,17 +9,17 @@ from apps.address_registry.builders import (
     _get_one_by_dict,
     build_address_registry_nested,
 )
-from apps.address_registry.tests.utils import (
-    create_apskritis,
-    create_dokumentas,
-    create_dokumento_autorius,
-    create_gyvenviete,
-    create_juridinis_asmuo,
-    create_nejuridinis_asmuo,
-    create_pavadinimas,
-    create_salis,
-    create_savivaldybe,
-    create_seniunija,
+from apps.address_registry.models import (
+    Apskritis,
+    Dokumentas,
+    DokumentoAutorius,
+    Gyvenviete,
+    JuridinisAsmuo,
+    NejuridinisAsmuo,
+    Pavadinimas,
+    Salis,
+    Savivaldybe,
+    Seniunija,
 )
 
 
@@ -51,8 +52,8 @@ class TestGetOneByDict:
 
 class TestGetGyvenvieteDict:
     def test_get_gyvenviete_dict(self) -> None:
-        salis = create_salis()
-        gyvenviete = create_gyvenviete(salis)
+        salis = make(Salis)
+        gyvenviete = make(Gyvenviete, salis=salis)
 
         assert _get_gyvenviete_dict(gyvenviete) == {
             "id": gyvenviete.id,
@@ -74,9 +75,9 @@ class TestGetGyvenvieteDict:
         }
 
     def test_gyvenviete_pavadinimai(self) -> None:
-        gyvenviete = create_gyvenviete()
-        pavadinimas1 = create_pavadinimas(linksnis="VARDININKAS", gyvenviete=gyvenviete)
-        pavadinimas2 = create_pavadinimas(linksnis="KILMININKAS", gyvenviete=gyvenviete)
+        gyvenviete = make(Gyvenviete)
+        pavadinimas1 = make(Pavadinimas, linksnis="VARDININKAS", gyvenviete=gyvenviete)
+        pavadinimas2 = make(Pavadinimas, linksnis="KILMININKAS", gyvenviete=gyvenviete)
 
         assert _get_gyvenviete_dict(gyvenviete)["pavadinimu_formos"] == [
             {
@@ -98,9 +99,9 @@ class TestGetGyvenvieteDict:
 
 class TestGetAdministracinisVienetasDict:
     def test_get_administracinis_vienetas_dict(self) -> None:
-        salis = create_salis()
-        gyvenviete = create_gyvenviete(salis=salis)
-        apskritis = create_apskritis(gyvenviete=gyvenviete, salis=salis)
+        salis = make(Salis)
+        gyvenviete = make(Gyvenviete, salis=salis)
+        apskritis = make(Apskritis, centras=gyvenviete, salis=salis)
 
         assert _get_administracinis_vienetas_dict(apskritis, [gyvenviete.to_dict()]) == {
             "id": apskritis.id,
@@ -125,7 +126,7 @@ class TestGetAdministracinisVienetasDict:
         }
 
     def test_centras_takes_dict_from_gyvenvietes_attribute_that_matches_centras_id(self) -> None:
-        apskritis = create_apskritis()
+        apskritis = make(Apskritis)
 
         test_list = [{"id": apskritis.centras_id, "foo": "bar"}]
         result = _get_administracinis_vienetas_dict(apskritis, gyvenvietes=test_list)
@@ -133,18 +134,18 @@ class TestGetAdministracinisVienetasDict:
         assert result["centras"] == {"id": apskritis.centras_id, "foo": "bar"}
 
     def test_centras_returns_none_if_empty_list_given(self) -> None:
-        apskritis = create_apskritis()
+        apskritis = make(Apskritis)
 
         result = _get_administracinis_vienetas_dict(apskritis, [])
 
         assert result["centras"] is None
 
     def test_only_related_dokumentai_returned_with_or_without_autorius(self) -> None:
-        dokumentas1 = create_dokumentas()
-        dokumento_autorius1 = create_dokumento_autorius(dokumentas1)
-        dokumentas2 = create_dokumentas()
-        create_dokumentas()
-        apskritis = create_apskritis(dokumentai=[dokumentas1, dokumentas2])
+        dokumentas1 = make(Dokumentas)
+        dokumento_autorius1 = make(DokumentoAutorius, dokumentas=dokumentas1)
+        dokumentas2 = make(Dokumentas)
+        make(Dokumentas)
+        apskritis = make(Apskritis, dokumentai=[dokumentas1, dokumentas2])
 
         result = _get_administracinis_vienetas_dict(apskritis, [])
 
@@ -189,8 +190,8 @@ class TestBuildAddressRegistryNested:
         assert list(result["nejuridiniai_asmenys"]) == []
 
     def test_gyvenvietes(self) -> None:
-        gyvenviete1 = create_gyvenviete()
-        gyvenviete2 = create_gyvenviete()
+        gyvenviete1 = make(Gyvenviete)
+        gyvenviete2 = make(Gyvenviete)
 
         result = build_address_registry_nested()
         assert result["gyvenvietes"] == [
@@ -199,8 +200,8 @@ class TestBuildAddressRegistryNested:
         ]
 
     def test_apskritys(self) -> None:
-        gyvenviete = create_gyvenviete()
-        apskritis = create_apskritis(gyvenviete=gyvenviete)
+        gyvenviete = make(Gyvenviete)
+        apskritis = make(Apskritis, centras=gyvenviete)
 
         result = build_address_registry_nested()
         assert result["apskritys"] == [
@@ -228,8 +229,8 @@ class TestBuildAddressRegistryNested:
         ]
 
     def test_savivaldybes(self) -> None:
-        apskritis = create_apskritis()
-        savivaldybe = create_savivaldybe(apskritis=apskritis)
+        apskritis = make(Apskritis)
+        savivaldybe = make(Savivaldybe, apskritis=apskritis)
 
         result = build_address_registry_nested()
         assert result["savivaldybes"] == [
@@ -259,8 +260,8 @@ class TestBuildAddressRegistryNested:
         ]
 
     def test_seniunijos(self) -> None:
-        savivaldybe = create_savivaldybe()
-        seniunija = create_seniunija(savivaldybe=savivaldybe)
+        savivaldybe = make(Savivaldybe)
+        seniunija = make(Seniunija, savivaldybe=savivaldybe)
 
         result = build_address_registry_nested()
         assert result["seniunijos"] == [
@@ -290,10 +291,10 @@ class TestBuildAddressRegistryNested:
         ]
 
     def test_juridiniai_asmenys_nejuridiniai_asmenys(self) -> None:
-        juridinis_asmuo1 = create_juridinis_asmuo()
-        juridinis_asmuo2 = create_juridinis_asmuo()
-        nejuridinis_asmuo1 = create_nejuridinis_asmuo()
-        nejuridinis_asmuo2 = create_nejuridinis_asmuo()
+        juridinis_asmuo1 = make(JuridinisAsmuo)
+        juridinis_asmuo2 = make(JuridinisAsmuo)
+        nejuridinis_asmuo1 = make(NejuridinisAsmuo)
+        nejuridinis_asmuo2 = make(NejuridinisAsmuo)
 
         result = build_address_registry_nested()
 

@@ -1,16 +1,17 @@
 import pytest
+from model_bakery.baker import make
 
-from apps.address_registry.tests.utils import (
-    create_apskritis,
-    create_dokumentas,
-    create_dokumento_autorius,
-    create_gyvenviete,
-    create_juridinis_asmuo,
-    create_nejuridinis_asmuo,
-    create_pavadinimas,
-    create_salis,
-    create_savivaldybe,
-    create_seniunija,
+from apps.address_registry.models import (
+    Apskritis,
+    Dokumentas,
+    DokumentoAutorius,
+    Gyvenviete,
+    JuridinisAsmuo,
+    NejuridinisAsmuo,
+    Pavadinimas,
+    Salis,
+    Savivaldybe,
+    Seniunija,
 )
 from apps.utils.tests_query_counter import APIClientWithQueryCounter
 
@@ -23,7 +24,7 @@ class TestGyvenviete:
         assert response.json() == []
 
     def test_json(self, client: APIClientWithQueryCounter) -> None:
-        gyvenviete = create_gyvenviete()
+        gyvenviete = make(Gyvenviete)
 
         response = client.get("/api/v1/demo/json/gyvenviete")
         assert response.status_code == 200
@@ -31,19 +32,19 @@ class TestGyvenviete:
         assert response.json() == [
             {
                 "id": gyvenviete.id,
-                "isregistruota": "2024-03-03",
-                "registruota": "2024-03-03",
-                "pavadinimas": "test_name",
-                "kurortas": True,
-                "plotas": 1123.12,
-                "tipas": "MIESTELIS",
+                "isregistruota": gyvenviete.isregistruota.isoformat(),
+                "registruota": gyvenviete.registruota.isoformat(),
+                "pavadinimas": gyvenviete.pavadinimas,
+                "kurortas": gyvenviete.kurortas,
+                "plotas": gyvenviete.plotas,
+                "tipas": gyvenviete.tipas,
                 "salis_id": gyvenviete.salis_id,
-                "salies_kodas": "test",
+                "salies_kodas": gyvenviete.salies_kodas,
             }
         ]
 
     def test_xml(self, client: APIClientWithQueryCounter) -> None:
-        gyvenviete = create_gyvenviete()
+        gyvenviete = make(Gyvenviete)
 
         response = client.get("/api/v1/demo/xml/gyvenviete")
         assert response.status_code == 200
@@ -55,19 +56,19 @@ class TestGyvenviete:
             f'<ns1:gyvenvieteResult xmlns:ns1="demo_service_json">'
             f'<ns2:GyvenvieteModel xmlns:ns2="apps.address_registry.schema">'
             f"<ns2:id>{gyvenviete.id}</ns2:id>"
-            f"<ns2:isregistruota>2024-03-03</ns2:isregistruota>"
-            f"<ns2:registruota>2024-03-03</ns2:registruota>"
-            f"<ns2:pavadinimas>test_name</ns2:pavadinimas>"
-            f"<ns2:kurortas>true</ns2:kurortas>"
-            f"<ns2:plotas>1123.12</ns2:plotas>"
-            f"<ns2:tipas>MIESTELIS</ns2:tipas>"
+            f"<ns2:isregistruota>{gyvenviete.isregistruota}</ns2:isregistruota>"
+            f"<ns2:registruota>{gyvenviete.registruota}</ns2:registruota>"
+            f"<ns2:pavadinimas>{gyvenviete.pavadinimas}</ns2:pavadinimas>"
+            f"<ns2:kurortas>{str(gyvenviete.kurortas).lower()}</ns2:kurortas>"
+            f"<ns2:plotas>{gyvenviete.plotas}</ns2:plotas>"
+            f"<ns2:tipas>{gyvenviete.tipas}</ns2:tipas>"
             f"<ns2:salis_id>{gyvenviete.salis_id}</ns2:salis_id>"
-            f"<ns2:salies_kodas>test</ns2:salies_kodas>"
+            f"<ns2:salies_kodas>{gyvenviete.salies_kodas}</ns2:salies_kodas>"
             f"</ns2:GyvenvieteModel></ns1:gyvenvieteResult></ns0:gyvenvieteResponse>"
         )
 
     def test_soap(self, client: APIClientWithQueryCounter) -> None:
-        gyvenviete = create_gyvenviete()
+        gyvenviete = make(Gyvenviete)
 
         response = client.get("/api/v1/demo/soap/gyvenviete")
         assert response.status_code == 200
@@ -81,14 +82,14 @@ class TestGyvenviete:
             f"<ns1:gyvenvieteResult>"
             f'<ns2:GyvenvieteModel xmlns:ns2="apps.address_registry.schema">'
             f"<ns2:id>{gyvenviete.id}</ns2:id>"
-            f"<ns2:isregistruota>2024-03-03</ns2:isregistruota>"
-            f"<ns2:registruota>2024-03-03</ns2:registruota>"
-            f"<ns2:pavadinimas>test_name</ns2:pavadinimas>"
-            f"<ns2:kurortas>true</ns2:kurortas>"
-            f"<ns2:plotas>1123.12</ns2:plotas>"
-            f"<ns2:tipas>MIESTELIS</ns2:tipas>"
+            f"<ns2:isregistruota>{gyvenviete.isregistruota.isoformat()}</ns2:isregistruota>"
+            f"<ns2:registruota>{gyvenviete.registruota.isoformat()}</ns2:registruota>"
+            f"<ns2:pavadinimas>{gyvenviete.pavadinimas}</ns2:pavadinimas>"
+            f"<ns2:kurortas>{str(gyvenviete.kurortas).lower()}</ns2:kurortas>"
+            f"<ns2:plotas>{gyvenviete.plotas}</ns2:plotas>"
+            f"<ns2:tipas>{gyvenviete.tipas}</ns2:tipas>"
             f"<ns2:salis_id>{gyvenviete.salis_id}</ns2:salis_id>"
-            f"<ns2:salies_kodas>test</ns2:salies_kodas>"
+            f"<ns2:salies_kodas>{gyvenviete.salies_kodas}</ns2:salies_kodas>"
             f"</ns2:GyvenvieteModel>"
             f"</ns1:gyvenvieteResult>"
             f"</ns1:gyvenvieteResponse>"
@@ -97,8 +98,8 @@ class TestGyvenviete:
         )
 
     def test_search(self, client: APIClientWithQueryCounter) -> None:
-        create_gyvenviete(pavadinimas="foo")
-        create_gyvenviete(pavadinimas="bar")
+        make(Gyvenviete, pavadinimas="foo")
+        make(Gyvenviete, pavadinimas="bar")
 
         response = client.get("/api/v1/demo/json/gyvenviete?pavadinimas=foo")
         assert response.status_code == 200
@@ -107,19 +108,19 @@ class TestGyvenviete:
 
 class TestAddressRegistry:
     def test_json_response(self, client: APIClientWithQueryCounter) -> None:
-        salis = create_salis()
-        gyvenviete = create_gyvenviete(salis=salis)
-        pavadinimas = create_pavadinimas(gyvenviete=gyvenviete)
-        dokumentas1 = create_dokumentas()
-        dokumento_autorius = create_dokumento_autorius(dokumentas=dokumentas1)
-        dokumentas2 = create_dokumentas()
-        apskritis = create_apskritis(gyvenviete=gyvenviete, salis=salis)
-        savivaldybe = create_savivaldybe(gyvenviete=gyvenviete, salis=salis, apskritis=apskritis)
-        seniunija = create_seniunija(
-            gyvenviete=gyvenviete, salis=salis, dokumentai=[dokumentas1, dokumentas2], savivaldybe=savivaldybe
+        salis = make(Salis)
+        gyvenviete = make(Gyvenviete, salis=salis)
+        pavadinimas = make(Pavadinimas, gyvenviete=gyvenviete)
+        dokumentas1 = make(Dokumentas)
+        dokumento_autorius = make(DokumentoAutorius, dokumentas=dokumentas1)
+        dokumentas2 = make(Dokumentas)
+        apskritis = make(Apskritis, centras=gyvenviete, salis=salis)
+        savivaldybe = make(Savivaldybe, centras=gyvenviete, salis=salis, apskritis=apskritis)
+        seniunija = make(
+            Seniunija, centras=gyvenviete, salis=salis, dokumentai=[dokumentas1, dokumentas2], savivaldybe=savivaldybe
         )
-        juridinis_asmuo = create_juridinis_asmuo()
-        nejuridinis_asmuo = create_nejuridinis_asmuo()
+        juridinis_asmuo = make(JuridinisAsmuo)
+        nejuridinis_asmuo = make(NejuridinisAsmuo)
 
         response = client.get("/api/v1/demo/json/address_registry")
 
@@ -128,102 +129,102 @@ class TestAddressRegistry:
             "salys": [
                 {
                     "id": salis.id,
-                    "kodas": "test",
-                    "pavadinimas_lt": "TestMiestas",
-                    "pavadinimas_en": "TestMiestasEN",
+                    "kodas": salis.kodas,
+                    "pavadinimas_lt": salis.pavadinimas_lt,
+                    "pavadinimas_en": salis.pavadinimas_en,
                 },
             ],
             "gyvenvietes": [
                 {
                     "id": gyvenviete.id,
-                    "isregistruota": "2024-03-03",
-                    "registruota": "2024-03-03",
-                    "pavadinimas": "test_name",
-                    "kurortas": True,
-                    "plotas": 1123.12,
-                    "tipas": "MIESTELIS",
+                    "isregistruota": gyvenviete.isregistruota.isoformat(),
+                    "registruota": gyvenviete.registruota.isoformat(),
+                    "pavadinimas": gyvenviete.pavadinimas,
+                    "kurortas": gyvenviete.kurortas,
+                    "plotas": gyvenviete.plotas,
+                    "tipas": gyvenviete.tipas,
                     "salis_id": salis.id,
-                    "salies_kodas": "test",
+                    "salies_kodas": gyvenviete.salies_kodas,
                 },
             ],
             "pavadinimai": [
                 {
                     "id": pavadinimas.id,
-                    "pavadinimas": "TestPavadinimas",
-                    "kirciuotas": "TestPavadinimas",
-                    "linksnis": "VARDININKAS",
+                    "pavadinimas": pavadinimas.pavadinimas,
+                    "kirciuotas": pavadinimas.kirciuotas,
+                    "linksnis": pavadinimas.linksnis,
                     "gyvenviete_id": gyvenviete.id,
                 }
             ],
             "dokumentai": [
                 {
                     "id": dokumentas1.id,
-                    "numeris": "TEST-123-DOK",
-                    "priimta": "2024-03-05",
-                    "rusis": "ISAKYMAS",
-                    "pozymis": "IREGISTRUOTA",
-                    "sukurimo_data": "2024-01-05",
-                    "sukurimo_laikas": "12:03:00",
+                    "numeris": dokumentas1.numeris,
+                    "priimta": dokumentas1.priimta.isoformat(),
+                    "rusis": dokumentas1.rusis,
+                    "pozymis": dokumentas1.pozymis,
+                    "sukurimo_data": dokumentas1.sukurimo_data.isoformat(),
+                    "sukurimo_laikas": dokumentas1.sukurimo_laikas.isoformat(),
                 },
                 {
                     "id": dokumentas2.id,
-                    "numeris": "TEST-123-DOK",
-                    "priimta": "2024-03-05",
-                    "rusis": "ISAKYMAS",
-                    "pozymis": "IREGISTRUOTA",
-                    "sukurimo_data": "2024-01-05",
-                    "sukurimo_laikas": "12:03:00",
+                    "numeris": dokumentas2.numeris,
+                    "priimta": dokumentas2.priimta.isoformat(),
+                    "rusis": dokumentas2.rusis,
+                    "pozymis": dokumentas2.pozymis,
+                    "sukurimo_data": dokumentas2.sukurimo_data.isoformat(),
+                    "sukurimo_laikas": dokumentas2.sukurimo_laikas.isoformat(),
                 },
             ],
             "dokumentu_autoriai": [
                 {
                     "id": dokumento_autorius.id,
                     "dokumentas_id": dokumentas1.id,
-                    "vardas": "Vardenis",
-                    "pavarde": "Pavardenis",
+                    "vardas": dokumento_autorius.vardas,
+                    "pavarde": dokumento_autorius.pavarde,
                 }
             ],
             "apskritys": [
                 {
                     "id": apskritis.id,
-                    "tipas": "APSKRITIS",
-                    "kodas": 123,
-                    "iregistruota": "2024-05-06T14:30:00+00:00",
-                    "isregistruota": "2024-05-07T14:30:00+00:00",
-                    "pavadinimas": "TestApskritis",
-                    "plotas": 20,
+                    "tipas": apskritis.tipas,
+                    "kodas": apskritis.kodas,
+                    "iregistruota": apskritis.iregistruota,
+                    "isregistruota": apskritis.isregistruota,
+                    "pavadinimas": apskritis.pavadinimas,
+                    "plotas": apskritis.plotas,
                     "centras_id": gyvenviete.id,
-                    "salis_id": salis.id,
-                    "salies_kodas": "test",
+                    "salis_id": apskritis.salis_id,
+                    "salies_kodas": apskritis.salies_kodas,
                 }
             ],
             "savivaldybes": [
                 {
                     "id": savivaldybe.id,
-                    "tipas": "SAVIVALDYBE",
-                    "kodas": 123,
-                    "iregistruota": "2024-05-06T14:30:00+00:00",
-                    "isregistruota": "2024-05-07T14:30:00+00:00",
-                    "pavadinimas": "TestSavivaldybe",
-                    "plotas": 20,
+                    "tipas": savivaldybe.tipas,
+                    "kodas": savivaldybe.kodas,
+                    "iregistruota": savivaldybe.iregistruota,
+                    "isregistruota": savivaldybe.isregistruota,
+                    "pavadinimas": savivaldybe.pavadinimas,
+                    "plotas": savivaldybe.plotas,
                     "centras_id": gyvenviete.id,
                     "salis_id": salis.id,
-                    "salies_kodas": "test",
+                    "salies_kodas": savivaldybe.salies_kodas,
                     "apskritis_id": apskritis.id,
                 }
             ],
             "seniunijos": [
                 {
                     "id": seniunija.id,
-                    "tipas": "SENIUNIJA",
-                    "kodas": 123,
-                    "iregistruota": "2024-05-06T14:30:00+00:00",
-                    "isregistruota": "2024-05-07T14:30:00+00:00",
-                    "pavadinimas": "TestSeniunija",
-                    "plotas": 20,
+                    "tipas": seniunija.tipas,
+                    "kodas": seniunija.kodas,
+                    "iregistruota": seniunija.iregistruota,
+                    "isregistruota": seniunija.isregistruota,
+                    "pavadinimas": seniunija.pavadinimas,
+                    "plotas": seniunija.plotas,
                     "centras_id": gyvenviete.id,
                     "salis_id": salis.id,
-                    "salies_kodas": "test",
+                    "salies_kodas": seniunija.salies_kodas,
                     "savivaldybe_id": savivaldybe.id,
                 }
             ],
@@ -232,14 +233,14 @@ class TestAddressRegistry:
                 {
                     "id": juridinis_asmuo.id,
                     "organizacija_ptr_id": juridinis_asmuo.id,
-                    "pavadinimas": "TestJuridinis",
+                    "pavadinimas": juridinis_asmuo.pavadinimas,
                 }
             ],
             "nejuridiniai_asmenys": [
                 {
                     "id": nejuridinis_asmuo.id,
                     "organizacija_ptr_id": nejuridinis_asmuo.id,
-                    "pavadinimas": "TestNeJuridinis",
+                    "pavadinimas": nejuridinis_asmuo.pavadinimas,
                 }
             ],
         }
@@ -247,75 +248,75 @@ class TestAddressRegistry:
 
 class TestAddressRegistryNested:
     def test_json_response(self, client: APIClientWithQueryCounter) -> None:
-        salis = create_salis()
-        gyvenviete = create_gyvenviete(salis=salis)
-        pavadinimas = create_pavadinimas(gyvenviete=gyvenviete)
-        dokumentas1 = create_dokumentas()
-        dokumento_autorius = create_dokumento_autorius(dokumentas=dokumentas1)
-        dokumentas2 = create_dokumentas()
-        apskritis = create_apskritis(gyvenviete=gyvenviete, salis=salis)
-        savivaldybe = create_savivaldybe(gyvenviete=gyvenviete, salis=salis, apskritis=apskritis)
-        seniunija = create_seniunija(
-            gyvenviete=gyvenviete, salis=salis, dokumentai=[dokumentas1, dokumentas2], savivaldybe=savivaldybe
+        salis = make(Salis)
+        gyvenviete = make(Gyvenviete, salis=salis)
+        pavadinimas = make(Pavadinimas, gyvenviete=gyvenviete)
+        dokumentas1 = make(Dokumentas)
+        dokumento_autorius = make(DokumentoAutorius, dokumentas=dokumentas1)
+        dokumentas2 = make(Dokumentas)
+        apskritis = make(Apskritis, centras=gyvenviete, salis=salis)
+        savivaldybe = make(Savivaldybe, centras=gyvenviete, salis=salis, apskritis=apskritis)
+        seniunija = make(
+            Seniunija, centras=gyvenviete, salis=salis, dokumentai=[dokumentas1, dokumentas2], savivaldybe=savivaldybe
         )
-        juridinis_asmuo = create_juridinis_asmuo()
-        nejuridinis_asmuo = create_nejuridinis_asmuo()
+        juridinis_asmuo = make(JuridinisAsmuo)
+        nejuridinis_asmuo = make(NejuridinisAsmuo)
 
         response = client.get("/api/v1/demo/json/address_registry_nested")
         assert response.status_code == 200
 
         expected_salis = {
             "id": salis.id,
-            "kodas": "test",
-            "pavadinimas_lt": "TestMiestas",
-            "pavadinimas_en": "TestMiestasEN",
+            "kodas": salis.kodas,
+            "pavadinimas_lt": salis.pavadinimas_lt,
+            "pavadinimas_en": salis.pavadinimas_en,
         }
         expected_gyvenviete = {
             "id": gyvenviete.id,
-            "isregistruota": "2024-03-03",
-            "registruota": "2024-03-03",
-            "pavadinimas": "test_name",
-            "kurortas": True,
-            "plotas": 1123.12,
-            "tipas": "MIESTELIS",
+            "isregistruota": gyvenviete.isregistruota.isoformat(),
+            "registruota": gyvenviete.registruota.isoformat(),
+            "pavadinimas": gyvenviete.pavadinimas,
+            "kurortas": gyvenviete.kurortas,
+            "plotas": gyvenviete.plotas,
+            "tipas": gyvenviete.tipas,
             "salis_id": salis.id,
-            "salies_kodas": "test",
+            "salies_kodas": gyvenviete.salies_kodas,
             "salis": expected_salis,
             "pavadinimu_formos": [
                 {
                     "id": pavadinimas.id,
-                    "pavadinimas": "TestPavadinimas",
-                    "kirciuotas": "TestPavadinimas",
-                    "linksnis": "VARDININKAS",
+                    "pavadinimas": pavadinimas.pavadinimas,
+                    "kirciuotas": pavadinimas.kirciuotas,
+                    "linksnis": pavadinimas.linksnis,
                 }
             ],
         }
         expected_apskritis = {
             "id": apskritis.id,
-            "tipas": "APSKRITIS",
-            "kodas": 123,
-            "iregistruota": "2024-05-06T14:30:00+00:00",
-            "isregistruota": "2024-05-07T14:30:00+00:00",
-            "pavadinimas": "TestApskritis",
-            "plotas": 20,
+            "tipas": apskritis.tipas,
+            "kodas": apskritis.kodas,
+            "iregistruota": apskritis.iregistruota,
+            "isregistruota": apskritis.isregistruota,
+            "pavadinimas": apskritis.pavadinimas,
+            "plotas": apskritis.plotas,
             "centras_id": gyvenviete.id,
             "salis_id": salis.id,
-            "salies_kodas": "test",
+            "salies_kodas": apskritis.salies_kodas,
             "centras": expected_gyvenviete,
             "dokumentai": [],
             "salis": expected_salis,
         }
         expected_savivaldybe = {
             "id": savivaldybe.id,
-            "tipas": "SAVIVALDYBE",
-            "kodas": 123,
-            "iregistruota": "2024-05-06T14:30:00+00:00",
-            "isregistruota": "2024-05-07T14:30:00+00:00",
-            "pavadinimas": "TestSavivaldybe",
-            "plotas": 20,
+            "tipas": savivaldybe.tipas,
+            "kodas": savivaldybe.kodas,
+            "iregistruota": savivaldybe.iregistruota,
+            "isregistruota": savivaldybe.isregistruota,
+            "pavadinimas": savivaldybe.pavadinimas,
+            "plotas": savivaldybe.plotas,
             "centras_id": gyvenviete.id,
             "salis_id": salis.id,
-            "salies_kodas": "test",
+            "salies_kodas": savivaldybe.salies_kodas,
             "apskritis_id": apskritis.id,
             "centras": expected_gyvenviete,
             "dokumentai": [],
@@ -324,41 +325,41 @@ class TestAddressRegistryNested:
         }
         expected_seniunija = {
             "id": seniunija.id,
-            "tipas": "SENIUNIJA",
-            "kodas": 123,
-            "iregistruota": "2024-05-06T14:30:00+00:00",
-            "isregistruota": "2024-05-07T14:30:00+00:00",
-            "pavadinimas": "TestSeniunija",
-            "plotas": 20,
+            "tipas": seniunija.tipas,
+            "kodas": seniunija.kodas,
+            "iregistruota": seniunija.iregistruota,
+            "isregistruota": seniunija.isregistruota,
+            "pavadinimas": seniunija.pavadinimas,
+            "plotas": seniunija.plotas,
             "centras_id": gyvenviete.id,
             "salis_id": salis.id,
-            "salies_kodas": "test",
+            "salies_kodas": seniunija.salies_kodas,
             "savivaldybe_id": savivaldybe.id,
             "centras": expected_gyvenviete,
             "dokumentai": [
                 {
                     "id": dokumentas1.id,
-                    "numeris": "TEST-123-DOK",
-                    "priimta": "2024-03-05",
-                    "rusis": "ISAKYMAS",
-                    "pozymis": "IREGISTRUOTA",
-                    "sukurimo_data": "2024-01-05",
-                    "sukurimo_laikas": "12:03:00",
+                    "numeris": dokumentas1.numeris,
+                    "priimta": dokumentas1.priimta.isoformat(),
+                    "rusis": dokumentas1.rusis,
+                    "pozymis": dokumentas1.pozymis,
+                    "sukurimo_data": dokumentas1.sukurimo_data.isoformat(),
+                    "sukurimo_laikas": dokumentas1.sukurimo_laikas.isoformat(),
                     "dokumento_autorius": {
                         "id": dokumento_autorius.id,
                         "dokumentas_id": dokumentas1.id,
-                        "vardas": "Vardenis",
-                        "pavarde": "Pavardenis",
+                        "vardas": dokumento_autorius.vardas,
+                        "pavarde": dokumento_autorius.pavarde,
                     },
                 },
                 {
                     "id": dokumentas2.id,
-                    "numeris": "TEST-123-DOK",
-                    "priimta": "2024-03-05",
-                    "rusis": "ISAKYMAS",
-                    "pozymis": "IREGISTRUOTA",
-                    "sukurimo_data": "2024-01-05",
-                    "sukurimo_laikas": "12:03:00",
+                    "numeris": dokumentas2.numeris,
+                    "priimta": dokumentas2.priimta.isoformat(),
+                    "rusis": dokumentas2.rusis,
+                    "pozymis": dokumentas2.pozymis,
+                    "sukurimo_data": dokumentas2.sukurimo_data.isoformat(),
+                    "sukurimo_laikas": dokumentas2.sukurimo_laikas.isoformat(),
                     "dokumento_autorius": {
                         "dokumentas_id": None,
                         "vardas": None,
@@ -375,13 +376,17 @@ class TestAddressRegistryNested:
             "savivaldybes": [expected_savivaldybe],
             "seniunijos": [expected_seniunija],
             "juridiniai_asmenys": [
-                {"id": juridinis_asmuo.id, "organizacija_ptr_id": juridinis_asmuo.id, "pavadinimas": "TestJuridinis"},
+                {
+                    "id": juridinis_asmuo.id,
+                    "organizacija_ptr_id": juridinis_asmuo.id,
+                    "pavadinimas": juridinis_asmuo.pavadinimas,
+                },
             ],
             "nejuridiniai_asmenys": [
                 {
                     "id": nejuridinis_asmuo.id,
                     "organizacija_ptr_id": nejuridinis_asmuo.id,
-                    "pavadinimas": "TestNeJuridinis",
+                    "pavadinimas": nejuridinis_asmuo.pavadinimas,
                 }
             ],
         }
