@@ -33,7 +33,19 @@ class CustomSchemaGenerator(OpenAPISchemaGenerator):
 
             for spyne_schema_pattern in self._get_spyne_app_schema_patterns(view.app):
                 spyne_paths[f"{view_url}{spyne_schema_pattern}"] = {
-                    "get": {"summary": f"{view.app.name} for {spyne_schema_pattern}"}
+                    "get": {
+                        "summary": f"{view.app.name} for {spyne_schema_pattern}",
+                        "parameters": [
+                            {
+                                "in": "query",
+                                "name": "wsdl",
+                                "type": "boolean",
+                                "required": False,
+                                "allowEmptyValue": True,
+                                "description": "WSDL schema",
+                            }
+                        ],
+                    }
                 }
 
         return spyne_paths
