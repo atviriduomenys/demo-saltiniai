@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from django.contrib.gis.db import models as gis_models
 from django.db import models
 from model_bakery.baker import make_recipe
 
@@ -223,6 +224,7 @@ class AdministracinisVienetas(GenerateTestDataMixin, models.Model):
     dokumentai = models.ManyToManyField(Dokumentas, blank=True)
     salis = models.ForeignKey(Salis, on_delete=models.CASCADE)
     salies_kodas = models.CharField(max_length=20, blank=True, help_text="Turi sutapti su Salis.kodas")
+    ribos = gis_models.PolygonField(blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -247,6 +249,7 @@ class AdministracinisVienetas(GenerateTestDataMixin, models.Model):
             "centras_id": self.centras_id,
             "salis_id": self.salis_id,
             "salies_kodas": self.salies_kodas,
+            "ribos": str(self.ribos) if self.ribos else None,
         }
 
 

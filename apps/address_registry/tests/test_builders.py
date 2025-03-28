@@ -115,6 +115,7 @@ class TestGetAdministracinisVienetasDict:
             "centras_id": gyvenviete.id,
             "salis_id": salis.id,
             "salies_kodas": apskritis.salies_kodas,
+            "ribos": apskritis.ribos,
             "centras": gyvenviete.to_dict(),
             "dokumentai": [],
             "salis": {
@@ -217,6 +218,7 @@ class TestBuildAddressRegistryNested:
                 "centras_id": apskritis.centras_id,
                 "salis_id": apskritis.salis_id,
                 "salies_kodas": apskritis.salies_kodas,
+                "ribos": apskritis.ribos,
                 "centras": _get_gyvenviete_dict(gyvenviete),
                 "dokumentai": [],
                 "salis": {
@@ -246,6 +248,7 @@ class TestBuildAddressRegistryNested:
                 "centras_id": savivaldybe.centras_id,
                 "salis_id": savivaldybe.salis_id,
                 "salies_kodas": savivaldybe.salies_kodas,
+                "ribos": savivaldybe.ribos,
                 "centras": _get_gyvenviete_dict(savivaldybe.centras),
                 "dokumentai": [],
                 "salis": {
@@ -277,6 +280,7 @@ class TestBuildAddressRegistryNested:
                 "centras_id": seniunija.centras_id,
                 "salis_id": seniunija.salis_id,
                 "salies_kodas": seniunija.salies_kodas,
+                "ribos": seniunija.ribos,
                 "centras": _get_gyvenviete_dict(seniunija.centras),
                 "dokumentai": [],
                 "salis": {
