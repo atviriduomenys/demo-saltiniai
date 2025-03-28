@@ -1,6 +1,11 @@
 from django.urls import include, path, re_path
 
-from apps.address_registry.views import demo_application_json, demo_application_soap, demo_application_xml
+from apps.address_registry.views import (
+    GenerateTestData,
+    demo_application_json,
+    demo_application_soap,
+    demo_application_xml,
+)
 
 urlpatterns = [
     path(
@@ -13,4 +18,5 @@ urlpatterns = [
             ]
         ),
     ),
+    path("<str:app_label>/<str:model_name>/generate/", GenerateTestData.as_view()),
 ]
