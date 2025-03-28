@@ -117,6 +117,7 @@ class TestApskritis:
             "centras_id": apskritis.centras_id,
             "salis_id": apskritis.salis_id,
             "salies_kodas": apskritis.salies_kodas,
+            "ribos": apskritis.ribos,
         }
 
     def test_generate_test_dataa(self) -> None:
@@ -140,6 +141,7 @@ class TestSavivaldybe:
             "centras_id": savivaldybe.centras_id,
             "salis_id": savivaldybe.salis_id,
             "salies_kodas": savivaldybe.salies_kodas,
+            "ribos": savivaldybe.ribos,
             "apskritis_id": savivaldybe.apskritis_id,
         }
 
@@ -164,6 +166,7 @@ class TestSeniunija:
             "centras_id": seniunija.centras_id,
             "salis_id": seniunija.salis_id,
             "salies_kodas": seniunija.salies_kodas,
+            "ribos": seniunija.ribos,
             "savivaldybe_id": seniunija.savivaldybe_id,
         }
 

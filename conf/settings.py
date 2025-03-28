@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
     "rest_framework",
     "solo",
     "ckeditor",
@@ -114,7 +115,7 @@ if os.getenv("DATABASE_URL"):
 else:
     DATABASES = {  # type: ignore [typeddict-unknown-key]
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
             "NAME": os.getenv("DB_NAME", "django"),
             "USER": os.getenv("DB_USER", "django"),
             "HOST": os.getenv("DB_HOST", "localhost"),
