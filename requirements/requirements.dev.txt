@@ -14,11 +14,6 @@ asgiref==3.8.1
     #   django-stubs
 asttokens==3.0.0
     # via stack-data
-attrs==25.3.0
-    # via
-    #   -r requirements/requirements.txt
-    #   jsonschema
-    #   referencing
 authlib==1.5.1
     # via safety
 billiard==4.2.1
@@ -80,7 +75,7 @@ django==5.1.7
     #   django-stubs-ext
     #   djangorestframework
     #   djangorestframework-simplejwt
-    #   drf-spectacular
+    #   drf-yasg
     #   model-bakery
 django-ckeditor==6.7.2
     # via -r requirements/requirements.txt
@@ -108,14 +103,14 @@ djangorestframework==3.15.2
     # via
     #   -r requirements/requirements.txt
     #   djangorestframework-simplejwt
-    #   drf-spectacular
+    #   drf-yasg
 djangorestframework-simplejwt==5.5.0
     # via -r requirements/requirements.txt
 dparse==0.6.4
     # via
     #   safety
     #   safety-schemas
-drf-spectacular==0.28.0
+drf-yasg==1.21.10
     # via -r requirements/requirements.txt
 exceptiongroup==1.2.2
     # via
@@ -137,7 +132,7 @@ idna==3.10
 inflection==0.5.1
     # via
     #   -r requirements/requirements.txt
-    #   drf-spectacular
+    #   drf-yasg
 iniconfig==2.0.0
     # via
     #   -r requirements/requirements.txt
@@ -150,14 +145,6 @@ jinja2==3.1.6
     # via safety
 joblib==1.4.2
     # via nltk
-jsonschema==4.23.0
-    # via
-    #   -r requirements/requirements.txt
-    #   drf-spectacular
-jsonschema-specifications==2024.10.1
-    # via
-    #   -r requirements/requirements.txt
-    #   jsonschema
 kombu==5.5.0
     # via
     #   -r requirements/requirements.txt
@@ -186,6 +173,7 @@ packaging==24.2
     # via
     #   -r requirements/requirements.txt
     #   dparse
+    #   drf-yasg
     #   gunicorn
     #   marshmallow
     #   pytest
@@ -249,27 +237,18 @@ python-dateutil==2.9.0.post0
 pytz==2025.1
     # via
     #   -r requirements/requirements.txt
+    #   drf-yasg
     #   spyne
 pyyaml==6.0.2
     # via
     #   -r requirements/requirements.txt
-    #   drf-spectacular
-referencing==0.36.2
-    # via
-    #   -r requirements/requirements.txt
-    #   jsonschema
-    #   jsonschema-specifications
+    #   drf-yasg
 regex==2024.11.6
     # via nltk
 requests==2.32.3
     # via safety
 rich==13.9.4
     # via typer
-rpds-py==0.23.1
-    # via
-    #   -r requirements/requirements.txt
-    #   jsonschema
-    #   referencing
 ruamel-yaml==0.18.10
     # via
     #   safety
@@ -328,7 +307,6 @@ typing-extensions==4.12.2
     #   mypy
     #   pydantic
     #   pydantic-core
-    #   referencing
     #   rich
     #   safety
     #   safety-schemas
@@ -341,7 +319,7 @@ tzdata==2025.1
 uritemplate==4.1.1
     # via
     #   -r requirements/requirements.txt
-    #   drf-spectacular
+    #   drf-yasg
 urllib3==2.3.0
     # via requests
 vine==5.1.0

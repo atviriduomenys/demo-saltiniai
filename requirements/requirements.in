@@ -10,7 +10,6 @@ django-cors-headers
 djangorestframework-simplejwt
 django-storages
 django-health-check
-drf-spectacular
 typing-extensions
 dj-database-url
 model-bakery
@@ -22,3 +21,4 @@ django-cleanup
 django-extensions
 spyne
 lxml
+drf-yasg
