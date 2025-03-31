@@ -9,5 +9,5 @@ python3 manage.py createsuperuser --noinput
 if [[ $RUN_MODE == "DEVELOPMENT" ]]; then
 	python3 manage.py runserver 0.0.0.0:8000
 else
-	gunicorn -b 0.0.0.0:8000 -c /app/conf/gunicorn.conf.aws.py wsgi:application --log-file=-
+	gunicorn -b 0.0.0.0:8000 -c /app/conf/gunicorn.conf.py wsgi:application --log-file=-
 fi
