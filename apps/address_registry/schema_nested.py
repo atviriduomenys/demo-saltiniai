@@ -1,22 +1,19 @@
 from spyne import Array, ComplexModel
+from spyne.util.django import DjangoComplexModel
 
 from apps.address_registry.models import Apskritis, Dokumentas, Gyvenviete, Pavadinimas, Savivaldybe, Seniunija
 from apps.address_registry.schema import (
-    ApskritisModel,
-    DokumentasModel,
     DokumentoAutoriusModel,
     GyvenvieteModel,
     JuridinisAsmuoModel,
     NejuridinisAsmuoModel,
     PavadinimasModel,
     SalisModel,
-    SavivaldybeModel,
-    SeniunijaModel,
 )
 from apps.utils.spyne_utils import DjangoAttributes
 
 
-class GyvenvieteNestedResponseModel(GyvenvieteModel):
+class GyvenvieteNestedResponseModel(DjangoComplexModel):
     salis = SalisModel
     pavadinimu_formos = Array(PavadinimasModel)
 
@@ -24,7 +21,7 @@ class GyvenvieteNestedResponseModel(GyvenvieteModel):
         django_model = Gyvenviete
 
 
-class DokumentasNestedResponseModel(DokumentasModel):
+class DokumentasNestedResponseModel(DjangoComplexModel):
     dokumento_autorius = DokumentoAutoriusModel
 
     class Attributes(DjangoAttributes):
@@ -39,19 +36,19 @@ class AdministracinisVienetasMixin(ComplexModel):
     salis = SalisModel
 
 
-class ApskritisNestedResponseModel(ApskritisModel, AdministracinisVienetasMixin):
+class ApskritisNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
     class Attributes(DjangoAttributes):
         django_model = Apskritis
 
 
-class SavivaldybeNestedResponseModel(SavivaldybeModel, AdministracinisVienetasMixin):
+class SavivaldybeNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
     apskritis = ApskritisNestedResponseModel
 
     class Attributes(DjangoAttributes):
         django_model = Savivaldybe
 
 
-class SeniunijosNestedResponseModel(SeniunijaModel, AdministracinisVienetasMixin):
+class SeniunijosNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
     savivaldybe = SavivaldybeNestedResponseModel
 
     class Attributes(DjangoAttributes):
@@ -67,14 +64,14 @@ class AddressRegistryNestedResponseModel(ComplexModel):
     nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)
 
 
-class GyvenvietePavadinimasNestedModel(GyvenvieteModel):
+class GyvenvietePavadinimasNestedModel(DjangoComplexModel):
     pavadinimo_formos = Array(PavadinimasModel)
 
     class Attributes(DjangoAttributes):
         django_model = Gyvenviete
 
 
-class PavadinimasGyvenvieteNestedModel(PavadinimasModel):
+class PavadinimasGyvenvieteNestedModel(DjangoComplexModel):
     gyvenviete = GyvenvieteModel
 
     class Attributes(DjangoAttributes):
