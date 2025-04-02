@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
+from apps.utils.swagger import schema_view
 
 urlpatterns = []
 
@@ -15,9 +16,9 @@ urlpatterns += [
     # Admin
     path("admin/", admin.site.urls),
     # 3rd party apps
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-    path("schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("swagger.<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     # Local apps
     path("health/", include("health_check.urls")),
     path("api/v1/", include("apps.address_registry.urls")),

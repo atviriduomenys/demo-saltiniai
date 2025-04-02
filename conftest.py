@@ -30,7 +30,7 @@ def disable_logging():
 @pytest.fixture
 def client(request) -> APIClientWithQueryCounter:
     """Using rest framework's api client instead of built-in django test client since we'll be working with APIs"""
-    return APIClientWithQueryCounter(count=getattr(request, "param", 5))
+    return APIClientWithQueryCounter(count=getattr(request, "param", 20))
 
 
 @pytest.fixture(scope="session")
