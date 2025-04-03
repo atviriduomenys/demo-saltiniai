@@ -122,3 +122,29 @@ If using docker database from instructions above DB_HOST=localhost;DB_PORT=9432;
 Run tests from opened test file class or method by clicking on green arrow on the left 
 or whole directory/app tests by right clicking on them from IDE project view -> Run:test
 ```
+
+## Production deploy (Dockerized)
+### Prerequisites:
+Docker
+Docker-compose
+Cloned repo
+
+### Create file where secrets and other environment variables will be stored. Enable Production Run Mode
+```sh
+touch .env
+echo "RUN_MODE=PRODUCTION" >> .env
+```
+Add other env variables you need like database credentials. 
+Check docker-compose for predefined ones.
+
+### Start application
+
+Build application Docker image
+```sh
+docker build . -t demo-saltiniai -f production.Dockerfile
+```
+
+Launch application from image with external database connected.
+```sh
+docker run --env-file .env -d demo-saltiniai
+```
