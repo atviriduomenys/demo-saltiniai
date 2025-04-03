@@ -402,3 +402,50 @@ def test_content_types(client: APIClientWithQueryCounter, endpoint: str, frmt: s
     response = client.get(f"/api/v1/demo/{frmt}/{endpoint}")
     assert response.status_code == 200
     assert response.headers["Content-Type"] == content_type
+
+
+class TestGenerateTestData:
+    @staticmethod
+    def get_url(model_name: str) -> str:
+        return f"/api/v1/address_registry/{model_name}/generate/"
+
+    def test_return_403_when_not_authenticated(self, client: APIClientWithQueryCounter) -> None:
+        response = client.post(self.get_url("salis"))
+        assert response.status_code == 401
+
+    def test_return_404_when_model_does_not_exist(self, authorized_client: APIClientWithQueryCounter) -> None:
+        response = authorized_client.post(self.get_url("foo"), data={"quantity": 1})
+        assert response.status_code == 404
+
+    def test_return_400_when_serializer_not_valid(self, authorized_client: APIClientWithQueryCounter) -> None:
+        response = authorized_client.post(self.get_url("salis"), data={"quantity": "foo"})
+        assert response.status_code == 400
+
+    def test_return_404_when_model_has_no_generate_data_method(
+        self, authorized_client: APIClientWithQueryCounter
+    ) -> None:
+        response = authorized_client.post(self.get_url("pavadinimas"), data={"quantity": 1})
+        assert response.status_code == 404
+
+    def test_return_201_when_data_is_generated(self, authorized_client: APIClientWithQueryCounter) -> None:
+        assert Salis.objects.all().count() == 0
+
+        response = authorized_client.post(self.get_url("salis"), data={"quantity": 1})
+        assert response.status_code == 201
+        assert Salis.objects.all().count() == 1
+
+    def test_generate_multiple_objects(self, authorized_client: APIClientWithQueryCounter) -> None:
+        assert Salis.objects.all().count() == 0
+
+        response = authorized_client.post(self.get_url("salis"), data={"quantity": 2})
+        assert response.status_code == 201
+        assert Salis.objects.all().count() == 2
+
+    @pytest.mark.parametrize("client", [100], indirect=True)
+    def test_related_objects_generated_using_same_salis_instance(
+        self, authorized_client: APIClientWithQueryCounter
+    ) -> None:
+        response = authorized_client.post(self.get_url("seniunija"), data={"quantity": 1})
+
+        assert response.status_code == 201
+        assert Salis.objects.all().count() == 1
