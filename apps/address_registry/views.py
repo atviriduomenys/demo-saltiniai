@@ -13,7 +13,7 @@ from spyne.protocol.soap import Soap11
 from spyne.protocol.xml import XmlDocument
 from spyne.server.django import DjangoApplication
 
-from apps.address_registry.services import DemoService
+from apps.address_registry.services import CityNameService, CityService, DemoService
 
 demo_application_json = csrf_exempt(
     DjangoApplication(
@@ -49,6 +49,19 @@ demo_application_xml = csrf_exempt(
             name="Demo XML Service",
             in_protocol=HttpRpc(validator="soft"),
             out_protocol=XmlDocument(validator="soft"),
+        )
+    )
+)
+
+
+cities_application_soap = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [CityService, CityNameService],
+            tns="cities_application_tns",
+            name="CitiesApplication",
+            in_protocol=Soap11(validator="lxml"),
+            out_protocol=Soap11(validator="soft"),
         )
     )
 )
