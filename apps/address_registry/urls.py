@@ -2,6 +2,7 @@ from django.urls import include, path, re_path
 
 from apps.address_registry.views import (
     GenerateTestData,
+    cities_application_json,
     cities_application_soap,
     demo_application_json,
     demo_application_soap,
@@ -24,6 +25,7 @@ urlpatterns = [
         include(
             [
                 re_path(r"^soap/", cities_application_soap),
+                re_path(r"^json/", cities_application_json),
             ]
         ),
     ),

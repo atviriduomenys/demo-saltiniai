@@ -406,7 +406,7 @@ def test_content_types(client: APIClientWithQueryCounter, endpoint: str, frmt: s
     assert response.headers["Content-Type"] == content_type
 
 
-class TestCitiesApplication:
+class TestCitiesApplicationSoap:
     @pytest.fixture
     def client(self) -> DjangoTestClient:
         return DjangoTestClient("/api/v1/cities-app/soap/", cities_application_soap.app)
@@ -440,6 +440,41 @@ class TestCitiesApplication:
         data = response_data[0]
         assert data.id == pavadinimas.id
         assert data.gyvenviete.id == gyvenviete.id
+
+
+class TestCitiesApplicationJson:
+    def test_city_response(self, client: APIClientWithQueryCounter) -> None:
+        gyvenviete = make(Gyvenviete)
+        pavadinimas1 = make(Pavadinimas, linksnis="VARDININKAS", gyvenviete=gyvenviete)
+        pavadinimas2 = make(Pavadinimas, linksnis="KILMININKAS", gyvenviete=gyvenviete)
+
+        response = client.get("/api/v1/cities-app/json/cities")
+        assert response.status_code == 200
+
+        response_data = response.json()
+        assert len(response_data) == 1
+
+        data = response_data[0]
+        assert data["id"] == gyvenviete.id
+        assert len(data["pavadinimo_formos"]) == 2
+        assert {data["pavadinimo_formos"][0]["id"], data["pavadinimo_formos"][1]["id"]} == {
+            pavadinimas1.id,
+            pavadinimas2.id,
+        }
+
+    def test_city_name_response(self, client: APIClientWithQueryCounter) -> None:
+        gyvenviete = make(Gyvenviete)
+        pavadinimas = make(Pavadinimas, gyvenviete=gyvenviete)
+
+        response = client.get("/api/v1/cities-app/json/city_names")
+        assert response.status_code == 200
+
+        response_data = response.json()
+        assert len(response_data) == 1
+
+        data = response_data[0]
+        assert data["id"] == pavadinimas.id
+        assert data["gyvenviete"]["id"] == gyvenviete.id
 
 
 class TestGenerateTestData:

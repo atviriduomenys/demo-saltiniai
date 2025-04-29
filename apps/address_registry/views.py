@@ -67,6 +67,19 @@ cities_application_soap = csrf_exempt(
 )
 
 
+cities_application_json = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [CityService, CityNameService],
+            tns="cities_application_tns",
+            name="CitiesApplication",
+            in_protocol=HttpRpc(validator="soft"),
+            out_protocol=JsonDocument(validator="soft"),
+        )
+    )
+)
+
+
 class GenerateTestDataSerializer(serializers.Serializer):
     quantity = serializers.IntegerField(min_value=1, max_value=1000, required=True)
 
