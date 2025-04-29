@@ -9,7 +9,12 @@ from apps.address_registry.builders import (
 )
 from apps.address_registry.models import Gyvenviete, Pavadinimas
 from apps.address_registry.schema import AddressRegistryResponseModel, GyvenvieteModel, PavadinimasModel
-from apps.address_registry.schema_nested import AddressRegistryNestedResponseModel, GyvenvietePavadinimasResponseModel
+from apps.address_registry.schema_nested import (
+    AddressRegistryNestedResponseModel,
+    GyvenvietePavadinimasNestedModel,
+    GyvenvietePavadinimasResponseModel,
+    PavadinimasGyvenvieteNestedModel,
+)
 
 
 class DemoService(Service):
@@ -38,3 +43,22 @@ class DemoService(Service):
     @rpc(String, _returns=GyvenvietePavadinimasResponseModel)
     def gyvenviete_pavadinimai(self, pavadinimas: str | None) -> dict:
         return build_gyvenviete_pavadinimai(pavadinimas)
+
+
+class CityNameService(Service):
+    @rpc(_returns=Iterable(PavadinimasGyvenvieteNestedModel))
+    def city_names(self) -> QuerySet:
+        return Pavadinimas.objects.all().select_related("gyvenviete")
+
+
+class CityService(Service):
+    @rpc(_returns=Iterable(GyvenvietePavadinimasNestedModel))
+    def cities(self) -> list[dict]:
+        queryset = Gyvenviete.objects.all().prefetch_related("pavadinimo_formos")
+        return [
+            {
+                **gyvenviete.to_dict(),
+                "pavadinimo_formos": [{**pavadinimas.to_dict()} for pavadinimas in gyvenviete.pavadinimo_formos.all()],
+            }
+            for gyvenviete in queryset
+        ]
