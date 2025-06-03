@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from spyne import Iterable, String, rpc
+from spyne import ComplexModel, Iterable, String, rpc
 from spyne.service import Service
 
 from apps.address_registry.builders import (
@@ -45,10 +45,32 @@ class DemoService(Service):
         return build_gyvenviete_pavadinimai(pavadinimas)
 
 
+class TownFilter(ComplexModel):
+    pavadinimas = String(min_occurs=0, nillable=True)
+
+
+class CityNameFilter(ComplexModel):
+    pavadinimas = String(min_occurs=0, nillable=True)
+    linksnis = String(min_occurs=0, nillable=True)
+    gyvenviete = TownFilter
+
+
 class CityNameService(Service):
-    @rpc(_returns=Iterable(PavadinimasGyvenvieteNestedModel))
-    def city_names(self) -> QuerySet:
-        return Pavadinimas.objects.all().select_related("gyvenviete")
+    @rpc(CityNameFilter, _returns=Iterable(PavadinimasGyvenvieteNestedModel))
+    def city_names(self, city_name_filter: CityNameFilter | None = None) -> QuerySet:
+        queryset = Pavadinimas.objects.all().select_related("gyvenviete")
+
+        if not city_name_filter:
+            return queryset
+
+        if name := city_name_filter.pavadinimas:
+            queryset = queryset.filter(pavadinimas__icontains=name)
+        if case := city_name_filter.linksnis:
+            queryset = queryset.filter(linksnis=case)
+        if city_name_filter.gyvenviete and (town_name := city_name_filter.gyvenviete.pavadinimas):
+            queryset = queryset.filter(gyvenviete__pavadinimas__icontains=town_name)
+
+        return queryset
 
 
 class CityService(Service):
