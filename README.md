@@ -33,15 +33,29 @@ make run-docker
 
 ### II. Virtualenv (OSX)
 
+Install `gdal`:
+```sh
+brew install gdal
+```
+
+Install `python3.10`:
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install python@3.10
+```
 
+Install `virtualenv` (or use any other virtual environment tool):
+```sh
 /usr/local/opt/python@3.10/bin/pip3 install virtualenv
 /usr/local/opt/python@3.10/bin/python3 -m virtualenv .venv
+```
 
+Start services:
+```sh
 source .venv/bin/activate
 make sync
+make start-databases
+make run
 ```
 
 ### Wrapped commands

@@ -21,7 +21,7 @@ help:
 	@echo 'make start-databases - starts postgres in background'
 	@echo 'make down-docker     - stops docker containers and removes them'
 	@echo 'make purge-databases - stop postgres and purge data volume'
-	@echo 'make run-docker      - starts django docker environment'
+	@echo 'make run-docker      - starts docker containers'
 	@echo 'make restore         - restores database.sql to docker-compose database'
 	@echo 'make restore-docker  - restores database.sql to docker-compose database when run from django docker container'
 
@@ -84,7 +84,7 @@ purge-databases: down-docker
 	docker compose -f docker-compose.yml rm postgres -fv
 
 run-docker:
-	docker compose -f docker-compose.yml run -p 8000:8000 django /bin/sh
+	docker compose -f docker-compose.yml up -d
 
 restore:
 	export PGPASSWORD=django; cat database.sql | psql -h 127.0.0.1 -p 9432 -U django
