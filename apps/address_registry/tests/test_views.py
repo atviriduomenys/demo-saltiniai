@@ -441,6 +441,30 @@ class TestCitiesApplicationSoap:
         assert data.id == pavadinimas.id
         assert data.gyvenviete.id == gyvenviete.id
 
+    def test_city_name_response_with_request_body(self, client: DjangoTestClient) -> None:
+        gyvenviete = make(Gyvenviete, pavadinimas="TestName")
+        pavadinimas1 = make(Pavadinimas, gyvenviete=gyvenviete, linksnis="VARDININKAS", pavadinimas="name1")
+        make(Pavadinimas, gyvenviete=gyvenviete, linksnis="KILMININKAS", pavadinimas="name2")
+
+        request_data = {
+            "city_name_filter": {
+                "pavadinimas": "name1",
+                "linksnis": "VARDININKAS",
+                "gyvenviete": {
+                    "pavadinimas": "TestName",
+                },
+            }
+        }
+        response = client.service.city_names.get_django_response(**request_data)
+        assert response.status_code == 200
+
+        response_data = list(client.service.city_names(**request_data))
+        assert len(response_data) == 1
+
+        data = response_data[0]
+        assert data.id == pavadinimas1.id
+        assert data.gyvenviete.id == gyvenviete.id
+
 
 class TestCitiesApplicationJson:
     def test_city_response(self, client: APIClientWithQueryCounter) -> None:
