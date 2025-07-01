@@ -1,5 +1,5 @@
 dataset,resource,base,model,property,type,ref,source,access,prepare,level,uri
-example,,,,,sql,,,,,,
+datasets/gov/vssa/example/sql,,,,,dataset,,,,,,
 ,api,,,,sql,,postgresql://django:django@localhost:9432/django,,,,
 ,,,,,,,,,,,
 ,,,Salis,,,id,address_registry_salis,open,,,
