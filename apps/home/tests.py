@@ -55,7 +55,7 @@ class TestUrlPathPatterns:
     """Ensure that all URL paths comply with the best practices.
 
     It is possible to face hard to debug issues, when URL paths do not comply with
-    the best practices. For example, when a URL path is missing trailing / Django
+    the best practices. For demo, when a URL path is missing trailing / Django
     usually redirects the request to another URL, which has trailing /.
     The body of PUT/POST request is being lost during this redirection.
     This test suite makes sure that such cases are avoided by forcing

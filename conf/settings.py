@@ -34,6 +34,8 @@ BUILD_VERSION = os.getenv("BUILD_VERSION", "")
 
 # Semantic versioning + build version
 VERSION = f"0.0.0_{BUILD_VERSION}"
+GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
+GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
 # Returns user even if it's not active, lets do handle it manually
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
@@ -175,7 +177,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "COERCE_DECIMAL_TO_STRING": False,
 }
-
+GDAL_LIBRARY_PATH = "/opt/homebrew/Cellar/gdal/3.11.0_2/lib/libgdal.dylib"
+GEOS_LIBRARY_PATH = "/opt/homebrew/Cellar/geos/3.13.1/lib/libgeos_c.dylib"
 # user uploads
 FILE_UPLOAD_PERMISSIONS = 0o644
 CKEDITOR_UPLOAD_PATH = "uploads/"

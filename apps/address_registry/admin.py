@@ -1,27 +1,25 @@
 from django.contrib import admin
 
 from apps.address_registry.models import (
-    Apskritis,
-    Dokumentas,
-    DokumentoAutorius,
-    Gyvenviete,
-    JuridinisAsmuo,
-    NejuridinisAsmuo,
-    Organizacija,
-    Pavadinimas,
-    Salis,
-    Savivaldybe,
-    Seniunija,
+    Administration,
+    Continent,
+    Country,
+    County,
+    Document,
+    DocumentAuthor,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
 
-admin.site.register(Salis)
-admin.site.register(Gyvenviete)
-admin.site.register(Pavadinimas)
-admin.site.register(Dokumentas)
-admin.site.register(DokumentoAutorius)
-admin.site.register(Apskritis)
-admin.site.register(Savivaldybe)
-admin.site.register(Seniunija)
-admin.site.register(Organizacija)
-admin.site.register(JuridinisAsmuo)
-admin.site.register(NejuridinisAsmuo)
+admin.site.register(Administration)
+admin.site.register(Country)
+admin.site.register(County)
+admin.site.register(Document)
+admin.site.register(DocumentAuthor)
+admin.site.register(Eldership)
+admin.site.register(Municipality)
+admin.site.register(Settlement)
+admin.site.register(Title)
+admin.site.register(Continent)

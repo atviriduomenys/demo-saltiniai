@@ -1,87 +1,69 @@
+from random import random
+
 from model_bakery import seq
-from model_bakery.recipe import Recipe, foreign_key, related
+from model_bakery.recipe import Recipe, foreign_key
 
 from apps.address_registry.models import (
-    Apskritis,
-    Dokumentas,
-    DokumentoAutorius,
-    Gyvenviete,
-    JuridinisAsmuo,
-    NejuridinisAsmuo,
-    Pavadinimas,
-    Salis,
-    Savivaldybe,
-    Seniunija,
+    Administration,
+    AdministrativeUnit,
+    Continent,
+    Country,
+    County,
+    Document,
+    DocumentAuthor,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
 
-salis = Recipe(
-    Salis,
-    kodas=seq(1),
-    pavadinimas=seq("Salies pavadinimas - "),
-    pavadinimas_lt=seq("Salies pavadinimas LT - "),
-    pavadinimas_en=seq("Salies pavadinimas EN - "),
+continent = Recipe(
+    Continent,
+    name=seq("Europe - "),
 )
 
-gyvenviete = Recipe(
-    Gyvenviete,
-    pavadinimas=seq("Gyvenvietes pavadinimas - "),
-    salis=foreign_key(salis),
+country = Recipe(
+    Country,
+    title=seq("Lietuva - %s", random()),
+    title_lt=seq("Lietuva - "),
+    title_en=seq("Lithuania - "),
 )
 
-pavadinimas = Recipe(
-    Pavadinimas,
-    pavadinimas=seq("Pavadinimas - "),
-    kirciuotas=seq("Pavadinimo kirtis - "),
-    gyvenviete=foreign_key(gyvenviete),
+
+document = Recipe(Document, number=seq("DOK-NUMERIS-"))
+
+
+document_author = Recipe(
+    DocumentAuthor, name=seq("Vardas - "), surname=seq("Pavarde - "), document=foreign_key(document, one_to_one=True)
 )
 
-dokumentas = Recipe(
-    Dokumentas,
-    numeris=seq("DOK-NUMERIS-"),
+settlement = Recipe(Settlement, title_lt=seq("Settlement title - "), area=seq(1), country=foreign_key(country))
+
+administrative_unit = Recipe(
+    AdministrativeUnit,
+    code=seq(1),
+    title=seq("Administrative Unit title - "),
+    area=seq(1),
+    country=foreign_key(country),
+    centre=foreign_key(settlement),
 )
 
-dokumento_autorius = Recipe(
-    DokumentoAutorius,
-    dokumentas=foreign_key(dokumentas, one_to_one=True),
-    vardas=seq("Vardas - "),
-    pavarde=seq("Pavarde - "),
+title = Recipe(Title, title=seq("Title - "), settlement=foreign_key(settlement))
+
+county = Recipe(
+    County,
 )
 
-apskritis = Recipe(
-    Apskritis,
-    tipas="APSKRITIS",
-    pavadinimas=seq("Apskrities pavadinimas - "),
-    centras=foreign_key(gyvenviete),
-    dokumentai=related(dokumentas, dokumentas),
-    salis=foreign_key(salis),
+municipality = Recipe(
+    Municipality,
 )
 
-savivaldybe = Recipe(
-    Savivaldybe,
-    tipas="SAVIVALDYBE",
-    pavadinimas=seq("Savivaldybes pavadinimas - "),
-    centras=foreign_key(gyvenviete),
-    dokumentai=related(dokumentas, dokumentas),
-    salis=foreign_key(salis),
-    apskritis=foreign_key(apskritis),
+eldership = Recipe(
+    Eldership,
 )
 
-seniunija = Recipe(
-    Seniunija,
-    tipas="SENIUNIJA",
-    pavadinimas=seq("Seniunijos pavadinimas - "),
-    centras=foreign_key(gyvenviete),
-    dokumentai=related(dokumentas, dokumentas),
-    salis=foreign_key(salis),
-    savivaldybe=foreign_key(savivaldybe),
-)
-
-juridinis_asmuo = Recipe(
-    JuridinisAsmuo,
-    pavadinimas=seq("Juridinis pavadinimas - "),
-)
-
-nejuridinis_asmuo = Recipe(
-    NejuridinisAsmuo,
-    pavadinimas=seq("Nejuridinis pavadinimas - "),
+administration = Recipe(
+    Administration,
+    country=foreign_key(country),
+    admin_unit=foreign_key(administrative_unit),
 )

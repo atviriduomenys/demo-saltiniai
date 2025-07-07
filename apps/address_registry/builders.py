@@ -1,34 +1,32 @@
 from typing import Any
 
 from apps.address_registry.models import (
-    AdministracinisVienetas,
-    Apskritis,
-    Dokumentas,
-    DokumentoAutorius,
-    Gyvenviete,
-    JuridinisAsmuo,
-    NejuridinisAsmuo,
-    Organizacija,
-    Pavadinimas,
-    Salis,
-    Savivaldybe,
-    Seniunija,
+    Administration,
+    AdministrativeUnit,
+    Continent,
+    Country,
+    County,
+    Document,
+    DocumentAuthor,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
 
 
 def build_address_registry() -> dict:
     return {
-        "salys": Salis.objects.all(),
-        "gyvenvietes": Gyvenviete.objects.all(),
-        "pavadinimai": Pavadinimas.objects.all(),
-        "dokumentai": Dokumentas.objects.all(),
-        "dokumentu_autoriai": DokumentoAutorius.objects.all(),
-        "apskritys": Apskritis.objects.all(),
-        "savivaldybes": Savivaldybe.objects.all(),
-        "seniunijos": Seniunija.objects.all(),
-        "organizacijos": Organizacija.objects.all(),
-        "juridiniai_asmenys": JuridinisAsmuo.objects.all(),
-        "nejuridiniai_asmenys": NejuridinisAsmuo.objects.all(),
+        "countries": Country.objects.all(),
+        "settlements": Settlement.objects.all(),
+        "titles": Title.objects.all(),
+        "documents": Document.objects.all(),
+        "document_authors": DocumentAuthor.objects.all(),
+        "continents": Continent.objects.all(),
+        "elderships": Eldership.objects.all(),
+        "municipalities": Municipality.objects.all(),
+        "counties": County.objects.all(),
+        "administrations": Administration.objects.all(),
     }
 
 
@@ -39,92 +37,85 @@ def _get_one_by_dict(source: list[dict], filter_key: str, filter_value: Any) -> 
     )
 
 
-def _get_gyvenviete_dict(gyvenviete: Gyvenviete) -> dict:
+def _get_settlement_dict(settlement: Settlement) -> dict:
     return {
-        **gyvenviete.to_dict(),
-        "salis": gyvenviete.salis.to_dict(),
-        "pavadinimu_formos": [pavadinimas.to_dict() for pavadinimas in gyvenviete.pavadinimo_formos.all()],
+        **settlement.to_dict(),
+        "country": settlement.country.to_dict(),
+        "title_forms": [title.to_dict() for title in settlement.title_forms.all()],  # ?
     }
 
 
-def _get_administracinis_vienetas_dict(
-    obj: AdministracinisVienetas,
-    gyvenvietes: list[dict],
+def _get_administrative_unit_dict(
+    obj: AdministrativeUnit,
+    settlements: list[dict],
 ) -> dict:
     return {
         **obj.to_dict(),
-        "centras": _get_one_by_dict(gyvenvietes, filter_key="id", filter_value=obj.centras_id),
-        "dokumentai": [
-            {
-                **dokumentas.to_dict(),
-                "dokumento_autorius": (
-                    dokumentas.dokumentoautorius.to_dict() if hasattr(dokumentas, "dokumentoautorius") else {}
-                ),
-            }
-            for dokumentas in obj.dokumentai.all()
-        ],
-        "salis": obj.salis.to_dict(),
+        "centre": _get_one_by_dict(settlements, filter_key="id", filter_value=obj.centre_id),
+        "country": obj.country.to_dict(),
     }
 
 
 def build_address_registry_nested() -> dict:
-    gyvenvietes = Gyvenviete.objects.all().select_related("salis").prefetch_related("pavadinimo_formos")
-    apskritys = Apskritis.objects.all().select_related("salis").prefetch_related("dokumentai__dokumentoautorius")
-    savivaldybes = Savivaldybe.objects.all().select_related("salis").prefetch_related("dokumentai__dokumentoautorius")
-    seniunijos = Seniunija.objects.all().select_related("salis").prefetch_related("dokumentai__dokumentoautorius")
+    settlements = Settlement.objects.all().select_related("country").prefetch_related("title_forms")
+    counties = County.objects.select_related("admin_unit__country").prefetch_related("admin_unit")
+    municipalities = Municipality.objects.select_related("admin_unit__country").prefetch_related("admin_unit")
+    elderships = Eldership.objects.select_related("admin_unit__country").prefetch_related("admin_unit")
 
-    gyvenvietes_dict = [_get_gyvenviete_dict(gyvenviete) for gyvenviete in gyvenvietes]
-    apskritys_dict = [
+    settlements_dict = [_get_settlement_dict(settlement) for settlement in settlements]
+    counties_dict = [
         {
-            **_get_administracinis_vienetas_dict(apskritis, gyvenvietes_dict),
+            "admin_unit_id": county.admin_unit_id,
+            **_get_administrative_unit_dict(county.admin_unit, settlements_dict),
         }
-        for apskritis in apskritys
+        for county in counties
     ]
-    savivaldybes_dict = [
+    municipalities_dict = [
         {
-            **_get_administracinis_vienetas_dict(savivaldybe, gyvenvietes_dict),
-            "apskritis": _get_one_by_dict(apskritys_dict, filter_key="id", filter_value=savivaldybe.apskritis_id),
+            "admin_unit_id": municipality.admin_unit_id,
+            **_get_administrative_unit_dict(municipality.admin_unit, settlements_dict),
+            "county": _get_one_by_dict(counties_dict, filter_key="id", filter_value=municipality.county_id),
         }
-        for savivaldybe in savivaldybes
+        for municipality in municipalities
     ]
-    seniunijos_dict = [
+    elderships_dict = [
         {
-            **_get_administracinis_vienetas_dict(seniunija, gyvenvietes_dict),
-            "savivaldybe": _get_one_by_dict(savivaldybes_dict, filter_key="id", filter_value=seniunija.savivaldybe_id),
+            **_get_administrative_unit_dict(eldership.admin_unit, settlements_dict),
+            "municipality": _get_one_by_dict(
+                municipalities_dict, filter_key="id", filter_value=eldership.municipality_id
+            ),
         }
-        for seniunija in seniunijos
+        for eldership in elderships
     ]
 
     return {
-        "gyvenvietes": gyvenvietes_dict,
-        "apskritys": apskritys_dict,
-        "savivaldybes": savivaldybes_dict,
-        "seniunijos": seniunijos_dict,
-        "juridiniai_asmenys": JuridinisAsmuo.objects.all(),
-        "nejuridiniai_asmenys": NejuridinisAsmuo.objects.all(),
+        "settlements": settlements_dict,
+        "counties": counties_dict,
+        "municipalities": municipalities_dict,
+        "elderships": elderships_dict,
     }
 
 
-def build_gyvenviete_pavadinimai(pavadinimas: str | None) -> dict:
-    gyvenviete_queryset = Gyvenviete.objects.all().prefetch_related("pavadinimo_formos")
-    pavadinimai_queryset = Pavadinimas.objects.all().select_related("gyvenviete")
-    if pavadinimas:
-        gyvenviete_queryset = gyvenviete_queryset.filter(pavadinimas__icontains=pavadinimas)
-        pavadinimai_queryset = pavadinimai_queryset.filter(pavadinimas__icontains=pavadinimas)
+def build_settlement_title(title: str | None) -> dict:
+    settlement_queryset = Settlement.objects.all().prefetch_related("title_forms")
+    title_queryset = Title.objects.all().select_related("settlement")
+    if title:
+        settlement_queryset = settlement_queryset.filter(title_lt__icontains=title)
+        title_queryset = title_queryset.filter(title__icontains=title)
 
     return {
-        "gyvenvietes": [
+        "settlements": [
             {
-                **gyvenviete.to_dict(),
-                "pavadinimo_formos": [{**pavadinimas.to_dict()} for pavadinimas in gyvenviete.pavadinimo_formos.all()],
+                **settlement.to_dict(),
+                "title_forms": [{**title.to_dict()} for title in settlement.title_forms.all()],
             }
-            for gyvenviete in gyvenviete_queryset
+            for settlement in settlement_queryset
         ],
-        "pavadinimai": [
+        "titles": [
             {
-                **pavadinimas.to_dict(),
-                "gyvenviete": pavadinimas.gyvenviete.to_dict(),
+                **title.to_dict(),
+                "settlement": title.settlement.to_dict(),
             }
-            for pavadinimas in pavadinimai_queryset
+            for title in title_queryset
         ],
     }

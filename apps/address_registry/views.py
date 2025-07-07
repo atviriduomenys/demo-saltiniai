@@ -2,11 +2,11 @@ from django.apps import apps as django_apps
 from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from spyne.application import Application
+from spyne import Application
 from spyne.protocol.http import HttpRpc
 from spyne.protocol.json import JsonDocument
 from spyne.protocol.soap import Soap11
@@ -85,7 +85,9 @@ class GenerateTestDataSerializer(serializers.Serializer):
 
 
 class GenerateTestData(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        AllowAny,
+    ]
 
     @swagger_auto_schema(request_body=GenerateTestDataSerializer)
     def post(self, request: Request, app_label: str, model_name: str) -> Response:
