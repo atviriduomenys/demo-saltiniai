@@ -1,83 +1,75 @@
 from spyne import Array, ComplexModel
 from spyne.util.django import DjangoComplexModel
 
-from apps.address_registry.models import Apskritis, Dokumentas, Gyvenviete, Pavadinimas, Savivaldybe, Seniunija
-from apps.address_registry.schema import (
-    DokumentoAutoriusModel,
-    GyvenvieteModel,
-    JuridinisAsmuoModel,
-    NejuridinisAsmuoModel,
-    PavadinimasModel,
-    SalisModel,
-)
+from apps.address_registry.models import County, Document, Eldership, Municipality, Settlement, Title
+from apps.address_registry.schema import CountryModel, DocumentAuthorModel, SettlementModel, TitleModel
 from apps.utils.spyne_utils import DjangoAttributes
 
 
-class GyvenvieteNestedResponseModel(DjangoComplexModel):
-    salis = SalisModel
-    pavadinimu_formos = Array(PavadinimasModel)
+class SettlementNestedResponseModel(DjangoComplexModel):
+    country = CountryModel
+    title_forms = Array(TitleModel)
 
     class Attributes(DjangoAttributes):
-        django_model = Gyvenviete
+        django_model = Settlement
 
 
-class DokumentasNestedResponseModel(DjangoComplexModel):
-    dokumento_autorius = DokumentoAutoriusModel
+class DocumentsNestedResponseModel(DjangoComplexModel):
+    document_author = DocumentAuthorModel
 
     class Attributes(DjangoAttributes):
-        django_model = Dokumentas
+        django_model = Document
+        django_exclude = ("content",)
 
 
-class AdministracinisVienetasMixin(ComplexModel):
+class AdministrativeUnitMixin(ComplexModel):
     __mixin__ = True
 
-    centras = GyvenvieteNestedResponseModel
-    dokumentai = Array(DokumentasNestedResponseModel)
-    salis = SalisModel
+    centre = SettlementNestedResponseModel
+    documents = Array(DocumentsNestedResponseModel)
+    country = CountryModel
 
 
-class ApskritisNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
+class CountyNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
     class Attributes(DjangoAttributes):
-        django_model = Apskritis
+        django_model = County
 
 
-class SavivaldybeNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
-    apskritis = ApskritisNestedResponseModel
-
-    class Attributes(DjangoAttributes):
-        django_model = Savivaldybe
-
-
-class SeniunijosNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
-    savivaldybe = SavivaldybeNestedResponseModel
+class MunicipalityNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
+    county = CountyNestedResponseModel
 
     class Attributes(DjangoAttributes):
-        django_model = Seniunija
+        django_model = Municipality
+
+
+class EldershipNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
+    municipality = MunicipalityNestedResponseModel
+
+    class Attributes(DjangoAttributes):
+        django_model = Eldership
 
 
 class AddressRegistryNestedResponseModel(ComplexModel):
-    gyvenvietes = Array(GyvenvieteNestedResponseModel)
-    apskritys = Array(ApskritisNestedResponseModel)
-    savivaldybes = Array(SavivaldybeNestedResponseModel)
-    seniunijos = Array(SeniunijosNestedResponseModel)
-    juridiniai_asmenys = Array(JuridinisAsmuoModel)
-    nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)
+    settlements = Array(SettlementNestedResponseModel)
+    counties = Array(CountyNestedResponseModel)
+    municipalities = Array(MunicipalityNestedResponseModel)
+    elderships = Array(EldershipNestedResponseModel)
 
 
-class GyvenvietePavadinimasNestedModel(DjangoComplexModel):
-    pavadinimo_formos = Array(PavadinimasModel)
+class SettlementTitleNestedModel(DjangoComplexModel):
+    title_forms = Array(TitleModel)
 
     class Attributes(DjangoAttributes):
-        django_model = Gyvenviete
+        django_model = Settlement
 
 
-class PavadinimasGyvenvieteNestedModel(DjangoComplexModel):
-    gyvenviete = GyvenvieteModel
+class TitleSettlementNestedModel(DjangoComplexModel):
+    settlement = SettlementModel
 
     class Attributes(DjangoAttributes):
-        django_model = Pavadinimas
+        django_model = Title
 
 
-class GyvenvietePavadinimasResponseModel(ComplexModel):
-    gyvenvietes = Array(GyvenvietePavadinimasNestedModel)
-    pavadinimai = Array(PavadinimasGyvenvieteNestedModel)
+class SettlementTitleResponseModel(ComplexModel):
+    settlements = Array(SettlementTitleNestedModel)
+    titles = Array(TitleSettlementNestedModel)
