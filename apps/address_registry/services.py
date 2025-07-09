@@ -11,8 +11,8 @@ from apps.address_registry.models import Settlement, Title
 from apps.address_registry.schema import AddressRegistryResponseModel, SettlementModel, TitleModel
 from apps.address_registry.schema_nested import (
     AddressRegistryNestedResponseModel,
-    SettlementNestedResponseModel,
     SettlementTitleNestedModel,
+    SettlementTitleResponseModel,
     TitleSettlementNestedModel,
 )
 
@@ -40,7 +40,7 @@ class DemoService(Service):
     def address_registry_nested(self) -> dict:
         return build_address_registry_nested()
 
-    @rpc(String, _returns=SettlementNestedResponseModel)
+    @rpc(String, _returns=SettlementTitleResponseModel)
     def settlement_title(self, title: str | None) -> dict:
         return build_settlement_title(title)
 
