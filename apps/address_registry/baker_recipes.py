@@ -54,19 +54,17 @@ county = Recipe(
     County,
     code=seq(1),
     title=seq("County title - "),
+    type="COUNTY",
 )
 
 municipality = Recipe(
     Municipality,
     code=seq(1),
     title=seq("Municipality title - "),
+    type="MUNICIPALITY",
 )
 
-eldership = Recipe(
-    Eldership,
-    code=seq(1),
-    title=seq("Eldership title - "),
-)
+eldership = Recipe(Eldership, code=seq(1), title=seq("Eldership title - "), type="ELDERSHIP")
 
 administration = Recipe(
     Administration,

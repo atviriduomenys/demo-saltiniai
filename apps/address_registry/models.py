@@ -290,21 +290,6 @@ class AdministrativeUnit(models.Model):
             "country_id": getattr(self, "country_id", None),
         }
 
-    @classmethod
-    def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["AdministrativeUnit"]:
-        administrative_units = []
-        for _ in range(quantity):
-            settlement = kwargs.get("settlement") or Settlement.generate_test_data()[0]
-            administrative_unit = make_recipe(
-                "address_registry.administrative_unit",
-                country=[settlement.country],
-                centre=settlement,
-                _fill_optional=True,
-            )
-            administrative_units.append(administrative_unit)
-
-        return administrative_units
-
 
 class Administration(AdministrativeUnit):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
