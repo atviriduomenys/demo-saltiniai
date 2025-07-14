@@ -2,47 +2,11 @@ from django.db.models import QuerySet
 from spyne import ComplexModel, Iterable, String, rpc
 from spyne.service import Service
 
-from apps.address_registry.builders import (
-    build_address_registry,
-    build_address_registry_nested,
-    build_settlement_title,
-)
 from apps.address_registry.models import Settlement, Title
-from apps.address_registry.schema import AddressRegistryResponseModel, SettlementModel, TitleModel
 from apps.address_registry.schema_nested import (
-    AddressRegistryNestedResponseModel,
     SettlementTitleNestedModel,
-    SettlementTitleResponseModel,
     TitleSettlementNestedModel,
 )
-
-
-class DemoService(Service):
-    @rpc(String, _returns=Iterable(SettlementModel))
-    def settlement(self, title_lt: str | None) -> QuerySet:
-        queryset = Settlement.objects.all()
-        if title_lt:
-            queryset = queryset.filter(title_lt__icontains=title_lt)
-        return queryset
-
-    @rpc(String, _returns=Iterable(TitleModel))
-    def title(self, title: str | None) -> QuerySet:
-        queryset = Title.objects.all()
-        if title:
-            queryset = queryset.filter(title__icontains=title)
-        return queryset
-
-    @rpc(_returns=AddressRegistryResponseModel)
-    def address_registry(self) -> dict:
-        return build_address_registry()
-
-    @rpc(_returns=AddressRegistryNestedResponseModel)
-    def address_registry_nested(self) -> dict:
-        return build_address_registry_nested()
-
-    @rpc(String, _returns=SettlementTitleResponseModel)
-    def settlement_title(self, title: str | None) -> dict:
-        return build_settlement_title(title)
 
 
 class TownFilter(ComplexModel):

@@ -6,7 +6,7 @@ from model_bakery.baker import make_recipe
 
 SETTLEMENT_TYPE = ["SMALL TOWN", "HAMLET", "VILLAGE"]
 GRAMMATICAL_CASE = ["NOMINATIVE", "GENITIVE"]
-ADMINISTRATIVE_UNIT_TYPE = ["MUNICIPALITY", "COUNTY", "ELDERSHIP"]
+ADMINISTRATIVE_UNIT_TYPE = ["MUNICIPALITY", "COUNTY", "ELDERSHIP", "ADMINISTRATION"]
 DOCUMENT_TYPE = ["ORDER", "LETTER"]
 DOCUMENT_STATUS = ["REGISTERED", "AMENDMENT", "DEREGISTERED"]
 
@@ -328,7 +328,7 @@ class Administration(models.Model):
     def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Administration"]:
         administrations = []
         for _ in range(quantity):
-            admin_unit = kwargs.get("Administration") or AdministrativeUnit.generate_test_data(quantity=1)[0]
+            admin_unit = kwargs.get("Administration") or AdministrativeUnit.generate_test_data(quantity=1, type="ADMINISTRATION")[0]
             administration = make_recipe(
                 "address_registry.administration",
                 admin_unit=admin_unit,
@@ -450,6 +450,5 @@ class Eldership(models.Model):
                 admin_unit=admin_unit,
                 _fill_optional=True,
             )
-
             elderships.append(eldership)
         return elderships

@@ -1,4 +1,3 @@
-from spyne import Array, ComplexModel
 from spyne.util.django import DjangoComplexModel
 
 from apps.address_registry.models import (
@@ -73,16 +72,3 @@ class CountyModel(DjangoComplexModel):
 class AdministrativeUnitModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
         django_model = AdministrativeUnit
-
-
-class AddressRegistryResponseModel(ComplexModel):
-    countries = Array(CountryModel)
-    settlements = Array(SettlementModel)
-    titles = Array(TitleModel)
-    documents = Array(DocumentModel)
-    document_authors = Array(DocumentAuthorModel)
-    elderships = Array(EldershipModel)
-    municipalities = Array(MunicipalityModel)
-    counties = Array(CountyModel)
-    administrations = Array(AdministrationModel)
-    administrative_units = Array(AdministrativeUnitModel)

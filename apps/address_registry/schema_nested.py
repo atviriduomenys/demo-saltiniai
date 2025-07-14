@@ -1,4 +1,4 @@
-from spyne import Array, ComplexModel
+from spyne import Array
 from spyne.util.django import DjangoComplexModel
 
 from apps.address_registry.models import (
@@ -62,13 +62,6 @@ class EldershipNestedResponseModel(
         django_model = Eldership
 
 
-class AddressRegistryNestedResponseModel(ComplexModel):
-    settlements = Array(SettlementNestedResponseModel)
-    counties = Array(CountyNestedResponseModel)
-    municipalities = Array(MunicipalityNestedResponseModel)
-    elderships = Array(EldershipNestedResponseModel)
-
-
 class SettlementTitleNestedModel(DjangoComplexModel):
     title_forms = Array(TitleModel)
 
@@ -81,8 +74,3 @@ class TitleSettlementNestedModel(DjangoComplexModel):
 
     class Attributes(DjangoAttributes):
         django_model = Title
-
-
-class SettlementTitleResponseModel(ComplexModel):
-    settlements = Array(SettlementTitleNestedModel)
-    titles = Array(TitleSettlementNestedModel)
