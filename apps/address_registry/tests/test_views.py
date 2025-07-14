@@ -5,6 +5,8 @@ from model_bakery.baker import make
 from spyne.client.django import DjangoTestClient
 
 from apps.address_registry.models import (
+    Administration,
+    AdministrativeUnit,
     Country,
     County,
     Document,
@@ -137,10 +139,12 @@ class TestAddressRegistry:
         document1 = make(Document)
         document_author = make(DocumentAuthor, document=document1)
         document2 = make(Document)
-        county = make(County, centre=settlement, country=country)
-        municipality = make(Municipality, centre=settlement, country=country, county=county)
-        eldership = make(Eldership, centre=settlement, country=country, municipality=municipality)
+        admin_unit = make(AdministrativeUnit, country=country, centre=settlement)
 
+        county = make(County, admin_unit=admin_unit)
+        municipality = make(Municipality, county=county, admin_unit=admin_unit)
+        eldership = make(Eldership, municipality=municipality, admin_unit=admin_unit)
+        administration = make(Administration, admin_unit=admin_unit, country=country)
         response = client.get("/api/v1/demo/json/address_registry")
 
         assert response.status_code == 200
@@ -204,51 +208,28 @@ class TestAddressRegistry:
                     "surname": document_author.surname,
                 }
             ],
-            "counties": [
-                {
-                    "id": county.id,
-                    "type": county.type,
-                    "code": county.code,
-                    "registered": county.registered,
-                    "deregistered": county.deregistered,
-                    "title": county.title,
-                    "area": county.area,
-                    "centre_id": settlement.id,
-                    "country_id": county.country_id,
-                    "country_code": county.country_code,
-                }
-            ],
+            "counties": [{"id": county.id, "admin_unit_id": county.admin_unit_id}],
             "municipalities": [
                 {
                     "id": municipality.id,
-                    "type": municipality.type,
-                    "code": municipality.code,
-                    "registered": municipality.registered,
-                    "deregistered": municipality.deregistered,
-                    "title": municipality.title,
-                    "area": municipality.area,
-                    "centre_id": settlement.id,
-                    "country_id": municipality.country_id,
-                    "country_code": municipality.country_code,
-                    "county_id": county.id,
+                    "admin_unit_id": municipality.admin_unit_id,
+                    "county_id": municipality.id,
                 }
             ],
             "elderships": [
                 {
                     "id": eldership.id,
-                    "type": eldership.type,
-                    "code": eldership.code,
-                    "registered": eldership.registered,
-                    "deregistered": eldership.deregistered,
-                    "title": eldership.title,
-                    "area": eldership.area,
-                    "centre_id": settlement.id,
-                    "country_id": eldership.country_id,
-                    "country_code": eldership.country_code,
-                    "municipality_id": municipality.id,
+                    "admin_unit_id": eldership.admin_unit_id,
+                    "municipality_id": eldership.id,
                 }
             ],
-            "administrations": [],
+            "administrations": [
+                {
+                    "id": administration.id,
+                    "admin_unit_id": administration.admin_unit_id,
+                    "country_id": country.id,
+                }
+            ],
         }
 
 
@@ -263,9 +244,11 @@ class TestAddressRegistryNested:
             country_code=country.code,
         )
         title = make(Title, settlement=settlement)
-        county = make(County, centre=settlement, country=country)
-        municipality = make(Municipality, country=country, county=county, centre=settlement)
-        eldership = make(Eldership, centre=settlement, country=country, municipality=municipality)
+        admin_unit = make(AdministrativeUnit, country=country, centre=settlement)
+
+        county = make(County, admin_unit=admin_unit)
+        municipality = make(Municipality, county=county, admin_unit=admin_unit)
+        eldership = make(Eldership, municipality=municipality, admin_unit=admin_unit)
 
         response = client.get("/api/v1/demo/json/address_registry_nested")
         assert response.status_code == 200
@@ -300,50 +283,21 @@ class TestAddressRegistryNested:
         }
         expected_county = {
             "id": county.id,
-            "type": county.type,
-            "code": county.code,
-            "registered": county.registered,
-            "deregistered": county.deregistered,
-            "title": county.title,
-            "area": county.area,
-            "centre_id": settlement.id,
-            "country_id": country.id,
-            "country_code": county.country_code,
-            "centre": expected_settlement,
-            "country": expected_country,
+            "admin_unit_id": county.admin_unit_id,
         }
         expected_municipality = {
             "id": municipality.id,
-            "type": municipality.type,
-            "code": municipality.code,
-            "registered": municipality.registered,
-            "deregistered": municipality.deregistered,
-            "title": municipality.title,
-            "area": municipality.area,
-            "centre_id": county.centre.id,
-            "country_id": country.id,
-            "country_code": municipality.country_code,
-            "centre": expected_settlement,
-            "country": expected_country,
+            "admin_unit_id": county.admin_unit_id,
+            "county_id": municipality.county_id,
             "county": expected_county,
-            "county_id": county.id,
         }
         expected_eldership = {
             "id": eldership.id,
-            "type": eldership.type,
-            "code": eldership.code,
-            "registered": eldership.registered,
-            "deregistered": eldership.deregistered,
-            "title": eldership.title,
-            "area": eldership.area,
-            "centre_id": municipality.county.centre.id,
-            "country_id": country.id,
-            "country_code": eldership.country_code,
-            "centre": expected_settlement,
-            "country": expected_country,
+            "admin_unit_id": county.admin_unit_id,
+            "municipality_id": eldership.municipality_id,
             "municipality": expected_municipality,
-            "municipality_id": municipality.id,
         }
+
         assert response.json() == {
             "settlements": [expected_settlement],
             "counties": [expected_county],

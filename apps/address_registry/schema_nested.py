@@ -1,7 +1,15 @@
 from spyne import Array, ComplexModel
 from spyne.util.django import DjangoComplexModel
 
-from apps.address_registry.models import County, Document, Eldership, Municipality, Settlement, Title
+from apps.address_registry.models import (
+    AdministrativeUnit,
+    County,
+    Document,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
+)
 from apps.address_registry.schema import CountryModel, DocumentAuthorModel, SettlementModel, TitleModel
 from apps.utils.spyne_utils import DjangoAttributes
 
@@ -22,27 +30,32 @@ class DocumentsNestedResponseModel(DjangoComplexModel):
         django_exclude = ("content",)
 
 
-class AdministrativeUnitMixin(ComplexModel):
-    __mixin__ = True
-
+class AdministrativeUnitNestedModel(DjangoComplexModel):
     centre = SettlementNestedResponseModel
-    documents = Array(DocumentsNestedResponseModel)
     country = CountryModel
 
+    class Attributes(DjangoAttributes):
+        django_model = AdministrativeUnit
 
-class CountyNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
+
+class CountyNestedResponseModel(DjangoComplexModel):
+    admin_unit = AdministrativeUnitNestedModel
+
     class Attributes(DjangoAttributes):
         django_model = County
 
 
-class MunicipalityNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
+class MunicipalityNestedResponseModel(DjangoComplexModel):
+    admin_unit = AdministrativeUnitNestedModel
     county = CountyNestedResponseModel
 
     class Attributes(DjangoAttributes):
         django_model = Municipality
 
 
-class EldershipNestedResponseModel(DjangoComplexModel, AdministrativeUnitMixin):
+class EldershipNestedResponseModel(
+    DjangoComplexModel,
+):
     municipality = MunicipalityNestedResponseModel
 
     class Attributes(DjangoAttributes):

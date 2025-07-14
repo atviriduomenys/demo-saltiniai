@@ -10,6 +10,7 @@ from apps.address_registry.builders import (
     build_address_registry_nested,
 )
 from apps.address_registry.models import (
+    AdministrativeUnit,
     Country,
     County,
     Eldership,
@@ -96,49 +97,48 @@ class TestGetSettlementDict:
 
 class TestGetAdministrativeUnitDict:
     def test_get_administrative_unit_dict(self) -> None:
-        country = make(Country)
-        settlement = make(Settlement, country=country)
-        county = make(County, centre=settlement, country=country)
+        county = make(County)
 
-        assert _get_administrative_unit_dict(county, [settlement.to_dict()]) == {
-            "id": county.id,
-            "uuid": county.uuid,
-            "type": county.type,
-            "code": county.code,
-            "registered": county.registered,
-            "deregistered": county.deregistered,
-            "title": county.title,
-            "area": county.area,
-            "centre_id": settlement.id,
-            "country_id": country.id,
-            "country_code": county.country_code,
-            "centre": settlement.to_dict(),
+        assert _get_administrative_unit_dict(county.admin_unit, [county.admin_unit.centre.to_dict()]) == {
+            "uuid": county.admin_unit.uuid,
+            "type": county.admin_unit.type,
+            "code": county.admin_unit.code,
+            "registered": county.admin_unit.registered,
+            "deregistered": county.admin_unit.deregistered,
+            "title": county.admin_unit.title,
+            "area": county.admin_unit.area,
+            "centre_id": county.admin_unit.centre.id,
+            "country_id": county.admin_unit.country.id,
+            "country_code": county.admin_unit.country_code,
+            "centre": county.admin_unit.centre.to_dict(),
             "country": {
-                "id": country.id,
-                "code": country.code,
-                "title_lt": country.title_lt,
-                "title_en": country.title_en,
-                "title": country.title,
-                "continent_id": country.continent_id,
+                "id": county.admin_unit.country.id,
+                "code": county.admin_unit.country.code,
+                "title_lt": county.admin_unit.country.title_lt,
+                "title_en": county.admin_unit.country.title_en,
+                "title": county.admin_unit.country.title,
+                "continent_id": county.admin_unit.country.continent_id,
             },
         }
 
     def test_centre_takes_dict_from_settlement_attribute_that_matches_centre_id(self) -> None:
         country = make(Country)
         settlement = make(Settlement, country=country)
-        county = make(County, centre=settlement, country=country)
+        admin_unit = make(AdministrativeUnit, centre=settlement, country=country)
+        county = make(County, admin_unit=admin_unit)
 
-        test_list = [{"id": county.centre_id, "foo": "bar"}]
-        result = _get_administrative_unit_dict(county, settlements=test_list)
+        test_list = [{"id": county.admin_unit.centre_id, "foo": "bar"}]
+        result = _get_administrative_unit_dict(county.admin_unit, settlements=test_list)
 
-        assert result["centre"] == {"id": county.centre_id, "foo": "bar"}
+        assert result["centre"] == {"id": county.admin_unit.centre_id, "foo": "bar"}
 
     def test_centre_returns_none_if_empty_list_given(self) -> None:
         country = make(Country)
         settlement = make(Settlement, country=country)
-        county = make(County, centre=settlement, country=country)
+        admin_unit = make(AdministrativeUnit, centre=settlement, country=country)
+        county = make(County, admin_unit=admin_unit)
 
-        result = _get_administrative_unit_dict(county, [])
+        result = _get_administrative_unit_dict(county.admin_unit, [])
 
         assert result["centre"] is None
 
@@ -164,143 +164,97 @@ class TestBuildAddressRegistryNested:
         ]
 
     def test_county(self) -> None:
-        country = make(Country)
-        settlement = make(Settlement, country=country)
-        county = make(County, centre=settlement, country=country)
+        admin_unit = make(AdministrativeUnit)
+        county = make(County, admin_unit=admin_unit)
 
         result = build_address_registry_nested()
+
         assert result["counties"] == [
             {
                 "id": county.id,
-                "uuid": county.uuid,
-                "type": county.type,
-                "code": county.code,
-                "registered": county.registered,
-                "deregistered": county.deregistered,
-                "title": county.title,
-                "area": county.area,
-                "centre_id": county.centre_id,
-                "country_id": county.country_id,
-                "country_code": county.country_code,
-                "centre": _get_settlement_dict(county.centre),
+                "admin_unit_id": county.admin_unit_id,
+                "uuid": county.admin_unit.uuid,
+                "type": county.admin_unit.type,
+                "code": county.admin_unit.code,
+                "registered": county.admin_unit.registered,
+                "deregistered": county.admin_unit.deregistered,
+                "title": county.admin_unit.title,
+                "area": county.admin_unit.area,
+                "centre_id": county.admin_unit.centre_id,
+                "country_id": county.admin_unit.country_id,
+                "country_code": county.admin_unit.country_code,
                 "country": {
-                    "id": county.country.id,
-                    "code": county.country.code,
-                    "title_lt": county.country.title_lt,
-                    "title_en": county.country.title_en,
-                    "title": county.country.title,
-                    "continent_id": county.country.continent_id,
+                    "id": county.admin_unit.country.id,
+                    "code": county.admin_unit.country.code,
+                    "title_lt": county.admin_unit.country.title_lt,
+                    "title_en": county.admin_unit.country.title_en,
+                    "title": county.admin_unit.country.title,
+                    "continent_id": county.admin_unit.country.continent_id,
                 },
+                "centre": _get_settlement_dict(county.admin_unit.centre),
             }
         ]
 
     def test_municipality(self) -> None:
-        country = make(Country)
-        settlement = make(Settlement, country=country)
-        county = make(County, country=country, centre=settlement)
-        municipality = make(Municipality, county=county, country=country, centre=settlement)
+        municipality = make(Municipality)
 
         result = build_address_registry_nested()
         assert result["municipalities"] == [
             {
                 "id": municipality.id,
-                "uuid": municipality.uuid,
-                "type": municipality.type,
-                "code": municipality.code,
-                "registered": municipality.registered,
-                "deregistered": municipality.deregistered,
-                "title": municipality.title,
-                "area": municipality.area,
-                "centre_id": municipality.centre_id,
-                "country_id": municipality.country_id,
-                "country_code": municipality.country_code,
-                "centre": _get_settlement_dict(municipality.centre),
+                "admin_unit_id": municipality.admin_unit_id,
                 "county_id": municipality.county_id,
+                "uuid": municipality.admin_unit.uuid,
+                "type": municipality.admin_unit.type,
+                "code": municipality.admin_unit.code,
+                "registered": municipality.admin_unit.registered,
+                "deregistered": municipality.admin_unit.deregistered,
+                "title": municipality.admin_unit.title,
+                "area": municipality.admin_unit.area,
+                "centre_id": municipality.admin_unit.centre_id,
+                "country_id": municipality.admin_unit.country_id,
+                "country_code": municipality.admin_unit.country_code,
                 "country": {
-                    "id": municipality.country.id,
-                    "code": municipality.country.code,
-                    "title_lt": municipality.country.title_lt,
-                    "title_en": municipality.country.title_en,
-                    "title": municipality.country.title,
-                    "continent_id": municipality.country.continent_id,
+                    "id": municipality.admin_unit.country.id,
+                    "code": municipality.admin_unit.country.code,
+                    "title_lt": municipality.admin_unit.country.title_lt,
+                    "title_en": municipality.admin_unit.country.title_en,
+                    "title": municipality.admin_unit.country.title,
+                    "continent_id": municipality.admin_unit.country.continent_id,
                 },
-                "county": {
-                    "id": municipality.county.id,
-                    "uuid": municipality.county.uuid,
-                    "country_code": municipality.county.country_code,
-                    "code": municipality.county.code,
-                    "registered": municipality.county.registered,
-                    "deregistered": municipality.county.deregistered,
-                    "title": municipality.county.title,
-                    "area": municipality.county.area,
-                    "type": municipality.county.type,
-                    "centre_id": municipality.county.centre_id,
-                    "country_id": municipality.county.country_id,
-                    "centre": _get_settlement_dict(county.centre),
-                    "country": {
-                        "id": municipality.country.id,
-                        "code": municipality.country.code,
-                        "title": municipality.country.title,
-                        "title_lt": municipality.country.title_lt,
-                        "title_en": municipality.country.title_en,
-                        "continent_id": municipality.country.continent_id,
-                    },
-                },
+                "centre": _get_settlement_dict(municipality.admin_unit.centre),
+                "county": result["counties"][0],
             }
         ]
 
     def test_eldership(self) -> None:
-        municipality = make(Municipality)
-
-        eldership = make(Eldership, municipality=municipality)
+        eldership = make(Eldership)
 
         result = build_address_registry_nested()
         assert result["elderships"] == [
             {
                 "id": eldership.id,
-                "uuid": eldership.uuid,
-                "type": eldership.type,
-                "code": eldership.code,
-                "registered": eldership.registered,
-                "deregistered": eldership.deregistered,
-                "title": eldership.title,
-                "area": eldership.area,
-                "centre_id": eldership.centre_id,
-                "country_id": eldership.country_id,
-                "country_code": eldership.country_code,
+                "admin_unit_id": eldership.admin_unit_id,
                 "municipality_id": eldership.municipality_id,
-                "centre": _get_settlement_dict(eldership.centre),
+                "uuid": eldership.admin_unit.uuid,
+                "type": eldership.admin_unit.type,
+                "code": eldership.admin_unit.code,
+                "registered": eldership.admin_unit.registered,
+                "deregistered": eldership.admin_unit.deregistered,
+                "title": eldership.admin_unit.title,
+                "area": eldership.admin_unit.area,
+                "centre_id": eldership.admin_unit.centre_id,
+                "country_id": eldership.admin_unit.country_id,
+                "country_code": eldership.admin_unit.country_code,
+                "centre": _get_settlement_dict(eldership.admin_unit.centre),
                 "country": {
-                    "id": eldership.country.id,
-                    "code": eldership.country.code,
-                    "title": eldership.country.title,
-                    "title_lt": eldership.country.title_lt,
-                    "title_en": eldership.country.title_en,
-                    "continent_id": eldership.country.continent_id,
+                    "id": eldership.admin_unit.country.id,
+                    "code": eldership.admin_unit.country.code,
+                    "title_lt": eldership.admin_unit.country.title_lt,
+                    "title_en": eldership.admin_unit.country.title_en,
+                    "title": eldership.admin_unit.country.title,
+                    "continent_id": eldership.admin_unit.country.continent_id,
                 },
-                "municipality": {
-                    "id": eldership.municipality.id,
-                    "uuid": eldership.municipality.uuid,
-                    "country_code": eldership.municipality.country_code,
-                    "code": eldership.municipality.code,
-                    "registered": eldership.municipality.registered,
-                    "deregistered": eldership.municipality.deregistered,
-                    "county_id": eldership.municipality.county_id,
-                    "title": eldership.municipality.title,
-                    "area": eldership.municipality.area,
-                    "type": eldership.municipality.type,
-                    "centre_id": eldership.municipality.centre_id,
-                    "country_id": eldership.municipality.country_id,
-                    "centre": _get_settlement_dict(eldership.municipality.centre),
-                    "country": {
-                        "id": eldership.municipality.country.id,
-                        "code": eldership.municipality.country.code,
-                        "title": eldership.municipality.country.title,
-                        "title_lt": eldership.municipality.country.title_lt,
-                        "title_en": eldership.municipality.country.title_en,
-                        "continent_id": eldership.municipality.country.continent_id,
-                    },
-                    "county": None,
-                },
+                "municipality": result["municipalities"][0],
             }
         ]

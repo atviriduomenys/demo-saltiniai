@@ -37,6 +37,7 @@ class TestAdministration:
         assert administration.to_dict() == {
             "id": administration.id,
             "country_id": administration.country_id,
+            "admin_unit_id": administration.admin_unit_id,
         }
 
 
@@ -128,21 +129,24 @@ class TestCounty:
         county = make(County)
         assert county.to_dict() == {
             "id": county.id,
-            "uuid": county.uuid,
-            "code": county.code,
-            "registered": county.registered,
-            "deregistered": county.deregistered,
-            "title": county.title,
-            "area": county.area,
-            "type": county.type,
-            "centre_id": county.centre_id,
-            "country_id": county.country_id,
-            "country_code": county.country_code,
+            "admin_unit_id": county.admin_unit_id,
+            "uuid": county.admin_unit.uuid,
+            "code": county.admin_unit.code,
+            "registered": county.admin_unit.registered,
+            "deregistered": county.admin_unit.deregistered,
+            "title": county.admin_unit.title,
+            "area": county.admin_unit.area,
+            "type": county.admin_unit.type,
+            "centre_id": county.admin_unit.centre_id,
+            "country_id": county.admin_unit.country_id,
+            "country_code": county.admin_unit.country_code,
         }
 
     def test_generate_test_data(self) -> None:
         County.generate_test_data(quantity=2)
         assert County.objects.count() == 2
+        assert Settlement.objects.count() == 2
+        assert Country.objects.count() == 2
 
 
 class TestMunicipality:
@@ -150,16 +154,17 @@ class TestMunicipality:
         municipality = make(Municipality)
         assert municipality.to_dict() == {
             "id": municipality.id,
-            "uuid": municipality.uuid,
-            "code": municipality.code,
-            "registered": municipality.registered,
-            "deregistered": municipality.deregistered,
-            "title": municipality.title,
-            "area": municipality.area,
-            "type": municipality.type,
-            "centre_id": municipality.centre_id,
-            "country_id": municipality.country_id,
-            "country_code": municipality.country_code,
+            "admin_unit_id": municipality.admin_unit_id,
+            "uuid": municipality.admin_unit.uuid,
+            "code": municipality.admin_unit.code,
+            "registered": municipality.admin_unit.registered,
+            "deregistered": municipality.admin_unit.deregistered,
+            "title": municipality.admin_unit.title,
+            "area": municipality.admin_unit.area,
+            "type": municipality.admin_unit.type,
+            "centre_id": municipality.admin_unit.centre_id,
+            "country_id": municipality.admin_unit.country_id,
+            "country_code": municipality.admin_unit.country_code,
             "county_id": municipality.county_id,
         }
 
@@ -175,16 +180,17 @@ class TestEldership:
         eldership = make(Eldership)
         assert eldership.to_dict() == {
             "id": eldership.id,
-            "uuid": eldership.uuid,
-            "code": eldership.code,
-            "registered": eldership.registered,
-            "deregistered": eldership.deregistered,
-            "title": eldership.title,
-            "area": eldership.area,
-            "type": eldership.type,
-            "centre_id": eldership.centre_id,
-            "country_id": eldership.country_id,
-            "country_code": eldership.country_code,
+            "admin_unit_id": eldership.admin_unit_id,
+            "uuid": eldership.admin_unit.uuid,
+            "code": eldership.admin_unit.code,
+            "registered": eldership.admin_unit.registered,
+            "deregistered": eldership.admin_unit.deregistered,
+            "title": eldership.admin_unit.title,
+            "area": eldership.admin_unit.area,
+            "type": eldership.admin_unit.type,
+            "centre_id": eldership.admin_unit.centre_id,
+            "country_id": eldership.admin_unit.country_id,
+            "country_code": eldership.admin_unit.country_code,
             "municipality_id": eldership.municipality_id,
         }
 

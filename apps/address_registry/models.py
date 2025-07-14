@@ -320,7 +320,8 @@ class Administration(models.Model):
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "country": self.country,
+            "country_id": self.country_id,
+            "admin_unit_id": self.admin_unit_id,
         }
 
     @classmethod
@@ -351,13 +352,15 @@ class County(models.Model):
         return str(self.id)
 
     def to_dict(self) -> dict:
-        return {"id": self.id, **self.admin_unit.to_dict()}
+        return {"id": self.id, "admin_unit_id": self.admin_unit_id, **self.admin_unit.to_dict()}
 
     @classmethod
     def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["AdministrativeUnit"]:
         counties = []
         for _ in range(quantity):
-            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, type="COUNTY")[0]
+            settlement = kwargs.get("settlement") or Settlement.generate_test_data()[0]
+
+            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, settlement=settlement, type="COUNTY")[0]
 
             county = make_recipe(
                 "address_registry.county",
@@ -370,7 +373,7 @@ class County(models.Model):
 
 
 class Municipality(models.Model):
-    county = models.ForeignKey(County, on_delete=models.SET_NULL, null=True)
+    county = models.ForeignKey(County, on_delete=models.CASCADE)
     admin_unit = models.ForeignKey(AdministrativeUnit, on_delete=models.CASCADE)
 
     class Meta:
@@ -381,14 +384,22 @@ class Municipality(models.Model):
         return str(self.id)
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "county_id": self.county_id, **self.admin_unit.to_dict()}
+        return {
+            "id": self.id,
+            "admin_unit_id": self.admin_unit_id,
+            "county_id": self.county_id,
+            **self.admin_unit.to_dict(),
+        }
 
     @classmethod
     def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["AdministrativeUnit"]:
         municipalities = []
         for _ in range(quantity):
-            county = County.generate_test_data(quantity=1)[0]
-            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, type="MUNICIPALITY")[0]
+            settlement = kwargs.get("settlement") or Settlement.generate_test_data()[0]
+            county = County.generate_test_data(quantity=1, settlement=settlement)[0]
+            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, settlement=settlement, type="MUNICIPALITY")[
+                0
+            ]
 
             municipality = make_recipe(
                 "address_registry.municipality",
@@ -402,7 +413,7 @@ class Municipality(models.Model):
 
 
 class Eldership(models.Model):
-    municipality = models.ForeignKey(Municipality, on_delete=models.SET_NULL, null=True)
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE)
     admin_unit = models.ForeignKey(AdministrativeUnit, on_delete=models.CASCADE)
 
     class Meta:
@@ -413,15 +424,25 @@ class Eldership(models.Model):
         return str(self.id)
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "municipality_id": self.municipality_id, **self.admin_unit.to_dict()}
+        return {
+            "id": self.id,
+            "admin_unit_id": self.admin_unit_id,
+            "municipality_id": self.municipality_id,
+            **self.admin_unit.to_dict(),
+        }
 
     @classmethod
     def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["AdministrativeUnit"]:
         elderships = []
         for _ in range(quantity):
-            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, type="ELDERSHIP")[0]
+            settlement = kwargs.get("settlement") or Settlement.generate_test_data()[0]
 
-            municipality = Municipality.generate_test_data(quantity=1)[0]
+            admin_unit = AdministrativeUnit.generate_test_data(quantity=1, settlement=settlement, type="ELDERSHIP")[0]
+
+            municipality = Municipality.generate_test_data(
+                quantity=1,
+                settlement=settlement,
+            )[0]
 
             eldership = make_recipe(
                 "address_registry.eldership",

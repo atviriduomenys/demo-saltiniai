@@ -65,14 +65,14 @@ def build_address_registry_nested() -> dict:
     settlements_dict = [_get_settlement_dict(settlement) for settlement in settlements]
     counties_dict = [
         {
-            "admin_unit_id": county.admin_unit_id,
+            **county.to_dict(),
             **_get_administrative_unit_dict(county.admin_unit, settlements_dict),
         }
         for county in counties
     ]
     municipalities_dict = [
         {
-            "admin_unit_id": municipality.admin_unit_id,
+            **municipality.to_dict(),
             **_get_administrative_unit_dict(municipality.admin_unit, settlements_dict),
             "county": _get_one_by_dict(counties_dict, filter_key="id", filter_value=municipality.county_id),
         }
@@ -80,6 +80,7 @@ def build_address_registry_nested() -> dict:
     ]
     elderships_dict = [
         {
+            **eldership.to_dict(),
             **_get_administrative_unit_dict(eldership.admin_unit, settlements_dict),
             "municipality": _get_one_by_dict(
                 municipalities_dict, filter_key="id", filter_value=eldership.municipality_id
