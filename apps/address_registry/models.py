@@ -328,7 +328,10 @@ class Administration(models.Model):
     def generate_test_data(cls, quantity: int = 1, **kwargs) -> list["Administration"]:
         administrations = []
         for _ in range(quantity):
-            admin_unit = kwargs.get("Administration") or AdministrativeUnit.generate_test_data(quantity=1, type="ADMINISTRATION")[0]
+            admin_unit = (
+                kwargs.get("Administration")
+                or AdministrativeUnit.generate_test_data(quantity=1, type="ADMINISTRATION")[0]
+            )
             administration = make_recipe(
                 "address_registry.administration",
                 admin_unit=admin_unit,
