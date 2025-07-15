@@ -112,7 +112,7 @@ class DocumentAuthor(models.Model):
         verbose_name_plural = "Document Authors"
 
     def __str__(self) -> str:
-        return f"Autorius: {self.name} {self.surname}"
+        return f"Author: {self.name} {self.surname}"
 
     def to_dict(self) -> dict:
         return {
