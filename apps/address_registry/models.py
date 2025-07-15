@@ -129,7 +129,7 @@ class Country(models.Model):
     title = models.CharField(max_length=255)
     title_lt = models.CharField(max_length=255)
     title_en = models.CharField(max_length=255)
-    continent = models.ForeignKey(Continent, on_delete=models.CASCADE)  # type: ignore
+    continent = models.ForeignKey(Continent, on_delete=models.CASCADE, related_name="countries")  # type: ignore
 
     class Meta:
         verbose_name = "Country"
@@ -172,7 +172,7 @@ class Settlement(models.Model):
     title_lt = models.CharField(max_length=255)
     area = models.FloatField(null=True)
     type = models.CharField(choices=get_settlement_type, max_length=255)  # type: ignore
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="settlements")
     country_code = models.CharField(max_length=50, help_text="Must match with country_id")
 
     class Meta:
@@ -329,8 +329,7 @@ class Administration(models.Model):
         administrations = []
         for _ in range(quantity):
             admin_unit = (
-                kwargs.get("Administration")
-                or AdministrativeUnit.generate_test_data(quantity=1, type="ADMINISTRATION")[0]
+                kwargs.get("admin_unit") or AdministrativeUnit.generate_test_data(quantity=1, type="ADMINISTRATION")[0]
             )
             administration = make_recipe(
                 "address_registry.administration",

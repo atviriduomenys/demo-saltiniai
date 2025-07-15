@@ -1,7 +1,7 @@
 from django.apps import apps as django_apps
 from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import serializers, status
+from rest_framework import serializers, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -12,6 +12,14 @@ from spyne.protocol.json import JsonDocument
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 
+from apps.address_registry.models import (
+    Continent,
+    Document,
+)
+from apps.address_registry.serializers import (
+    ContinentCountrySettlementSerializer,
+    DocumentSerializer,
+)
 from apps.address_registry.services import CityNameService, CityService
 
 cities_application_soap = csrf_exempt(
@@ -70,3 +78,27 @@ class GenerateTestData(APIView):
         model_class.generate_test_data(quantity=serializer.validated_data["quantity"])
 
         return Response(status=status.HTTP_201_CREATED)
+
+
+class DocumentViewSet(viewsets.ModelViewSet):
+    queryset = Document.objects.all().prefetch_related("documentauthor")
+    serializer_class = DocumentSerializer
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"documents": serializer.data})
+
+
+class ContinentCountrySettlementViewSet(viewsets.ModelViewSet):
+    queryset = Continent.objects.all().prefetch_related("countries__settlements")
+    serializer_class = ContinentCountrySettlementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"continents": serializer.data})
