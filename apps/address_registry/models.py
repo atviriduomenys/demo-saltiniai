@@ -4,31 +4,35 @@ from uuid import uuid4
 from django.db import models
 from model_bakery.baker import make_recipe
 
-SETTLEMENT_TYPE = ["SMALL TOWN", "HAMLET", "VILLAGE"]
-GRAMMATICAL_CASE = ["NOMINATIVE", "GENITIVE"]
-ADMINISTRATIVE_UNIT_TYPE = ["MUNICIPALITY", "COUNTY", "ELDERSHIP", "ADMINISTRATION"]
-DOCUMENT_TYPE = ["ORDER", "LETTER"]
-DOCUMENT_STATUS = ["REGISTERED", "AMENDMENT", "DEREGISTERED"]
+
+class SettlementType(models.TextChoices):
+    SMALL_TOWN = "SMALL TOWN"
+    HAMLET = "HAMLET"
+    VILLAGE = "VILLAGE"
+    CITY = "CITY"
 
 
-def get_settlement_type() -> dict[str, str]:
-    return {i: i for i in SETTLEMENT_TYPE}
+class GrammaticalCase(models.TextChoices):
+    NOMINATIVE = "NOMINATIVE"
+    GENITIVE = "GENITIVE"
 
 
-def get_grammatical_case() -> dict[str, str]:
-    return {i: i for i in GRAMMATICAL_CASE}
+class AdministrativeUnitType(models.TextChoices):
+    MUNICIPALITY = "MUNICIPALITY"
+    COUNTY = "COUNTY"
+    ELDERSHIP = "ELDERSHIP"
+    ADMINISTRATION = "ADMINISTRATION"
 
 
-def get_administrative_unit_type() -> dict[str, str]:
-    return {i: i for i in ADMINISTRATIVE_UNIT_TYPE}
+class DocumentType(models.TextChoices):
+    ORDER = "ORDER"
+    LETTER = "LETTER"
 
 
-def get_doc_type() -> dict[str, str]:
-    return {i: i for i in DOCUMENT_TYPE}
-
-
-def get_doc_status() -> dict[str, str]:
-    return {i: i for i in DOCUMENT_STATUS}
+class DocumentStatus(models.TextChoices):
+    REGISTERED = "REGISTERED"
+    AMENDMENT = "AMENDMENT"
+    DEREGISTERED = "DEREGISTERED"
 
 
 class GenerateTestDataMixin:
@@ -67,8 +71,8 @@ class Document(models.Model):
     number = models.CharField(max_length=255)
     received = models.DateField()
     content = models.BinaryField()
-    status = models.CharField(choices=get_doc_status, max_length=255)  # type: ignore
-    type = models.CharField(choices=get_doc_type, max_length=255)  # type: ignore
+    status = models.CharField(choices=DocumentStatus.choices, max_length=255)  # type: ignore
+    type = models.CharField(choices=DocumentType.choices, max_length=255)  # type: ignore
     creation_date = models.DateField()
     creation_time = models.TimeField()
 
@@ -171,7 +175,7 @@ class Settlement(models.Model):
     deregistered = models.DateField(null=True)
     title_lt = models.CharField(max_length=255)
     area = models.FloatField(null=True)
-    type = models.CharField(choices=get_settlement_type, max_length=255)  # type: ignore
+    type = models.CharField(choices=SettlementType.choices, max_length=255)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     country_code = models.CharField(max_length=50, help_text="Must match with country_id")
 
@@ -224,7 +228,7 @@ class Settlement(models.Model):
 class Title(models.Model):
     title = models.CharField(max_length=255)
     accented = models.CharField(max_length=255)
-    grammatical_case = models.CharField(choices=get_grammatical_case, max_length=255)  # type: ignore
+    grammatical_case = models.CharField(choices=GrammaticalCase.choices, max_length=255)  # type: ignore
     settlement = models.ForeignKey(Settlement, on_delete=models.SET_NULL, related_name="title_forms", null=True)
 
     class Meta:
@@ -255,7 +259,7 @@ class AdministrativeUnit(models.Model):
     deregistered = models.DateField(null=True)
     title = models.CharField(max_length=255)
     area = models.FloatField(null=True)
-    type = models.CharField(choices=get_administrative_unit_type, max_length=255)  # type: ignore
+    type = models.CharField(choices=AdministrativeUnitType.choices, max_length=255)  # type: ignore
     centre = models.ForeignKey(Settlement, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     country_code = models.CharField(max_length=50, help_text="Must match with country_id")
@@ -296,7 +300,7 @@ class AdministrativeUnit(models.Model):
             settlement = kwargs.get("settlement") or Settlement.generate_test_data()[0]
             administrative_unit = make_recipe(
                 "address_registry.administrative_unit",
-                type=kwargs.get("type", random.choice(ADMINISTRATIVE_UNIT_TYPE)),
+                type=kwargs.get("type", "ADMINISTRATION"),
                 country=settlement.country,
                 centre=settlement,
                 _fill_optional=True,

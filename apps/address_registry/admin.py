@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from apps.address_registry.models import (
     Administration,
+    AdministrativeUnit,
     Continent,
     Country,
     County,
@@ -13,6 +14,7 @@ from apps.address_registry.models import (
     Title,
 )
 
+admin.site.register(AdministrativeUnit)
 admin.site.register(Administration)
 admin.site.register(Country)
 admin.site.register(County)
