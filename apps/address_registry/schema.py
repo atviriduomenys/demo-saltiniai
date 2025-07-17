@@ -1,89 +1,74 @@
-from spyne import Array, ComplexModel
 from spyne.util.django import DjangoComplexModel
 
 from apps.address_registry.models import (
-    Apskritis,
-    Dokumentas,
-    DokumentoAutorius,
-    Gyvenviete,
-    JuridinisAsmuo,
-    NejuridinisAsmuo,
-    Organizacija,
-    Pavadinimas,
-    Salis,
-    Savivaldybe,
-    Seniunija,
+    Administration,
+    AdministrativeUnit,
+    Continent,
+    Country,
+    County,
+    Document,
+    DocumentAuthor,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
 from apps.utils.spyne_utils import DjangoAttributes
 
 # Spyne calls it models. Basically defines response schemas
 
 
-class SalisModel(DjangoComplexModel):
+class CountryModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Salis
-        django_exclude = ["pavadinimas"]
+        django_model = Country
 
 
-class GyvenvieteModel(DjangoComplexModel):
+class SettlementModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Gyvenviete
+        django_model = Settlement
 
 
-class PavadinimasModel(DjangoComplexModel):
+class TitleModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Pavadinimas
+        django_model = Title
 
 
-class DokumentasModel(DjangoComplexModel):
+class DocumentModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Dokumentas
+        django_model = Document
+        django_exclude = ("content",)
 
 
-class DokumentoAutoriusModel(DjangoComplexModel):
+class ContinentModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = DokumentoAutorius
+        django_model = Continent
 
 
-class ApskritisModel(DjangoComplexModel):
+class DocumentAuthorModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Apskritis
+        django_model = DocumentAuthor
 
 
-class SavivaldybeModel(DjangoComplexModel):
+class MunicipalityModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Savivaldybe
+        django_model = Municipality
 
 
-class SeniunijaModel(DjangoComplexModel):
+class EldershipModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Seniunija
+        django_model = Eldership
 
 
-class OrganizacijaModel(DjangoComplexModel):
+class AdministrationModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = Organizacija
+        django_model = Administration
 
 
-class JuridinisAsmuoModel(DjangoComplexModel):
+class CountyModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = JuridinisAsmuo
+        django_model = County
 
 
-class NejuridinisAsmuoModel(DjangoComplexModel):
+class AdministrativeUnitModel(DjangoComplexModel):
     class Attributes(DjangoAttributes):
-        django_model = NejuridinisAsmuo
-
-
-class AddressRegistryResponseModel(ComplexModel):
-    salys = Array(SalisModel)
-    gyvenvietes = Array(GyvenvieteModel)
-    pavadinimai = Array(PavadinimasModel)
-    dokumentai = Array(DokumentasModel)
-    dokumentu_autoriai = Array(DokumentoAutoriusModel)
-    apskritys = Array(ApskritisModel)
-    savivaldybes = Array(SavivaldybeModel)
-    seniunijos = Array(SeniunijaModel)
-    organizacijos = Array(OrganizacijaModel)
-    juridiniai_asmenys = Array(JuridinisAsmuoModel)
-    nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)
+        django_model = AdministrativeUnit

@@ -34,6 +34,8 @@ BUILD_VERSION = os.getenv("BUILD_VERSION", "")
 
 # Semantic versioning + build version
 VERSION = f"0.0.0_{BUILD_VERSION}"
+GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
+GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
 # Returns user even if it's not active, lets do handle it manually
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
