@@ -31,19 +31,11 @@ class SettlementSerializer(serializers.ModelSerializer):
 
 
 class CountrySerializer(serializers.ModelSerializer):
-    continent = ContinentSerializer(read_only=True)
+    continent = ContinentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Country
         fields = "__all__"
-
-
-class ContinentCountrySerializer(serializers.ModelSerializer):
-    countries = CountrySerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Continent
-        fields = [field.name for field in Continent._meta.fields] + ["countries"]
 
 
 class DocumentAuthorSerializer(serializers.ModelSerializer):
@@ -53,17 +45,11 @@ class DocumentAuthorSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    document_author = serializers.SerializerMethodField()
+    document_author = DocumentAuthorSerializer(source="documentauthor", read_only=True)
 
     class Meta:
         model = Document
         fields = "__all__"
-
-    def get_document_author(self, obj):
-        author = getattr(obj, "documentauthor", None)
-        if author:
-            return [DocumentAuthorSerializer(author).data]
-        return []
 
 
 class CountrySettlementSerializer(serializers.ModelSerializer):
@@ -76,8 +62,7 @@ class CountrySettlementSerializer(serializers.ModelSerializer):
 
 class ContinentCountrySettlementSerializer(serializers.ModelSerializer):
     countries = CountrySettlementSerializer(many=True, read_only=True)
-    continent = ContinentSerializer(read_only=True)
 
     class Meta:
         model = Continent
-        fields = [field.name for field in Continent._meta.fields] + ["countries"] + ["continent"]
+        fields = ["code", "name", "countries"]

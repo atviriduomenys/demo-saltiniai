@@ -5,7 +5,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,,exnuost,,,,,https://nuostatai.lt/example/document#,,
 ,,,,,,,dct,,,,,http://purl.org/dc/terms/,,
 ,,database1,,,,dask/json,,http://0.0.0.0:8001/api/v1/settlements/,,,,,,
-,,,,Settlement,,,id,continents[].countries.settlements,,4,open,,Settlement,
+,,,,Settlement,,,id,countries.settlements,,4,open,,Settlement,
 ,,,,,id,string unique required,,id,,5,open,dct:identifier,ID,ID
 ,,,,,registered,date,D,registered,,2,open,,Reg,
 ,,,,,_created,date,D,registered,,2,protected,,Created,
@@ -22,7 +22,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,comment,,title,,4,open,,,
 ,,,,,country_code,ref,Country[code],..,,,,,,
 ,,,,,,,,,,,,,,
-,,,,Title,,,id,continents[].countries[].settlements[].title_forms,,4,open,,Title,
+,,,,Title,,,id,countries[].settlements[].title_forms,,4,open,,Title,
 ,,,,,id,string,,id,,4,open,,ID,
 ,,,,,title,string,,,,0,open,,,
 ,,,,,accented,string,,accented,,4,open,,Accent mark,
@@ -31,7 +31,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,,,GENITIVE,,4,open,,,
 ,,,,,settlement_id,ref,Settlement,..,,4,open,,Title settlement,
 ,,,,,,,,,,,,,,
-,,,,Country,,,id,continents[].countries,,5,open,locn:Location,Country,Country
+,,,,Country,,,id,countries,,5,open,locn:Location,Country,Country
 ,,,,,id,string required,,id,,5,open,dct:identifier,Country ID,County identification number
 ,,,,,code,string,,code,,4,open,,Country code,Three-letter country code
 ,,,,,title,text,,,,0,protected,,,
@@ -39,13 +39,13 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,title@en,string,,title_en,,4,open,,Title English,"The data that provides country names in English is an important source of information, allowing users to quickly and easily access data about various countries around the world. This data can be used in various fields, including geography, economics, culture, and international relations. For example, it can help researchers, students, and business professionals analyze country data, compare different states, and understand their characteristics. Moreover, this data can be integrated into various applications and systems, enabling users to easily find and use country names in English. In this way, it contributes to the dissemination of knowledge and helps to better understand world geography and cultural differences."
 ,,,,,continent,ref,Continent,..,,4,open,,,
 ,,,,,,,,,,,,,,
-,,,,Continent,,,code,continents,,5,,skos:concept,Continent,
+,,,,Continent,,,code,.,,5,,skos:concept,Continent,
 ,,,,,code,string required,,code,,5,open,,ID,
 ,,,,,name,string,,name,,5,open,,,
 ,,,,,_label,string,,name,,5,open,,,
 ,,,,,,,,,,,,,,
 ,,database2,,,,dask/json,,http://0.0.0.0:8001/api/v1/documents/,,,,,,
-5d5bfb77-47b4-46b8-b305-a2689d616c1d,,,,Document,,,id,documents,,4,open,,,
+5d5bfb77-47b4-46b8-b305-a2689d616c1d,,,,Document,,,id,.,,4,open,,,
 ,,,,,id,string,,id,,4,open,,,
 ,,,,,number,string,,number,,4,open,,,
 ,,,,,received,datetime,D,received,,4,open,,,
@@ -61,7 +61,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,_created,datetime,,,"creation_date+""T""+creation_time",4,open,,,
 ,,,,,content,binary,,doc_content,,4,open,,,
 ,,,,,,,,,,,,,,
-,,,,DocumentAuthor,,,id,documents[].document_author,,4,open,,,
+,,,,DocumentAuthor,,,id,document_author,,4,open,,,
 ,,,,,id,string,,id,,4,open,,,
 ,,,,,document_id,ref,Document,..,,4,open,,,
 ,,,,,name,string,,name,,4,open,,,

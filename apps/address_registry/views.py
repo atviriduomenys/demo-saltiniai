@@ -87,18 +87,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
         IsAuthenticated,
     ]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({"documents": serializer.data})
-
 
 class ContinentCountrySettlementViewSet(viewsets.ModelViewSet):
     queryset = Continent.objects.all().prefetch_related("countries__settlements")
     serializer_class = ContinentCountrySettlementSerializer
     permission_classes = [IsAuthenticated]
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({"continents": serializer.data})

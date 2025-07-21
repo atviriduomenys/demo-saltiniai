@@ -171,36 +171,31 @@ class TestGetDataEndpoints:
     @pytest.mark.parametrize("endpoint_name", ["documents", "settlements"])
     def test_no_data_exists_in_db(self, authorized_client: APIClientWithQueryCounter, endpoint_name: str) -> None:
         response = authorized_client.get(self.get_url(endpoint_name))
-        expected_response_data: dict = {"documents": []} if endpoint_name == "documents" else {"continents": []}
-        assert response.data == expected_response_data
+        assert response.data == []
 
     def test_document_author_data_returned(self, authorized_client: APIClientWithQueryCounter) -> None:
         document = make(Document)
         document_author = make(DocumentAuthor, document=document)
         response = authorized_client.get(self.get_url("documents"))
-        assert response.data == {
-            "documents": [
-                {
-                    "id": document.id,
-                    "number": document.number,
-                    "received": document.received.isoformat(),
-                    "content": base64.b64encode(document.content).decode(),
-                    "status": document.status,
-                    "type": document.type,
-                    "creation_date": document.creation_date.isoformat(),
-                    "creation_time": document.creation_time.isoformat(),
-                    "document_author": [
-                        {
-                            "id": document_author.id,
-                            "name": document_author.name,
-                            "surname": document_author.surname,
-                            "passport": None,
-                            "document": document.id,
-                        }
-                    ],
-                }
-            ]
-        }
+        assert response.data == [
+            {
+                "id": document.id,
+                "number": document.number,
+                "received": document.received.isoformat(),
+                "content": base64.b64encode(document.content).decode(),
+                "status": document.status,
+                "type": document.type,
+                "creation_date": document.creation_date.isoformat(),
+                "creation_time": document.creation_time.isoformat(),
+                "document_author": {
+                    "id": document_author.id,
+                    "name": document_author.name,
+                    "surname": document_author.surname,
+                    "passport": None,
+                    "document": document.id,
+                },
+            }
+        ]
 
     def test_settlement_data_returned(self, authorized_client: APIClientWithQueryCounter) -> None:
         continent = make(Continent)
@@ -208,42 +203,40 @@ class TestGetDataEndpoints:
         settlement = make(Settlement, country=country)
         title = make(Title, settlement=settlement)
         response = authorized_client.get(self.get_url("settlements"))
-        assert response.data == {
-            "continents": [
-                {
-                    "code": continent.code,
-                    "name": continent.name,
-                    "countries": [
-                        {
-                            "id": country.id,
-                            "code": country.code,
-                            "title": country.title,
-                            "title_lt": country.title_lt,
-                            "title_en": country.title_en,
-                            "continent": country.continent_id,
-                            "settlements": [
-                                {
-                                    "id": settlement.id,
-                                    "registered": settlement.registered,
-                                    "deregistered": settlement.deregistered,
-                                    "title_lt": settlement.title_lt,
-                                    "area": settlement.area,
-                                    "type": settlement.type,
-                                    "country_code": settlement.country.code,
-                                    "country": settlement.country.id,
-                                    "title_forms": [
-                                        {
-                                            "id": title.id,
-                                            "title": title.title,
-                                            "accented": title.accented,
-                                            "grammatical_case": title.grammatical_case,
-                                            "settlement": title.settlement.id,
-                                        }
-                                    ],
-                                }
-                            ],
-                        }
-                    ],
-                }
-            ],
-        }
+        assert response.data == [
+            {
+                "code": continent.code,
+                "name": continent.name,
+                "countries": [
+                    {
+                        "id": country.id,
+                        "code": country.code,
+                        "title": country.title,
+                        "title_lt": country.title_lt,
+                        "title_en": country.title_en,
+                        "continent": country.continent_id,
+                        "settlements": [
+                            {
+                                "id": settlement.id,
+                                "registered": settlement.registered,
+                                "deregistered": settlement.deregistered,
+                                "title_lt": settlement.title_lt,
+                                "area": settlement.area,
+                                "type": settlement.type,
+                                "country_code": settlement.country.code,
+                                "country": settlement.country.id,
+                                "title_forms": [
+                                    {
+                                        "id": title.id,
+                                        "title": title.title,
+                                        "accented": title.accented,
+                                        "grammatical_case": title.grammatical_case,
+                                        "settlement": title.settlement.id,
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ]
