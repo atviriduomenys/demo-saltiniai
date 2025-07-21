@@ -41,9 +41,9 @@ settlement = Recipe(Settlement, title_lt=seq("Settlement title - "), area=seq(1)
 
 administrative_unit = Recipe(
     AdministrativeUnit,
-    code=seq(10),
+    code=seq(1),
     title=seq("Administrative Unit title - "),
-    area=seq(30),
+    area=seq(1),
     country=foreign_key(country),
     centre=foreign_key(settlement),
 )
