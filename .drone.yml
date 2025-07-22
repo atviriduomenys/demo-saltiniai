@@ -19,8 +19,6 @@ steps:
       - docker compose -f docker-compose.review-apps.yml down || true
       - docker compose -f docker-compose.review-apps.yml up -d
       - docker image prune -a -f
-      - sleep 15
-      - docker compose -f docker-compose.review-apps.yml logs saltiniai
 volumes:
 - name: docker_sock
   host:
