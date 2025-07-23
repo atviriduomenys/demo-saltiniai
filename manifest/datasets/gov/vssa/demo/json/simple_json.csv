@@ -16,11 +16,11 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,enum,,SMALL TOWN,,,,,,
 ,,,,,,,,VILLAGE,,,,,,
 ,,,,,,,,HAMLET,,,,,,
-,,,,,,,,,,,,,,
+,,,,,,,,CITY,,,,,,
 ,,,,,titles,array,,,,4,open,,,
 ,,,,,titles[],backref,Title,..,,0,open,,,Title title
 ,,,,,,comment,,title,,4,open,,,
-,,,,,country_code,ref,Country[code],..,,,,,,
+,,,,,country,ref,Country[code],..,,,,,,
 ,,,,,,,,,,,,,,
 ,,,,Title,,,id,countries[].settlements[].title_forms,,4,open,,Title,
 ,,,,,id,string,,id,,4,open,,ID,
