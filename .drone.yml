@@ -1,0 +1,25 @@
+kind: pipeline
+type: docker
+name: deploy-docker-compose
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: deploy-with-docker-compose
+    image: docker:cli
+    volumes:
+    - name: docker_sock
+      path: /var/run/docker.sock
+    privileged: true
+    commands:
+      - echo "Deploying application for branch ${DRONE_BRANCH}..."
+      - docker compose -f docker-compose.review-apps.yml build
+      - docker compose -f docker-compose.review-apps.yml down || true
+      - docker compose -f docker-compose.review-apps.yml up -d
+      - docker image prune -a -f
+volumes:
+- name: docker_sock
+  host:
+    path: /var/run/docker.sock

@@ -1,0 +1,38 @@
+services:
+  saltiniai:
+    build:
+        context: .
+        dockerfile: production.Dockerfile
+    environment:
+        DJANGO_SUPERUSER_EMAIL: test@test.com
+        DJANGO_SUPERUSER_PASSWORD: test
+        DJANGO_SETTINGS_MODULE: conf.settings_qa
+        DB_NAME: django
+        DB_USER: django
+        DB_PASSWORD: django
+        DB_HOST: saltiniai-database
+        DB_PORT: 5432
+        RUN_MODE: "GUINICORN"
+    depends_on:
+        - saltiniai-database
+    networks:
+      katalogas:
+        aliases:
+          - saltiniai
+
+  saltiniai-database:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: django
+    volumes:
+      - "saltiniai-postgres:/var/lib/postgresql/data"
+    networks:
+      - katalogas
+
+volumes:
+  saltiniai-postgres:
+
+networks:
+  katalogas:
+    external: true
