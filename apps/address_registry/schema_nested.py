@@ -1,83 +1,76 @@
-from spyne import Array, ComplexModel
+from spyne import Array
 from spyne.util.django import DjangoComplexModel
 
-from apps.address_registry.models import Apskritis, Dokumentas, Gyvenviete, Pavadinimas, Savivaldybe, Seniunija
-from apps.address_registry.schema import (
-    DokumentoAutoriusModel,
-    GyvenvieteModel,
-    JuridinisAsmuoModel,
-    NejuridinisAsmuoModel,
-    PavadinimasModel,
-    SalisModel,
+from apps.address_registry.models import (
+    AdministrativeUnit,
+    County,
+    Document,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
+from apps.address_registry.schema import CountryModel, DocumentAuthorModel, SettlementModel, TitleModel
 from apps.utils.spyne_utils import DjangoAttributes
 
 
-class GyvenvieteNestedResponseModel(DjangoComplexModel):
-    salis = SalisModel
-    pavadinimu_formos = Array(PavadinimasModel)
+class SettlementNestedResponseModel(DjangoComplexModel):
+    country = CountryModel
+    title_forms = Array(TitleModel)
 
     class Attributes(DjangoAttributes):
-        django_model = Gyvenviete
+        django_model = Settlement
 
 
-class DokumentasNestedResponseModel(DjangoComplexModel):
-    dokumento_autorius = DokumentoAutoriusModel
-
-    class Attributes(DjangoAttributes):
-        django_model = Dokumentas
-
-
-class AdministracinisVienetasMixin(ComplexModel):
-    __mixin__ = True
-
-    centras = GyvenvieteNestedResponseModel
-    dokumentai = Array(DokumentasNestedResponseModel)
-    salis = SalisModel
-
-
-class ApskritisNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
-    class Attributes(DjangoAttributes):
-        django_model = Apskritis
-
-
-class SavivaldybeNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
-    apskritis = ApskritisNestedResponseModel
+class DocumentsNestedResponseModel(DjangoComplexModel):
+    document_author = DocumentAuthorModel
 
     class Attributes(DjangoAttributes):
-        django_model = Savivaldybe
+        django_model = Document
+        django_exclude = ("content",)
 
 
-class SeniunijosNestedResponseModel(DjangoComplexModel, AdministracinisVienetasMixin):
-    savivaldybe = SavivaldybeNestedResponseModel
-
-    class Attributes(DjangoAttributes):
-        django_model = Seniunija
-
-
-class AddressRegistryNestedResponseModel(ComplexModel):
-    gyvenvietes = Array(GyvenvieteNestedResponseModel)
-    apskritys = Array(ApskritisNestedResponseModel)
-    savivaldybes = Array(SavivaldybeNestedResponseModel)
-    seniunijos = Array(SeniunijosNestedResponseModel)
-    juridiniai_asmenys = Array(JuridinisAsmuoModel)
-    nejuridiniai_asmenys = Array(NejuridinisAsmuoModel)
-
-
-class GyvenvietePavadinimasNestedModel(DjangoComplexModel):
-    pavadinimo_formos = Array(PavadinimasModel)
+class AdministrativeUnitNestedModel(DjangoComplexModel):
+    centre = SettlementNestedResponseModel
+    country = CountryModel
 
     class Attributes(DjangoAttributes):
-        django_model = Gyvenviete
+        django_model = AdministrativeUnit
 
 
-class PavadinimasGyvenvieteNestedModel(DjangoComplexModel):
-    gyvenviete = GyvenvieteModel
+class CountyNestedResponseModel(DjangoComplexModel):
+    admin_unit = AdministrativeUnitNestedModel
 
     class Attributes(DjangoAttributes):
-        django_model = Pavadinimas
+        django_model = County
 
 
-class GyvenvietePavadinimasResponseModel(ComplexModel):
-    gyvenvietes = Array(GyvenvietePavadinimasNestedModel)
-    pavadinimai = Array(PavadinimasGyvenvieteNestedModel)
+class MunicipalityNestedResponseModel(DjangoComplexModel):
+    admin_unit = AdministrativeUnitNestedModel
+    county = CountyNestedResponseModel
+
+    class Attributes(DjangoAttributes):
+        django_model = Municipality
+
+
+class EldershipNestedResponseModel(
+    DjangoComplexModel,
+):
+    municipality = MunicipalityNestedResponseModel
+
+    class Attributes(DjangoAttributes):
+        django_model = Eldership
+
+
+class SettlementTitleNestedModel(DjangoComplexModel):
+    title_forms = Array(TitleModel)
+
+    class Attributes(DjangoAttributes):
+        django_model = Settlement
+
+
+class TitleSettlementNestedModel(DjangoComplexModel):
+    settlement = SettlementModel
+
+    class Attributes(DjangoAttributes):
+        django_model = Title
