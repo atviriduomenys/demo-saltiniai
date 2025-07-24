@@ -1,212 +1,201 @@
 from model_bakery.baker import make
 
 from apps.address_registry.models import (
-    Apskritis,
-    Dokumentas,
-    DokumentoAutorius,
-    Gyvenviete,
-    JuridinisAsmuo,
-    NejuridinisAsmuo,
-    Organizacija,
-    Pavadinimas,
-    Salis,
-    Savivaldybe,
-    Seniunija,
+    Administration,
+    Continent,
+    Country,
+    County,
+    Document,
+    DocumentAuthor,
+    Eldership,
+    Municipality,
+    Settlement,
+    Title,
 )
 
 
-class TestSalis:
+class TestCountry:
     def test_to_dict(self) -> None:
-        salis = make(Salis)
-        assert salis.to_dict() == {
-            "id": salis.id,
-            "kodas": salis.kodas,
-            "pavadinimas_lt": salis.pavadinimas_lt,
-            "pavadinimas_en": salis.pavadinimas_en,
+        country = make(Country)
+        assert country.to_dict() == {
+            "id": country.id,
+            "code": country.code,
+            "title_lt": country.title_lt,
+            "title_en": country.title_en,
+            "continent_id": country.continent_id,
+            "title": country.title,
         }
 
     def test_generate_test_data(self) -> None:
-        Salis.generate_test_data(quantity=2)
-        assert Salis.objects.count() == 2
+        Country.generate_test_data(quantity=2)
+        assert Country.objects.count() == 2
 
 
-class TestGyvenviete:
+class TestAdministration:
     def test_to_dict(self) -> None:
-        gyvenviete = make(Gyvenviete)
-        assert gyvenviete.to_dict() == {
-            "id": gyvenviete.id,
-            "isregistruota": gyvenviete.isregistruota,
-            "registruota": gyvenviete.registruota,
-            "pavadinimas": gyvenviete.pavadinimas,
-            "kurortas": gyvenviete.kurortas,
-            "plotas": gyvenviete.plotas,
-            "tipas": gyvenviete.tipas,
-            "salis_id": gyvenviete.salis_id,
-            "salies_kodas": gyvenviete.salies_kodas,
+        administration = make(Administration)
+        assert administration.to_dict() == {
+            "id": administration.id,
+            "country_id": administration.country_id,
+            "admin_unit_id": administration.admin_unit_id,
+        }
+
+
+class TestTitle:
+    def test_to_dict(self) -> None:
+        title = make(Title)
+        assert title.to_dict() == {
+            "id": title.id,
+            "title": title.title,
+            "accented": title.accented,
+            "grammatical_case": title.grammatical_case,
+            "settlement_id": title.settlement_id,
         }
 
     def test_generate_test_data(self) -> None:
-        Gyvenviete.generate_test_data(quantity=2)
-        assert Gyvenviete.objects.count() == 2
-        assert Pavadinimas.objects.count() == 4
+        Title.generate_test_data(quantity=2)
+        assert Title.objects.count() == 2
 
 
-class TestPavadinimas:
+class TestContinent:
     def test_to_dict(self) -> None:
-        pavadinimas = make(Pavadinimas)
-        assert pavadinimas.to_dict() == {
-            "id": pavadinimas.id,
-            "pavadinimas": pavadinimas.pavadinimas,
-            "kirciuotas": pavadinimas.kirciuotas,
-            "linksnis": pavadinimas.linksnis,
-            "gyvenviete": pavadinimas.gyvenviete_id,
-        }
-
-
-class TestDokumentas:
-    def test_to_dict(self) -> None:
-        dokumentas = make(Dokumentas)
-        assert dokumentas.to_dict() == {
-            "id": dokumentas.id,
-            "numeris": dokumentas.numeris,
-            "priimta": dokumentas.priimta,
-            "rusis": dokumentas.rusis,
-            "pozymis": dokumentas.pozymis,
-            "sukurimo_data": dokumentas.sukurimo_data,
-            "sukurimo_laikas": dokumentas.sukurimo_laikas,
+        continent = make(Continent)
+        assert continent.to_dict() == {
+            "code": continent.code,
+            "name": continent.name,
         }
 
     def test_generate_test_data(self) -> None:
-        Dokumentas.generate_test_data(quantity=2)
-        assert Dokumentas.objects.count() == 2
-        assert DokumentoAutorius.objects.count() == 2
+        # TODO check if code is necessary to be primary
+        Continent.generate_test_data(quantity=2)
+        assert Continent.objects.count() == 2
 
 
-class TestDokumentoAutorius:
-    def test_to_dict_without_dokumentas(self) -> None:
-        dokumento_autorius = make(DokumentoAutorius, dokumentas=None)
-        assert dokumento_autorius.to_dict() == {
-            "id": dokumento_autorius.id,
-            "vardas": dokumento_autorius.vardas,
-            "pavarde": dokumento_autorius.pavarde,
-            "dokumentas_id": None,
-        }
-
-    def test_to_dict_with_dokumentas(self) -> None:
-        dokumento_autorius = make(DokumentoAutorius)
-        assert dokumento_autorius.to_dict() == {
-            "id": dokumento_autorius.id,
-            "vardas": dokumento_autorius.vardas,
-            "pavarde": dokumento_autorius.pavarde,
-            "dokumentas_id": dokumento_autorius.dokumentas_id,
-        }
-
-
-class TestApskritis:
+class TestSettlement:
     def test_to_dict(self) -> None:
-        apskritis = make(Apskritis)
-        assert apskritis.to_dict() == {
-            "id": apskritis.id,
-            "uuid": apskritis.uuid,
-            "tipas": apskritis.tipas,
-            "kodas": apskritis.kodas,
-            "iregistruota": apskritis.iregistruota,
-            "isregistruota": apskritis.isregistruota,
-            "pavadinimas": apskritis.pavadinimas,
-            "plotas": apskritis.plotas,
-            "centras_id": apskritis.centras_id,
-            "salis_id": apskritis.salis_id,
-            "salies_kodas": apskritis.salies_kodas,
-            "ribos": apskritis.ribos,
-        }
-
-    def test_generate_test_dataa(self) -> None:
-        Apskritis.generate_test_data(quantity=2)
-        assert Apskritis.objects.count() == 2
-        assert Salis.objects.count() == 2
-
-
-class TestSavivaldybe:
-    def test_to_dict(self) -> None:
-        savivaldybe = make(Savivaldybe)
-        assert savivaldybe.to_dict() == {
-            "id": savivaldybe.id,
-            "uuid": savivaldybe.uuid,
-            "tipas": savivaldybe.tipas,
-            "kodas": savivaldybe.kodas,
-            "iregistruota": savivaldybe.iregistruota,
-            "isregistruota": savivaldybe.isregistruota,
-            "pavadinimas": savivaldybe.pavadinimas,
-            "plotas": savivaldybe.plotas,
-            "centras_id": savivaldybe.centras_id,
-            "salis_id": savivaldybe.salis_id,
-            "salies_kodas": savivaldybe.salies_kodas,
-            "ribos": savivaldybe.ribos,
-            "apskritis_id": savivaldybe.apskritis_id,
+        settlement = make(Settlement)
+        assert settlement.to_dict() == {
+            "id": settlement.id,
+            "registered": settlement.registered,
+            "deregistered": settlement.deregistered,
+            "title_lt": settlement.title_lt,
+            "area": settlement.area,
+            "type": settlement.type,
+            "country_id": settlement.country_id,
+            "country_code": settlement.country_code,
         }
 
     def test_generate_test_data(self) -> None:
-        Savivaldybe.generate_test_data(quantity=2)
-        assert Savivaldybe.objects.count() == 2
-        assert Salis.objects.count() == 2
+        Settlement.generate_test_data(quantity=2)
+        assert Settlement.objects.count() == 2
+        assert Title.objects.count() == 2
+        assert Country.objects.count() == 2
 
 
-class TestSeniunija:
+class TestDocument:
     def test_to_dict(self) -> None:
-        seniunija = make(Seniunija)
-        assert seniunija.to_dict() == {
-            "id": seniunija.id,
-            "uuid": seniunija.uuid,
-            "tipas": seniunija.tipas,
-            "kodas": seniunija.kodas,
-            "iregistruota": seniunija.iregistruota,
-            "isregistruota": seniunija.isregistruota,
-            "pavadinimas": seniunija.pavadinimas,
-            "plotas": seniunija.plotas,
-            "centras_id": seniunija.centras_id,
-            "salis_id": seniunija.salis_id,
-            "salies_kodas": seniunija.salies_kodas,
-            "ribos": seniunija.ribos,
-            "savivaldybe_id": seniunija.savivaldybe_id,
+        document = make(Document)
+        assert document.to_dict() == {
+            "id": document.id,
+            "number": document.number,
+            "type": document.type,
+            "content": document.content,
+            "status": document.status,
+            "received": document.received,
+            "creation_date": document.creation_date,
+            "creation_time": document.creation_time,
         }
 
     def test_generate_test_data(self) -> None:
-        Seniunija.generate_test_data(quantity=2)
-        assert Seniunija.objects.count() == 2
-        assert Salis.objects.count() == 2
+        Document.generate_test_data(quantity=2)
+        assert Document.objects.count() == 2
+        assert DocumentAuthor.objects.count() == 2
 
 
-class TestOrganizacija:
+class TestDocumentAuthor:
     def test_to_dict(self) -> None:
-        make(JuridinisAsmuo)
-        organizacija = Organizacija.objects.first()
-
-        assert organizacija.to_dict() == {
-            "id": organizacija.id,
+        document_author = make(DocumentAuthor)
+        assert document_author.to_dict() == {
+            "id": document_author.id,
+            "document_id": document_author.document_id,
+            "name": document_author.name,
+            "surname": document_author.surname,
+            "passport": document_author.passport,
         }
 
 
-class TestJuridinisAsmuo:
+class TestCounty:
     def test_to_dict(self) -> None:
-        juridinis_asmuo = make(JuridinisAsmuo)
-        assert juridinis_asmuo.to_dict() == {
-            "id": juridinis_asmuo.id,
-            "pavadinimas": juridinis_asmuo.pavadinimas,
+        county = make(County)
+        assert county.to_dict() == {
+            "id": county.id,
+            "admin_unit_id": county.admin_unit_id,
+            "uuid": county.admin_unit.uuid,
+            "code": county.admin_unit.code,
+            "registered": county.admin_unit.registered,
+            "deregistered": county.admin_unit.deregistered,
+            "title": county.admin_unit.title,
+            "area": county.admin_unit.area,
+            "type": county.admin_unit.type,
+            "centre_id": county.admin_unit.centre_id,
+            "country_id": county.admin_unit.country_id,
+            "country_code": county.admin_unit.country_code,
         }
 
     def test_generate_test_data(self) -> None:
-        JuridinisAsmuo.generate_test_data(quantity=2)
-        assert JuridinisAsmuo.objects.count() == 2
+        County.generate_test_data(quantity=2)
+        assert County.objects.count() == 2
+        assert Settlement.objects.count() == 2
+        assert Country.objects.count() == 2
 
 
-class TestNejuridinisAsmuo:
+class TestMunicipality:
     def test_to_dict(self) -> None:
-        nejuridinis_asmuo = make(NejuridinisAsmuo)
-        assert nejuridinis_asmuo.to_dict() == {
-            "id": nejuridinis_asmuo.id,
-            "pavadinimas": nejuridinis_asmuo.pavadinimas,
+        municipality = make(Municipality)
+        assert municipality.to_dict() == {
+            "id": municipality.id,
+            "admin_unit_id": municipality.admin_unit_id,
+            "uuid": municipality.admin_unit.uuid,
+            "code": municipality.admin_unit.code,
+            "registered": municipality.admin_unit.registered,
+            "deregistered": municipality.admin_unit.deregistered,
+            "title": municipality.admin_unit.title,
+            "area": municipality.admin_unit.area,
+            "type": municipality.admin_unit.type,
+            "centre_id": municipality.admin_unit.centre_id,
+            "country_id": municipality.admin_unit.country_id,
+            "country_code": municipality.admin_unit.country_code,
+            "county_id": municipality.county_id,
         }
 
     def test_generate_test_data(self) -> None:
-        NejuridinisAsmuo.generate_test_data(quantity=2)
-        assert NejuridinisAsmuo.objects.count() == 2
+        Municipality.generate_test_data(quantity=2)
+        assert Municipality.objects.count() == 2
+        assert County.objects.count() == 2
+        assert Settlement.objects.count() == 2
+
+
+class TestEldership:
+    def test_to_dict(self) -> None:
+        eldership = make(Eldership)
+        assert eldership.to_dict() == {
+            "id": eldership.id,
+            "admin_unit_id": eldership.admin_unit_id,
+            "uuid": eldership.admin_unit.uuid,
+            "code": eldership.admin_unit.code,
+            "registered": eldership.admin_unit.registered,
+            "deregistered": eldership.admin_unit.deregistered,
+            "title": eldership.admin_unit.title,
+            "area": eldership.admin_unit.area,
+            "type": eldership.admin_unit.type,
+            "centre_id": eldership.admin_unit.centre_id,
+            "country_id": eldership.admin_unit.country_id,
+            "country_code": eldership.admin_unit.country_code,
+            "municipality_id": eldership.municipality_id,
+        }
+
+    def test_generate_test_data(self) -> None:
+        Eldership.generate_test_data(quantity=2)
+        assert Eldership.objects.count() == 2
+        assert Municipality.objects.count() == 2
+        assert Settlement.objects.count() == 2
