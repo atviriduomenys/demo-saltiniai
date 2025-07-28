@@ -12,6 +12,14 @@ from spyne.protocol.json import JsonDocument
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 
+from apps.address_registry.services import (
+    CityNameService,
+    CityService,
+    ContinentService,
+    CountryService,
+    DocumentAuthorService,
+    DocumentService,
+)
 from apps.address_registry.models import (
     Continent,
     Document,
@@ -43,6 +51,55 @@ cities_application_json = csrf_exempt(
             name="CitiesApplication",
             in_protocol=HttpRpc(validator="soft"),
             out_protocol=JsonDocument(validator="soft"),
+        )
+    )
+)
+
+
+document_application_json = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [DocumentService, DocumentAuthorService],
+            tns="document_application_tns",
+            name="DocumentApplication",
+            in_protocol=HttpRpc(validator="soft"),
+            out_protocol=JsonDocument(validator="soft"),
+        )
+    )
+)
+
+document_application_soap = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [DocumentService, DocumentAuthorService],
+            tns="document_application_tns",
+            name="DocumentApplication",
+            in_protocol=Soap11(validator="lxml"),
+            out_protocol=Soap11(validator="soft"),
+        )
+    )
+)
+
+countries_application_json = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [ContinentService, CountryService],
+            tns="countries_application_tns",
+            name="CountryApplication",
+            in_protocol=HttpRpc(validator="soft"),
+            out_protocol=JsonDocument(validator="soft"),
+        )
+    )
+)
+
+countries_application_soap = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [ContinentService, CountryService],
+            tns="countries_application_tns",
+            name="CountryApplication",
+            in_protocol=Soap11(validator="lxml"),
+            out_protocol=Soap11(validator="soft"),
         )
     )
 )
