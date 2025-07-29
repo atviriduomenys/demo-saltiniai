@@ -133,7 +133,7 @@ class Country(models.Model):
     title = models.CharField(max_length=255)
     title_lt = models.CharField(max_length=255)
     title_en = models.CharField(max_length=255)
-    continent = models.ForeignKey(Continent, on_delete=models.CASCADE)  # type: ignore
+    continent = models.ForeignKey(Continent, related_name="countries", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Country"
@@ -176,7 +176,7 @@ class Settlement(models.Model):
     title_lt = models.CharField(max_length=255)
     area = models.FloatField(null=True)
     type = models.CharField(choices=SettlementType.choices, max_length=255)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="settlements")
     country_code = models.CharField(max_length=50, help_text="Must match with country_id")
 
     class Meta:
