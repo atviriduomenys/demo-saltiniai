@@ -19,7 +19,8 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,,,CITY,,,,,,
 ,,,,,titles,array,,,,4,open,,,
 ,,,,,titles[],backref,Title,..,,0,open,,,Title title
-,,,,,,comment,,title,,4,open,,,
+,,,,,titles.title,object,,title,,4,open,,,
+,,,,,,comment,ref,,update(type: “string”),,,,,
 ,,,,,country,ref,Country[code],..,,,,,,
 ,,,,,,,,,,,,,,
 ,,,,Title,,,id,countries[].settlements[].title_forms,,4,open,,Title,
@@ -60,6 +61,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,creation_time,time,,creation_time,,4,open,,,
 ,,,,,_created,datetime,,,"creation_date+""T""+creation_time",4,open,,,
 ,,,,,content,binary,,doc_content,,4,open,,,
+,,,,,,comment,ref,,update(ref: “base64”),,,,,
 ,,,,,,,,,,,,,,
 ,,,,DocumentAuthor,,,id,document_author,,4,open,,,
 ,,,,,id,string,,id,,4,open,,,
