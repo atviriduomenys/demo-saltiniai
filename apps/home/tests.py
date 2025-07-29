@@ -55,7 +55,7 @@ class TestUrlPathPatterns:
     """Ensure that all URL paths comply with the best practices.
 
     It is possible to face hard to debug issues, when URL paths do not comply with
-    the best practices. For example, when a URL path is missing trailing / Django
+    the best practices. For demo, when a URL path is missing trailing / Django
     usually redirects the request to another URL, which has trailing /.
     The body of PUT/POST request is being lost during this redirection.
     This test suite makes sure that such cases are avoided by forcing
@@ -78,8 +78,10 @@ class TestUrlPathPatterns:
     ]
 
     @pytest.mark.parametrize(("path", "path_name"), url_paths_and_names)
-    def test_url_path_ends_with_underscores(self, path, path_name):
-        if not (path.endswith("/") or path.endswith("<path>") or path.endswith("<url>")):
+    def test_url_path_ends_with_forward_slash(self, path, path_name):
+        # TODO: remove '<drf_format_suffix:format>' if DRF fixes the problem with route building
+        endings = ("/", "<path>", "<drf_format_suffix:format>", "<url>")
+        if not path.endswith(endings):
             raise AssertionError(f"Path {path} <{path_name}> does not end with /")
 
     @pytest.mark.parametrize(("path", "path_name"), url_paths_and_names)
