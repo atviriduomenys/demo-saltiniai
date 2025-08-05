@@ -104,8 +104,7 @@ class DocumentAuthorService(Service):
 class ContinentService(Service):
     @rpc(_returns=Iterable(ContinentModel))
     def continents(self) -> QuerySet:
-        queryset = Continent.objects.all()
-        return queryset
+        return Continent.objects.all()
 
 
 class CountryFilter(ComplexModel):

@@ -12,7 +12,7 @@ from apps.address_registry.views import (
 
 urlpatterns = [
     path(
-        "cities-app/",
+        "cities/",
         include(
             [
                 re_path(r"^soap/", cities_application_soap),
@@ -21,7 +21,7 @@ urlpatterns = [
         ),
     ),
     path(
-        "documents-app/",
+        "documents/",
         include(
             [
                 re_path(r"^json/", document_application_json),
@@ -30,7 +30,7 @@ urlpatterns = [
         ),
     ),
     path(
-        "countries-app/",
+        "countries/",
         include(
             [
                 re_path(r"^json/", countries_application_json),
