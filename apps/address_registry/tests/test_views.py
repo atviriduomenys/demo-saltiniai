@@ -23,7 +23,7 @@ from apps.utils.tests_query_counter import APIClientWithQueryCounter
 class TestCitiesApplicationSoap:
     @pytest.fixture
     def client(self) -> DjangoTestClient:
-        return DjangoTestClient("/api/v1/cities-app/soap/", cities_application_soap.app)
+        return DjangoTestClient("/api/v1/cities/soap/", cities_application_soap.app)
 
     def test_city_response(self, client: DjangoTestClient) -> None:
         settlement = make(Settlement)
@@ -86,7 +86,7 @@ class TestCitiesApplicationJson:
         title1 = make(Title, grammatical_case="GENITIVE", settlement=settlement)
         title2 = make(Title, grammatical_case="NOMINATIVE", settlement=settlement)
 
-        response = client.get("/api/v1/cities-app/json/cities")
+        response = client.get("/api/v1/cities/json/cities")
         assert response.status_code == 200
 
         response_data = response.json()
@@ -104,7 +104,7 @@ class TestCitiesApplicationJson:
         settlement = make(Settlement)
         title = make(Title, grammatical_case="GENITIVE", settlement=settlement)
 
-        response = client.get("/api/v1/cities-app/json/city_names")
+        response = client.get("/api/v1/cities/json/city_names")
         assert response.status_code == 200
 
         response_data = response.json()
@@ -165,7 +165,7 @@ class TestGenerateTestData:
 class TestDocumentsApplicationSoap:
     @pytest.fixture
     def client(self) -> DjangoTestClient:
-        return DjangoTestClient("/api/v1/documents-app/soap/", document_application_soap.app)
+        return DjangoTestClient("/api/v1/documents/soap/", document_application_soap.app)
 
     def test_document_response(self, client: DjangoTestClient) -> None:
         document = make(Document)
@@ -216,7 +216,7 @@ class TestDocumentsApplicationSoap:
 class TestCountryApplicationSoap:
     @pytest.fixture
     def client(self) -> DjangoTestClient:
-        return DjangoTestClient("/api/v1/countries-app/soap/", countries_application_soap.app)
+        return DjangoTestClient("/api/v1/countries/soap/", countries_application_soap.app)
 
     def test_country_response(self, client: DjangoTestClient) -> None:
         country = make(Country)
@@ -267,7 +267,7 @@ class TestCountryApplicationSoap:
 class TestDocumentsApplicationJson:
     def test_document_response(self, client: APIClientWithQueryCounter) -> None:
         document = make(Document)
-        response = client.get("/api/v1/documents-app/json/documents")
+        response = client.get("/api/v1/documents/json/documents")
         assert response.status_code == 200
 
         response_data = response.json()
@@ -280,7 +280,7 @@ class TestDocumentsApplicationJson:
     def test_document_author_response(self, client: APIClientWithQueryCounter) -> None:
         document_author = make(DocumentAuthor)
 
-        response = client.get("/api/v1/documents-app/json/document_authors")
+        response = client.get("/api/v1/documents/json/document_authors")
         assert response.status_code == 200
 
         response_data = response.json()
@@ -294,7 +294,7 @@ class TestDocumentsApplicationJson:
 class TestCountryApplicationJson:
     def test_country_response(self, client: APIClientWithQueryCounter) -> None:
         country = make(Country)
-        response = client.get("/api/v1/countries-app/json/countries")
+        response = client.get("/api/v1/countries/json/countries")
         assert response.status_code == 200
 
         response_data = response.json()
@@ -307,7 +307,7 @@ class TestCountryApplicationJson:
     def test_continent_response(self, client: APIClientWithQueryCounter) -> None:
         continent = make(Continent)
 
-        response = client.get("/api/v1/countries-app/json/continents")
+        response = client.get("/api/v1/countries/json/continents")
         assert response.status_code == 200
 
         response_data = response.json()
