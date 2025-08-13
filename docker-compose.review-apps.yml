@@ -30,6 +30,15 @@ services:
     networks:
       - katalogas
 
+  saltiniai-nginx:
+    image: nginx:latest
+    volumes:
+      - /tmp/${BRANCH}-static:/usr/share/nginx/html/static
+    networks:
+      katalogas:
+        aliases:
+          - static-saltiniai
+
 volumes:
   saltiniai-postgres:
 
