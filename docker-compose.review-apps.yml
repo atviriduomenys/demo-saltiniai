@@ -19,6 +19,8 @@ services:
       katalogas:
         aliases:
           - saltiniai
+    volumes:
+      - /tmp/${BRANCH}-static:/app/static
 
   saltiniai-database:
     image: postgis/postgis:16-3.4
