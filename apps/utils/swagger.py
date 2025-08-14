@@ -56,7 +56,7 @@ class CustomSchemaGenerator(OpenAPISchemaGenerator):
         # Add the new paths from the extra swagger JSON to the schema
         for path, path_data in self._get_spyne_view_paths().items():
             schema.paths.setdefault(path, {}).update(path_data)
-
+        schema.schemes = ('https', 'http')
         return schema
 
 
