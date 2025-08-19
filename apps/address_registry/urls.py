@@ -7,6 +7,10 @@ from apps.address_registry.views import (
     GenerateTestData,
     cities_application_json,
     cities_application_soap,
+    countries_application_json,
+    countries_application_soap,
+    document_application_json,
+    document_application_soap,
 )
 
 router = DefaultRouter()
@@ -15,11 +19,29 @@ router.register(r"documents", DocumentViewSet, basename="documents")
 
 urlpatterns = [
     path(
-        "cities-app/",
+        "cities/",
         include(
             [
                 re_path(r"^soap/", cities_application_soap),
                 re_path(r"^json/", cities_application_json),
+            ]
+        ),
+    ),
+    path(
+        "documents/",
+        include(
+            [
+                re_path(r"^json/", document_application_json),
+                re_path(r"^soap/", document_application_soap),
+            ]
+        ),
+    ),
+    path(
+        "countries/",
+        include(
+            [
+                re_path(r"^json/", countries_application_json),
+                re_path(r"^soap/", countries_application_soap),
             ]
         ),
     ),
