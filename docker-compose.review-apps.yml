@@ -16,7 +16,7 @@ services:
     depends_on:
         - saltiniai-database
     networks:
-      katalogas:
+      spinta:
         aliases:
           - saltiniai
     volumes:
@@ -30,14 +30,14 @@ services:
     volumes:
       - "saltiniai-postgres:/var/lib/postgresql/data"
     networks:
-      - katalogas
+      - spinta
 
   saltiniai-nginx:
     image: nginx:latest
     volumes:
       - /tmp/${BRANCH}-static:/usr/share/nginx/html/static
     networks:
-      katalogas:
+      spinta:
         aliases:
           - static-saltiniai
 
@@ -45,5 +45,5 @@ volumes:
   saltiniai-postgres:
 
 networks:
-  katalogas:
+  spinta:
     external: true
