@@ -12,14 +12,6 @@ from spyne.protocol.json import JsonDocument
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 
-from apps.address_registry.services import (
-    CityNameService,
-    CityService,
-    ContinentService,
-    CountryService,
-    DocumentAuthorService,
-    DocumentService,
-)
 from apps.address_registry.models import (
     Continent,
     Document,
@@ -28,7 +20,14 @@ from apps.address_registry.serializers import (
     ContinentCountrySettlementSerializer,
     DocumentSerializer,
 )
-from apps.address_registry.services import CityNameService, CityService
+from apps.address_registry.services import (
+    CityNameService,
+    CityService,
+    ContinentService,
+    CountryService,
+    DocumentAuthorService,
+    DocumentService,
+)
 
 cities_application_soap = csrf_exempt(
     DjangoApplication(
