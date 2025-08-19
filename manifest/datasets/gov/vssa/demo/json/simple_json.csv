@@ -45,7 +45,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,name,string,,name,,5,open,,,
 ,,,,,_label,string,,name,,5,open,,,
 ,,,,,,,,,,,,,,
-,,database2,,,,dask/json,,http://0.0.0.0:8001/api/v1/documents/,,,,,,
+,,database2,,,,dask/json,,http://saltiniai:8000/api/v1/documents/,,,,,,
 5d5bfb77-47b4-46b8-b305-a2689d616c1d,,,,Document,,,id,.,,4,open,,,
 ,,,,,id,string,,id,,4,open,,,
 ,,,,,number,string,,number,,4,open,,,
