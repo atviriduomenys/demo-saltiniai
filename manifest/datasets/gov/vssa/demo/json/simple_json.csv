@@ -4,7 +4,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,,,skos,,,,,https://www.w3.org/2009/08/skos-reference/skos.html#,,
 ,,,,,,,exnuost,,,,,https://nuostatai.lt/example/document#,,
 ,,,,,,,dct,,,,,http://purl.org/dc/terms/,,
-,,database1,,,,dask/json,,http://0.0.0.0:8001/api/v1/settlements/,,,,,,
+,,database1,,,,dask/json,,http://saltiniai:8000/api/v1/settlements/,,,,,,
 ,,,,Settlement,,,id,countries.settlements,,4,open,,Settlement,
 ,,,,,id,string unique required,,id,,5,open,dct:identifier,ID,ID
 ,,,,,registered,date,D,registered,,2,open,,Reg,
