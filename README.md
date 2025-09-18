@@ -16,8 +16,8 @@ Endpoints are written using `spyne` package that can return data in different fo
 
 Documentation dynamically generated with OpenAPI3. It can be reached:
 
-- `/schema/swagger/` for Swagger UI
-- `/schema/redoc/` for ReDoc UI
+- `/swagger/` for Swagger UI
+- `/redoc/` for ReDoc UI
 
 ## Get started
 ### I. Docker
