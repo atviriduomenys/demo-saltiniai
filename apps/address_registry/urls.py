@@ -1,7 +1,7 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from apps.address_registry.views import (
+from apps.address_registry.views.views import (
     ContinentCountrySettlementViewSet,
     DocumentViewSet,
     GenerateTestData,

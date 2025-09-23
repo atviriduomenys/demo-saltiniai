@@ -12,7 +12,7 @@ from apps.address_registry.models import (
     Settlement,
     Title,
 )
-from apps.address_registry.views import (
+from apps.address_registry.views.views import (
     cities_application_soap,
     countries_application_soap,
     document_application_soap,
