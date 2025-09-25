@@ -31,7 +31,7 @@ Available models:
 
 To generate test data you have to access the endpoint using a `POST` request and input the quantity of instances you want to generate in `json` format. The url for the endpoint is formed as follows:
 
-`http://.../api/v1/address_registry/{model}/generate/`
+`https://test-data.data.gov.lt/api/v1/address_registry/{model}/generate/`
 
 ### Data Access Endpoints
 
@@ -40,57 +40,57 @@ Demo-saltiniai service allows accessing the test data of certain models and in c
 ### JSON Format Endpoints
 
 #### REST API Endpoints
-- `http://.../api/v1/documents/{id}`  
+- `https://test-data.data.gov.lt/api/v1/documents/{id}/`  
   Returns a list of documents, with each document including its associated document author.
 
-- `http://.../api/v1/settlements/{id}`  
+- `https://test-data.data.gov.lt/api/v1/settlements/{id}/`  
   Returns a list of continents, with each continent containing its related countries and each country containing its related settlements.
 
 #### JSON Service Endpoints
-- `http://.../api/v1/cities/json/city_names`  
+- `https://test-data.data.gov.lt/api/v1/cities/json/city_names`  
   Returns a list of titles, with each title including its associated settlement.
 
-- `http://.../api/v1/cities/json/cities`  
+- `https://test-data.data.gov.lt/api/v1/cities/json/cities`  
   Returns a list of settlements with each settlement including a list of its associated titles.
 
-- `http://.../api/v1/countries/json/continents`  
+- `https://test-data.data.gov.lt/api/v1/countries/json/continents`  
   Returns a list of continents.
 
-- `http://.../api/v1/countries/json/countries`  
+- `https://test-data.data.gov.lt/api/v1/countries/json/countries`  
   Returns a list of countries.
 
-- `http://.../api/v1/documents/json/documents`  
+- `https://test-data.data.gov.lt/api/v1/documents/json/documents`  
   Returns a list of documents, with each document including its associated document author.
 
-- `http://.../api/v1/documents/json/document_authors`  
+- `https://test-data.data.gov.lt/api/v1/documents/json/document_authors`  
   Returns a list of document authors.
 
 ### SOAP Format Endpoints
 
 #### WSDL Endpoints
-- `http://.../api/v1/documents/soap/?wsdl`
-- `http://.../api/v1/cities/soap/?wsdl`
-- `http://.../api/v1/countries/soap/?wsdl`
+- `https://test-data.data.gov.lt/api/v1/documents/soap/?wsdl`
+- `https://test-data.data.gov.lt/api/v1/cities/soap/?wsdl`
+- `https://test-data.data.gov.lt/api/v1/countries/soap/?wsdl`
 
 Returns the WSDL for the service.
 
 #### SOAP Service Endpoints
-- `http://.../api/v1/cities/soap/city_names`  
+- `https://test-data.data.gov.lt/api/v1/cities/soap/city_names`  
   SOAP service that returns a list of titles, with each title including its associated settlement.
 
-- `http://.../api/v1/cities/soap/cities`  
+- `https://test-data.data.gov.lt/api/v1/cities/soap/cities`  
   SOAP service that returns a list of settlements with each settlement including a list of its associated titles.
 
-- `http://.../api/v1/countries/soap/continents`  
+- `https://test-data.data.gov.lt/api/v1/countries/soap/continents`  
   SOAP service that returns a list of continents.
 
-- `http://.../api/v1/countries/soap/countries`  
+- `https://test-data.data.gov.lt/api/v1/countries/soap/countries`  
   SOAP service that returns a list of countries.
 
-- `http://.../api/v1/documents/soap/documents`  
+- `https://test-data.data.gov.lt/api/v1/documents/soap/documents`  
   SOAP service that returns a list of documents, with each document including its associated document author.
 
-- `http://.../api/v1/documents/soap/document_authors`  
+- `https://test-data.data.gov.lt/api/v1/documents/soap/document_authors`  
   SOAP service that returns a list of document authors.
 
 **Note:** All SOAP endpoints require XML POST requests with proper SOAP envelope structure.
