@@ -16,8 +16,12 @@ Endpoints are written using `spyne` package that can return data in different fo
 
 Documentation dynamically generated with OpenAPI3. It can be reached:
 
-- `/swagger/` for Swagger UI
-- `/redoc/` for ReDoc UI
+- `/swagger/` for Swagger UI (https://test-data.data.gov.lt/swagger/)
+- `/redoc/` for ReDoc UI (https://test-data.data.gov.lt/redoc/)
+
+# Review app environment
+
+Deployments are performed with Drone CI - https://test-data.data.gov.lt/admin/.
 
 ## Get started
 ### I. Docker
