@@ -1,6 +1,6 @@
 id,dataset,resource,base,model,property,type,ref,source,prepare,level,status,visibility,access,uri,eli,title,description
 ,example,,,,,dataset,,,,,,,,,,,
-,,wsdl_resource1,,,,wsdl,,http://127.0.0.1:8001/api/v1/documents/soap/documents?wsdl,,,,,,,,,
+,,wsdl_resource1,,,,wsdl,,http://saltiniai:8000/api/v1/documents/soap/documents?wsdl,,,,,,,,,
 ,,documents,,,,soap,,DocumentService.DocumentApplication.DocumentApplication.documents,wsdl(wsdl_resource1),,,,,,,,
 ,,,,,,param,typ,document_filter/type,input(),,,,,,,,
 ,,,,,,param,stat,document_filter/status,input(),,,,,,,,
