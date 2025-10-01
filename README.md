@@ -2,7 +2,7 @@
 
 This repository is small Django service to create and expose test data that can be used for testing `spinta`. 
 
-Test data can be created via Django admin page.
+Test data can be created via Django admin page or by using data generating endpoints.
 
 Endpoints are written using `spyne` package that can return data in different formats including:
   - JSON
@@ -11,6 +11,89 @@ Endpoints are written using `spyne` package that can return data in different fo
   - WSDL
   - [TBD] CSV
   - [TBD] XLSX
+
+## API endpoints
+### Data generation endpoints
+Demo-saltiniai service allows generating test data for `spinta` project.
+
+Each model has its own endpoint that can be used to generate test data for that model.
+Available models: 
+- `administration`
+- `administrativeunit`
+- `continent`
+- `country`
+- `county`
+- `document`
+- `eldership`
+- `municipality`
+- `settlement`
+- `title`
+
+To generate test data you have to access the endpoint using a `POST` request and input the quantity of instances you want to generate in `json` format. The url for the endpoint is formed as follows:
+
+`https://test-data.data.gov.lt/api/v1/address_registry/{model}/generate/`
+
+### Data Access Endpoints
+
+Demo-saltiniai service allows accessing the test data of certain models and in certain formats.
+
+### JSON Format Endpoints
+
+#### REST API Endpoints
+- `https://test-data.data.gov.lt/api/v1/documents/{id}/`  
+  Returns a list of documents, with each document including its associated document author.
+
+- `https://test-data.data.gov.lt/api/v1/settlements/{id}/`  
+  Returns a list of continents, with each continent containing its related countries and each country containing its related settlements.
+
+#### JSON Service Endpoints
+- `https://test-data.data.gov.lt/api/v1/cities/json/city_names`  
+  Returns a list of titles, with each title including its associated settlement.
+
+- `https://test-data.data.gov.lt/api/v1/cities/json/cities`  
+  Returns a list of settlements with each settlement including a list of its associated titles.
+
+- `https://test-data.data.gov.lt/api/v1/countries/json/continents`  
+  Returns a list of continents.
+
+- `https://test-data.data.gov.lt/api/v1/countries/json/countries`  
+  Returns a list of countries.
+
+- `https://test-data.data.gov.lt/api/v1/documents/json/documents`  
+  Returns a list of documents, with each document including its associated document author.
+
+- `https://test-data.data.gov.lt/api/v1/documents/json/document_authors`  
+  Returns a list of document authors.
+
+### SOAP Format Endpoints
+
+#### WSDL Endpoints
+- `https://test-data.data.gov.lt/api/v1/documents/soap/?wsdl`
+- `https://test-data.data.gov.lt/api/v1/cities/soap/?wsdl`
+- `https://test-data.data.gov.lt/api/v1/countries/soap/?wsdl`
+
+Returns the WSDL for the service.
+
+#### SOAP Service Endpoints
+- `https://test-data.data.gov.lt/api/v1/cities/soap/city_names`  
+  SOAP service that returns a list of titles, with each title including its associated settlement.
+
+- `https://test-data.data.gov.lt/api/v1/cities/soap/cities`  
+  SOAP service that returns a list of settlements with each settlement including a list of its associated titles.
+
+- `https://test-data.data.gov.lt/api/v1/countries/soap/continents`  
+  SOAP service that returns a list of continents.
+
+- `https://test-data.data.gov.lt/api/v1/countries/soap/countries`  
+  SOAP service that returns a list of countries.
+
+- `https://test-data.data.gov.lt/api/v1/documents/soap/documents`  
+  SOAP service that returns a list of documents, with each document including its associated document author.
+
+- `https://test-data.data.gov.lt/api/v1/documents/soap/document_authors`  
+  SOAP service that returns a list of document authors.
+
+**Note:** All SOAP endpoints require XML POST requests with proper SOAP envelope structure.
 
 ## OpenAPI documentation
 
