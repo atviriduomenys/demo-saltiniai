@@ -3,7 +3,7 @@ import binascii
 import xml.etree.ElementTree as ET
 
 from django.views.decorators.csrf import csrf_exempt
-from spyne import Application, ComplexModel, String, rpc
+from spyne import Application, ComplexModel, String, rpc, Mandatory
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 from spyne.service import Service
@@ -46,7 +46,7 @@ class Get(Service):
     __service_name__ = "Get"
     __port_types__ = ("GetPort",)
 
-    @rpc(Input, _returns=Output, _port_type="GetPort")
+    @rpc(Mandatory(Input), _returns=Output, _port_type="GetPort")
     def GetData(self, input: Input) -> dict:  # noqa: N802, A002
         try:
             decoded_params = base64.b64decode(input.Parameters, validate=True).decode("utf-8")
