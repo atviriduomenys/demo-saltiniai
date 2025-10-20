@@ -12,6 +12,9 @@ from apps.address_registry.helpers import construct_countries_xml, construct_cou
 from apps.address_registry.models import Country
 
 
+NO_BASE64_ACTION = "64"
+
+
 class Input(ComplexModel):
     ActionType = String(min_occurs=1, nillable=False)
     CallerCode = String(min_occurs=1, nillable=False)
@@ -38,7 +41,7 @@ def _get_decoded_params(parameter: str) -> str:
 
 
 def _get_response_data(action_type: str, xml_data: ET.Element) -> str | bytes:
-    if action_type == "64":  # ActionType="64" returns ResponseData without base64 encoding
+    if action_type == NO_BASE64_ACTION:  # Returns ResponseData without base64 encoding
         countries_data = ET.tostring(xml_data, encoding="unicode")
     else:
         countries_data = base64.b64encode(ET.tostring(xml_data))
