@@ -3,11 +3,12 @@ import binascii
 import xml.etree.ElementTree as ET
 
 from django.views.decorators.csrf import csrf_exempt
-from spyne import Application, ComplexModel, String, rpc, Mandatory
+from spyne import Application, ComplexModel, Iterable, Mandatory, String, rpc
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 from spyne.service import Service
 
+from apps.address_registry.helpers import construct_countries_xml, construct_country_xml
 from apps.address_registry.models import Country
 
 
@@ -27,19 +28,22 @@ class Output(ComplexModel):
     DecodedParameters = String()
 
 
-def _construct_countries_xml() -> ET.Element:
-    countries = ET.Element("countries")
-    for country in Country.objects.all().select_related("continent"):
-        country_data = ET.SubElement(countries, "countryData")
-        ET.SubElement(country_data, "id").text = str(country.id)
-        ET.SubElement(country_data, "title").text = country.title
-        ET.SubElement(country_data, "continent_id").text = str(country.continent_id)
+def _get_decoded_params(parameter: str) -> str:
+    try:
+        decoded_params = base64.b64decode(parameter, validate=True).decode("utf-8")
+    except (binascii.Error, ValueError) as e:
+        decoded_params = f"Decoding base64 failed: {e}"
 
-        continent_data = ET.SubElement(country_data, "continent")
-        ET.SubElement(continent_data, "code").text = str(country.continent.code)
-        ET.SubElement(continent_data, "name").text = country.continent.name
+    return decoded_params
 
-    return countries
+
+def _get_response_data(action_type: str, xml_data: ET.Element) -> str | bytes:
+    if action_type == "64":  # ActionType="64" returns ResponseData without base64 encoding
+        countries_data = ET.tostring(xml_data, encoding="unicode")
+    else:
+        countries_data = base64.b64encode(ET.tostring(xml_data))
+
+    return countries_data
 
 
 class Get(Service):
@@ -48,18 +52,29 @@ class Get(Service):
 
     @rpc(Mandatory(Input), _returns=Output, _port_type="GetPort")
     def GetData(self, input: Input) -> dict:  # noqa: N802, A002
-        try:
-            decoded_params = base64.b64decode(input.Parameters, validate=True).decode("utf-8")
-        except (binascii.Error, ValueError) as e:
-            decoded_params = f"Decoding base64 failed: {e}"
+        decoded_params = _get_decoded_params(input.Parameters)
 
-        countries_xml = _construct_countries_xml()
-        if input.ActionType == "64":  # ActionType="64" returns ResponseData without base64 encoding
-            countries_str = ET.tostring(countries_xml, encoding="unicode")
-        else:
-            countries_str = base64.b64encode(ET.tostring(countries_xml))
+        countries_xml = construct_countries_xml()
+        countries_str = _get_response_data(input.ActionType, countries_xml)
 
         return {"ResponseCode": "1", "ResponseData": countries_str, "DecodedParameters": decoded_params}
+
+    @rpc(Mandatory(Input), _returns=Iterable(Output), _port_type="GetPort")
+    def GetDataMultiple(self, input: Input) -> list[dict]:  # noqa: N802, A002
+        decoded_params = _get_decoded_params(input.Parameters)
+
+        response_data = []
+
+        for country in Country.objects.all().select_related("continent"):
+            country_xml = ET.Element("countries")
+            country_xml.append(construct_country_xml(country))
+            country_str = _get_response_data(input.ActionType, country_xml)
+
+            response_data.append(
+                {"ResponseCode": "1", "ResponseData": country_str, "DecodedParameters": decoded_params}
+            )
+
+        return response_data
 
 
 get_data = csrf_exempt(

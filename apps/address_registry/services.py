@@ -1,7 +1,11 @@
+import json
+import xml.etree.ElementTree as ET
+
 from django.db.models import QuerySet
 from spyne import ComplexModel, Integer, Iterable, String, rpc
 from spyne.service import Service
 
+from apps.address_registry.helpers import construct_country_xml
 from apps.address_registry.models import Continent, Country, Document, DocumentAuthor, Settlement, Title
 from apps.address_registry.schema import ContinentModel, CountryModel, DocumentAuthorModel
 from apps.address_registry.schema_nested import (
@@ -47,6 +51,15 @@ class CityService(Service):
             {
                 **settlement.to_dict(),
                 "title_forms": [{**title.to_dict()} for title in settlement.title_forms.all()],
+                "json_settlement_data": json.dumps(
+                    {
+                        "id": settlement.id,
+                        "title_lt": settlement.title_lt,
+                        "area": settlement.area,
+                        "type": settlement.type,
+                    }
+                ),
+                "xml_country_data": ET.tostring(construct_country_xml(settlement.country), encoding="unicode"),
             }
             for settlement in queryset
         ]
