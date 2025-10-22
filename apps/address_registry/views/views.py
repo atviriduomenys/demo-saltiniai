@@ -10,6 +10,7 @@ from spyne import Application
 from spyne.protocol.http import HttpRpc
 from spyne.protocol.json import JsonDocument
 from spyne.protocol.soap import Soap11
+from spyne.protocol.xml import XmlDocument
 from spyne.server.django import DjangoApplication
 
 from apps.address_registry.models import (
@@ -50,6 +51,19 @@ cities_application_json = csrf_exempt(
             name="CitiesApplication",
             in_protocol=HttpRpc(validator="soft"),
             out_protocol=JsonDocument(validator="soft"),
+        )
+    )
+)
+
+
+cities_application_xml = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [CityService, CityNameService],
+            tns="cities_application_tns",
+            name="CitiesApplication",
+            in_protocol=HttpRpc(validator="soft"),
+            out_protocol=XmlDocument(validator="soft"),
         )
     )
 )

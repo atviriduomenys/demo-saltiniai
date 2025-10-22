@@ -98,3 +98,40 @@ def test_get_data_returns_error_message_in_decodedparameters_if_base64_fails(cli
     assert response_data.DecodedParameters == (
         "Decoding base64 failed: string argument should contain only ASCII characters"
     )
+
+
+def test_get_data_multiple_returns_multiple_objects(client: DjangoTestClient):
+    continent = make(Continent, name="Europe")
+    country1 = make(Country, continent=continent, title="Lithuania")
+    country2 = make(Country, continent=continent, title="Latvia")
+    request_data = _get_request_data()
+
+    result = "".join(  # Makes string single line, without spaces
+        f"""
+        <countries>
+            <countryData>
+                <id>{country2.id}</id>
+                <title>Latvia</title>
+                <continent_id>{continent.code}</continent_id>
+                <continent>
+                    <code>{continent.code}</code>
+                    <name>Europe</name>
+                </continent>
+            </countryData>
+            <countryData>
+                <id>{country1.id}</id>
+                <title>Lithuania</title>
+                <continent_id>{continent.code}</continent_id>
+                <continent>
+                    <code>{continent.code}</code>
+                    <name>Europe</name>
+                </continent>
+            </countryData>
+        </countries>
+        """.split()
+    )
+
+    response = client.service.GetData.get_django_response(**request_data)
+    assert response.status_code == 200
+    response_data = client.service.GetData(**request_data)
+    assert base64.b64decode(response_data.ResponseData).decode("utf-8") == result

@@ -8,6 +8,7 @@ from apps.address_registry.views.views import (
     GenerateTestData,
     cities_application_json,
     cities_application_soap,
+    cities_application_xml,
     countries_application_json,
     countries_application_soap,
     document_application_json,
@@ -25,6 +26,7 @@ urlpatterns = [
             [
                 re_path(r"^soap/", cities_application_soap),
                 re_path(r"^json/", cities_application_json),
+                re_path(r"^xml/", cities_application_xml),
             ]
         ),
     ),

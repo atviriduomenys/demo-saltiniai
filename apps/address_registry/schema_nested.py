@@ -1,4 +1,4 @@
-from spyne import Array
+from spyne import Array, String
 from spyne.util.django import DjangoComplexModel
 
 from apps.address_registry.models import (
@@ -64,6 +64,8 @@ class EldershipNestedResponseModel(
 
 class SettlementTitleNestedModel(DjangoComplexModel):
     title_forms = Array(TitleModel)
+    json_settlement_data = String()
+    xml_country_data = String()
 
     class Attributes(DjangoAttributes):
         django_model = Settlement
