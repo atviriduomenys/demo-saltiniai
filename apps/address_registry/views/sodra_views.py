@@ -73,7 +73,7 @@ def fake_basic_auth_decorator(view_func):
                 auth_decoded = base64.b64decode(auth[1]).decode("latin-1")
 
             username, password = auth_decoded.split(":", 1)
-        except (TypeError, ValueError, UnicodeDecodeError, binascii.Error):
+        except (TypeError, ValueError, UnicodeDecodeError, binascii.Error, IndexError):
             return HttpResponse("Invalid basic header. Credentials not correctly base64 encoded", status=401)
 
         if username != "test_user" and password != "test_password":
