@@ -54,36 +54,6 @@ class SkolasodraiError(ComplexModel):
     laikas = XmlAttribute(DateTime)
 
 
-def fake_basic_auth_decorator(view_func):
-    """
-    Decorator that imitates basic auth. Took inspiration from DRF Basic Authentication.
-    """
-
-    def wrapper(request, *args, **kwargs):
-        return view_func(request, *args, **kwargs)
-        auth = get_authorization_header(request).split()
-
-        if not auth or auth[0].lower() != b"basic":
-            return HttpResponse("Invalid auth header", status=401)
-
-        try:
-            try:
-                auth_decoded = base64.b64decode(auth[1]).decode("utf-8")
-            except UnicodeDecodeError:
-                auth_decoded = base64.b64decode(auth[1]).decode("latin-1")
-
-            username, password = auth_decoded.split(":", 1)
-        except (TypeError, ValueError, UnicodeDecodeError, binascii.Error, IndexError):
-            return HttpResponse("Invalid basic header. Credentials not correctly base64 encoded", status=401)
-
-        if username != "test_user" and password != "test_password":
-            return HttpResponse("Invalid credentials", status=403)
-
-        return view_func(request, *args, **kwargs)
-
-    return wrapper
-
-
 class SkolasodraiService(Service):
     __service_name__ = "skolasodrai"
     __port_types__ = ("skolasodraiPortType",)
