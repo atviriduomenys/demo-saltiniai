@@ -16,6 +16,7 @@ def client() -> DjangoTestClient:
 def _get_request_data(
     action_type="1",
     parameters="dGVzdA==",  # test in base64
+    signature="1",
 ) -> dict:
     return {
         "input": {
@@ -24,7 +25,7 @@ def _get_request_data(
             "EndUserInfo": "",
             "Parameters": parameters,
             "Time": "1",
-            "Signature": "1",
+            "Signature": signature,
             "CallerSignature": "",
         }
     }
@@ -135,3 +136,26 @@ def test_get_data_multiple_returns_multiple_objects(client: DjangoTestClient):
     assert response.status_code == 200
     response_data = client.service.GetData(**request_data)
     assert base64.b64decode(response_data.ResponseData).decode("utf-8") == result
+
+
+@pytest.mark.parametrize("signature", ["MTAwMQ==", "MTAwMg==", "MTAwMw=="])
+def test_return_success_response_if_action_type_60_and_correct_signature(client: DjangoTestClient, signature: str):
+    request_data = _get_request_data(action_type="60", signature=signature)
+    response = client.service.GetData.get_django_response(**request_data)
+    assert response.status_code == 200
+
+    response_data = client.service.GetData(**request_data)
+
+    assert response_data.ResponseCode == "1"
+    assert response_data.ResponseData == base64.b64encode(b"<countries />").decode("utf-8")
+
+
+def test_return_fail_response_if_action_type_60_and_incorrect_signature(client: DjangoTestClient):
+    request_data = _get_request_data(action_type="60", signature="incorrect")
+    response = client.service.GetData.get_django_response(**request_data)
+    assert response.status_code == 200
+
+    response_data = client.service.GetData(**request_data)
+
+    assert response_data.ResponseCode == "-1"
+    assert response_data.ResponseData == "Incorrect signature. Authorization failed."

@@ -1,6 +1,7 @@
 import base64
 import binascii
 import xml.etree.ElementTree as ET
+from enum import Enum
 
 from django.views.decorators.csrf import csrf_exempt
 from spyne import Application, ComplexModel, Iterable, Mandatory, String, rpc
@@ -12,7 +13,12 @@ from apps.address_registry.helpers import construct_countries_xml, construct_cou
 from apps.address_registry.models import Country
 
 
-NO_BASE64_ACTION = "64"
+class Actions(Enum):
+    AUTHENTICATED_RESPONSE_ACTION = "60"
+    NO_BASE64_ACTION = "64"
+
+
+ALLOWED_SIGNATURES = ["MTAwMQ==", "MTAwMg==", "MTAwMw=="]
 
 
 class Input(ComplexModel):
@@ -41,12 +47,18 @@ def _get_decoded_params(parameter: str) -> str:
 
 
 def _get_response_data(action_type: str, xml_data: ET.Element) -> str | bytes:
-    if action_type == NO_BASE64_ACTION:  # Returns ResponseData without base64 encoding
+    if action_type == Actions.NO_BASE64_ACTION.value:  # Returns ResponseData without base64 encoding
         countries_data = ET.tostring(xml_data, encoding="unicode")
     else:
         countries_data = base64.b64encode(ET.tostring(xml_data))
 
     return countries_data
+
+
+def _fake_authenticate(action_type: str, signature: str) -> bool:
+    if action_type == Actions.AUTHENTICATED_RESPONSE_ACTION.value:
+        return signature in ALLOWED_SIGNATURES
+    return True
 
 
 class Get(Service):
@@ -57,6 +69,13 @@ class Get(Service):
     def GetData(self, input: Input) -> dict:  # noqa: N802, A002
         decoded_params = _get_decoded_params(input.Parameters)
 
+        if not _fake_authenticate(input.ActionType, input.Signature):
+            return {
+                "ResponseCode": "-1",
+                "ResponseData": "Incorrect signature. Authorization failed.",
+                "DecodedParameters": decoded_params,
+            }
+
         countries_xml = construct_countries_xml()
         countries_str = _get_response_data(input.ActionType, countries_xml)
 
@@ -65,6 +84,15 @@ class Get(Service):
     @rpc(Mandatory(Input), _returns=Iterable(Output), _port_type="GetPort")
     def GetDataMultiple(self, input: Input) -> list[dict]:  # noqa: N802, A002
         decoded_params = _get_decoded_params(input.Parameters)
+
+        if not self.fake_authenticate(input.ActionType, input.Signature):
+            return [
+                {
+                    "ResponseCode": "-1",
+                    "ResponseData": "Incorrect signature. Authorization failed.",
+                    "DecodedParameters": decoded_params,
+                }
+            ]
 
         response_data = []
 

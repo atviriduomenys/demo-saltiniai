@@ -1,5 +1,5 @@
 id,dataset,resource,base,model,property,type,ref,source,prepare,level,status,visibility,access,uri,eli,title,description
-,datasets/gov/vssa/demo/rctest,,,,,dataset,,,,,,,,,,,"DSA for endpoint very similar to Registrų centras broker. All parameters do nothing except action_type=""64"" will return ResponseData without base64 encoding"
+,datasets/gov/vssa/demo/rctest,,,,,dataset,,,,,,,,,,,"DSA for endpoint very similar to Registrų centras broker. All parameters do nothing except action_type=""64"" will return ResponseData without base64 encoding. action_type=""60"" will only return success if signature is one of following: ""MTAwMQ=="", ""MTAwMg=="" or ""MTAwMw==""."
 ,,rc_wsdl,,,,wsdl,,http://saltiniai:8000/api/v1/rc/get-data/?wsdl,,,,,,,,,
 ,,get_data,,,,soap,,Get.GetPort.GetPort.GetData,wsdl(rc_wsdl),,,,,,,,
 ,,,,,,param,action_type,input/ActionType,input(),,,,,,,,
