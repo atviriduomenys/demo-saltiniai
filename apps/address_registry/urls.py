@@ -2,6 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
 from apps.address_registry.views.rc_broker_views import get_data
+from apps.address_registry.views.sodra_views import skola_sodrai
 from apps.address_registry.views.views import (
     ContinentCountrySettlementViewSet,
     DocumentViewSet,
@@ -49,6 +50,7 @@ urlpatterns = [
         ),
     ),
     re_path(r"^rc/get-data/", get_data),
+    re_path(r"^sodra/skola-sodrai/", skola_sodrai),
     path("<str:app_label>/<str:model_name>/generate/", GenerateTestData.as_view()),
     path("", include(router.urls)),
 ]
