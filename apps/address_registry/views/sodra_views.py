@@ -1,11 +1,7 @@
-import base64
-import binascii
 from datetime import datetime
 
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authentication import get_authorization_header
-from spyne import Application, ComplexModel, Date, DateTime, Fault, Integer, Iterable, String, XmlAttribute, rpc
+from spyne import Application, ComplexModel, Date, DateTime, Fault, Integer, String, XmlAttribute, rpc
 from spyne.protocol.soap import Soap11
 from spyne.server.django import DjangoApplication
 from spyne.service import Service
@@ -38,8 +34,8 @@ class Skolasodrai(ComplexModel):
     tikslas = Integer()
 
 
-class SkolasodraiResponse(ComplexModel):
-    asmuo = Iterable(Asmuo)
+class SkolaSodraiResponse(ComplexModel):
+    asmuo = Asmuo
     laikas = XmlAttribute(DateTime)
 
 
@@ -58,16 +54,22 @@ class SkolasodraiService(Service):
     __service_name__ = "skolasodrai"
     __port_types__ = ("skolasodraiPortType",)
 
-    @rpc(Skolasodrai, _returns=SkolasodraiResponse, _throws=[SkolasodraiError], _port_type="skolasodraiPortType")
-    def skolasodrai(self, SkolaSodrai: Skolasodrai) -> SkolasodraiResponse:  # noqa: N803
-        if SkolaSodrai.asm_kodas and len(str(SkolaSodrai.asm_kodas)) != 11:
+    @rpc(
+        Skolasodrai,
+        _returns=SkolaSodraiResponse,
+        _throws=[SkolasodraiError],
+        _port_type="skolasodraiPortType",
+        _body_style="bare",
+    )
+    def SkolaSodrai(self, skola_sodrai: Skolasodrai) -> SkolaSodraiResponse:  # noqa: N802
+        if skola_sodrai.asm_kodas and len(str(skola_sodrai.asm_kodas)) != 11:
             details = {
-                "asm_kodas": SkolaSodrai.asm_kodas,
-                "vardas": SkolaSodrai.vardas,
-                "pavarde": SkolaSodrai.pavarde,
-                "gim_data": SkolaSodrai.gim_data,
-                "sds": SkolaSodrai.sds,
-                "sdn": SkolaSodrai.sdn,
+                "asm_kodas": skola_sodrai.asm_kodas,
+                "vardas": skola_sodrai.vardas,
+                "pavarde": skola_sodrai.pavarde,
+                "gim_data": skola_sodrai.gim_data,
+                "sds": skola_sodrai.sds,
+                "sdn": skola_sodrai.sdn,
                 "klaida": '"asm_kodas" turi būti sudarytas iš 11 skaičių',
                 "laikas": datetime.now(),
             }
@@ -75,21 +77,19 @@ class SkolasodraiService(Service):
             raise Fault(faultcode="Client", faultstring="Invalid input data", detail=details)
 
         # Mock logic: debtor if asm_kodas is even
-        debtor = (SkolaSodrai.asm_kodas or 0) % 2 == 0
+        debtor = (skola_sodrai.asm_kodas or 0) % 2 == 0
 
-        return SkolasodraiResponse(
-            asmuo=[
-                Asmuo(
-                    asm_kodas=SkolaSodrai.asm_kodas,
-                    vardas=SkolaSodrai.vardas,
-                    pavarde=SkolaSodrai.pavarde,
-                    gim_data=SkolaSodrai.gim_data,
-                    sds=SkolaSodrai.sds,
-                    sdn=SkolaSodrai.sdn,
-                    pavadinimas="",
-                    skola=Skola(rezultatas="Taip" if debtor else "Ne"),
-                ),
-            ],
+        return SkolaSodraiResponse(
+            asmuo=Asmuo(
+                asm_kodas=skola_sodrai.asm_kodas,
+                vardas=skola_sodrai.vardas,
+                pavarde=skola_sodrai.pavarde,
+                gim_data=skola_sodrai.gim_data,
+                sds=skola_sodrai.sds,
+                sdn=skola_sodrai.sdn,
+                pavadinimas="",
+                skola=Skola(rezultatas="Taip" if debtor else "Ne"),
+            ),
             laikas=datetime.now(),
         )
 
