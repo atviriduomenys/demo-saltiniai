@@ -1,4 +1,8 @@
+import base64
+import binascii
+from collections.abc import Callable
 from datetime import datetime
+from functools import wraps
 
 from django.views.decorators.csrf import csrf_exempt
 from spyne import Application, ComplexModel, Date, DateTime, Fault, Integer, String, XmlAttribute, rpc
@@ -50,6 +54,34 @@ class SkolasodraiError(ComplexModel):
     laikas = XmlAttribute(DateTime)
 
 
+def fake_auth_decorator(func: Callable) -> Callable:
+    """This decorator imitates HTTP Basic Auth. Only allows username: test_user password: test_password"""
+
+    @wraps(func)
+    def wrapper(self, skola_sodrai: Skolasodrai, *args, **kwargs) -> Callable:
+        auth = self.transport.headers.get("authorization", "")
+        if isinstance(auth, list):
+            auth = auth[0]
+
+        if not auth or not auth.lower().startswith("basic"):
+            raise Fault(faultcode="Client", faultstring="Invalid auth header")
+
+        try:
+            auth_decoded = base64.b64decode(auth.split()[1]).decode("utf-8")
+            username, password = auth_decoded.split(":", 1)
+        except (TypeError, ValueError, UnicodeDecodeError, binascii.Error, IndexError) as exception:
+            raise Fault(
+                faultcode="Client", faultstring="Invalid basic header. Credentials not correctly base64 encoded"
+            ) from exception
+
+        if username == "test_user" and password == "test_password":
+            return func(self, skola_sodrai, *args, **kwargs)
+
+        raise Fault(faultcode="Client", faultstring="Invalid credentials")
+
+    return wrapper
+
+
 class SkolasodraiService(Service):
     __service_name__ = "skolasodrai"
     __port_types__ = ("skolasodraiPortType",)
@@ -61,6 +93,7 @@ class SkolasodraiService(Service):
         _port_type="skolasodraiPortType",
         _body_style="bare",
     )
+    @fake_auth_decorator
     def SkolaSodrai(self, skola_sodrai: Skolasodrai) -> SkolaSodraiResponse:  # noqa: N802
         if skola_sodrai.asm_kodas and len(str(skola_sodrai.asm_kodas)) != 11:
             details = {
@@ -94,7 +127,7 @@ class SkolasodraiService(Service):
         )
 
 
-skola_sodrai = csrf_exempt(
+skola_sodrai_view = csrf_exempt(
     DjangoApplication(
         Application(
             [SkolasodraiService],
