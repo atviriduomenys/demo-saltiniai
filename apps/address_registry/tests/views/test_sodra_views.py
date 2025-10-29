@@ -9,8 +9,8 @@ def client() -> Client:
 
 
 def _get_element_text(root_node, element_name: str, namespaces: dict) -> str | None:
-    el = root_node.find(element_name, namespaces=namespaces)
-    return el.text if el is not None else None
+    element = root_node.find(element_name, namespaces=namespaces)
+    return element.text if element is not None else None
 
 
 @pytest.mark.parametrize(("asm_kodas", "skola"), [(11111111111, "Ne"), (11111111112, "Taip")])

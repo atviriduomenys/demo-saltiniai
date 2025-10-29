@@ -55,7 +55,7 @@ class SkolasodraiError(ComplexModel):
 
 
 def fake_auth_decorator(func: Callable) -> Callable:
-    """This decorator imitates HTTP Basic Auth. Only allows username: test_user password: test_password"""
+    """This decorator imitates HTTP Basic Auth. Only allows username: test_user, password: test_password"""
 
     @wraps(func)
     def wrapper(self, skola_sodrai: Skolasodrai, *args, **kwargs) -> Callable:
