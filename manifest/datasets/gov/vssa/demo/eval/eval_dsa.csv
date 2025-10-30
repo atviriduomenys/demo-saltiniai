@@ -2,7 +2,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,datasets/gov/vssa/demo/eval,,,,,,,,,,,,,Example endpoints testing JSON reading from XML and XML reading from JSON
 ,,,,,,prefix,ns0,,,,,cities_application_tns,,
 ,,,,,,prefix,ns1,,,,,apps.address_registry.schema_nested,,
-,,json_with_xml_resource,,,,dask/json,,http://saltiniai:8000/api/v1/cities/json/cities,,,,,,
+,,json_with_xml_resource,,,,dask/json,,http://test-data.data.gov.lt/api/v1/cities/json/cities,,,,,,
 ,,,,SettlementJsonWithXml,,,id,.,,,open,,,
 ,,,,,id,integer,,id,,,,,,
 ,,,,,registered,date,,registered,,,,,,
@@ -14,7 +14,7 @@ id,dataset,resource,base,model,property,type,ref,source,prepare,level,access,uri
 ,,,,,id,integer,,id,,,,,,
 ,,,,,title,string,,title,,,,,,
 ,,,,,,,,,,,,,,
-,,xml_with_json_resource,,,,dask/xml,,http://saltiniai:8000/api/v1/cities/xml/cities,,,,,,
+,,xml_with_json_resource,,,,dask/xml,,http://test-data.data.gov.lt/api/v1/cities/xml/cities,,,,,,
 ,,,,SettlementXmlWithJson,,,id,ns0:citiesResponse/ns0:citiesResult/ns1:SettlementTitleNestedModel,,,open,,,
 ,,,,,id,integer,,ns1:id,,,,,,
 ,,,,,title_lt,string,,ns1:title_lt,,,,,,
