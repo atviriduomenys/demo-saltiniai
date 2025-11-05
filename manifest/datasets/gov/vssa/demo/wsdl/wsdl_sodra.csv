@@ -1,6 +1,6 @@
 id,dataset,resource,base,model,property,type,ref,source,prepare,level,status,visibility,access,uri,eli,title,description
 ,datasets/gov/vssa/demo/sodratest,,,,,dataset,,,,,,,,,,,
-,,sodra_wsdl,,,,wsdl,,http://test-data.data.gov.lt/api/v1/sodra/skola-sodrai/?wsdl,,,,,,,,,
+,,sodra_wsdl,,,,wsdl,,https://test-data.data.gov.lt/api/v1/sodra/skola-sodrai/?wsdl,,,,,,,,,
 ,,sodra_soap,,,,soap,,skolasodrai.skolasodraiPortType.skolasodraiPortType.SkolaSodrai,wsdl(sodra_wsdl),,,,,,,,
 ,,,,,,param,asm_kodas,asm_kodas,input(),,,,,,,,
 ,,,,,,param,vardas,vardas,input(),,,,,,,,
