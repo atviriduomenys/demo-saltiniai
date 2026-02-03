@@ -85,7 +85,7 @@ class Get(Service):
     def GetDataMultiple(self, input: Input) -> list[dict]:  # noqa: N802, A002
         decoded_params = _get_decoded_params(input.Parameters)
 
-        if not self.fake_authenticate(input.ActionType, input.Signature):
+        if not _fake_authenticate(input.ActionType, input.Signature):
             return [
                 {
                     "ResponseCode": "-1",

@@ -153,12 +153,10 @@ class GenerateTestData(APIView):
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all().prefetch_related("documentauthor")
     serializer_class = DocumentSerializer
-    permission_classes = [
-        IsAuthenticated,
-    ]
+    permission_classes = []
 
 
 class ContinentCountrySettlementViewSet(viewsets.ModelViewSet):
     queryset = Continent.objects.all().prefetch_related("countries__settlements")
     serializer_class = ContinentCountrySettlementSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
