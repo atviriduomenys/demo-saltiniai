@@ -1,0 +1,112 @@
+<RESULT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.yournamespace.com">
+	<Result xmlns="http://NIRVAR.WebService/2012/">1</Result>
+        <full xmlns="http://NIRVAR.WebService/2012/">
+            <title1>NEVEIKSNIŲ IR RIBOTAI VEIKSNIŲ ASMENŲ REGISTRO IŠRAŠAS</title1>
+            <title2>IŠSAMI INFORMACIJA</title2>
+            <printeddate>2025-04-16 14:23:53</printeddate>
+            <searchparameter1>33200000000</searchparameter1>
+            <searchparameter2>VARDAS</searchparameter2>
+            <searchparameter3>PAVARDĖ</searchparameter3>
+            <DocList>
+                <BE_FULL_doclist>
+                    <Actor>
+                        <TypeID>1</TypeID>
+                        <Code>33200000000</Code>
+                        <FirstName>VARDAS</FirstName>
+                        <LastName>PAVARDĖ</LastName>
+                        <Gender>M</Gender>
+                        <BirthDate xsi:nil="true"/>
+                        <DeathDate xsi:nil="true"/>
+                        <CityDistrict/>
+                        <StreetVillage/>
+                        <Country/>
+                        <DeclaredCityDistrict/>
+                        <DeclaredStreetVillage/>
+                        <DeclaredCountry/>
+                        <MarriageDate xsi:nil="true"/>
+                        <Limit_Area_List>
+                            <BE_XSLT_DS_LIMIT_AREA>
+                                <Name>Kilnojamojo turto naudojimas, valdymas ir disponavimas juo (kilnojamojo turto pirkimo–pardavimo, nuomos, dovanojimo, įkeitimo sandoriai ir kt.)</Name>
+                            </BE_XSLT_DS_LIMIT_AREA>
+                            <BE_XSLT_DS_LIMIT_AREA>
+                                <Name>Nekilnojamojo turto naudojimas, valdymas ir disponavimas juo (nekilnojamojo turto pirkimo–pardavimo, nuomos, dovanojimo, įkeitimo sandoriai ar kt.)</Name>
+                            </BE_XSLT_DS_LIMIT_AREA>
+                            <BE_XSLT_DS_LIMIT_AREA>
+                                <Name>Šeimos santykių sritis  (asmens gebėjimas įgyvendinti tėvų valdžią – auklėti ir prižiūrėti savo vaikus, įvaikinti ir kt.) </Name>
+                            </BE_XSLT_DS_LIMIT_AREA>
+                        </Limit_Area_List>
+                    </Actor>
+                    <CarerList>
+                        <Carer>
+                            <ID>00000</ID>
+                            <RefId xsi:nil="true"/>
+                            <TypeID>1</TypeID>
+                            <Code>38000000000</Code>
+                            <FirstName>VARDAS1</FirstName>
+                            <LastName>PAVARDĖ1</LastName>
+                            <FullName>VARDAS1 PAVARDĖ1</FullName>
+                            <BirthDate>1980-00-00T00:00:00</BirthDate>
+                            <DeclaredCityDistrict>Klaipėdos m. sav.</DeclaredCityDistrict>
+                            <NarCode>6000000000</NarCode>
+                            <DeathDate xsi:nil="true"/>
+                            <IsDead/>
+                            <CompTypeId xsi:nil="true"/>
+                            <CourtName>Testinis teismas</CourtName>
+                            <DecisionDate>2018-00-00T00:00:00</DecisionDate>
+                            <DecisionInureDate>2018-00-00T00:00:00</DecisionInureDate>
+                            <UrgentExecution>false</UrgentExecution>
+                            <CivilCaseNo>A-00</CivilCaseNo>
+                            <ProcessCaseNo>A-00-0</ProcessCaseNo>
+                            <RegistrationDate>2018-00-00T07:54:16</RegistrationDate>
+                            <Limit_Area_List>
+                                <BE_XSLT_DS_LIMIT_AREA>
+                                    <NAR_code>6201600000</NAR_code>
+                                    <Name>Kilnojamojo turto naudojimas, valdymas ir disponavimas juo (kilnojamojo turto pirkimo–pardavimo, nuomos, dovanojimo, įkeitimo sandoriai ir kt.)</Name>
+                                </BE_XSLT_DS_LIMIT_AREA>
+                                <BE_XSLT_DS_LIMIT_AREA>
+                                    <NAR_code>6201600000</NAR_code>
+                                    <Name>Nekilnojamojo turto naudojimas, valdymas ir disponavimas juo (nekilnojamojo turto pirkimo–pardavimo, nuomos, dovanojimo, įkeitimo sandoriai ar kt.)</Name>
+                                </BE_XSLT_DS_LIMIT_AREA>
+                                <BE_XSLT_DS_LIMIT_AREA>
+                                    <NAR_code>6200000000</NAR_code>
+                                    <Name>Šeimos santykių sritis  (asmens gebėjimas įgyvendinti tėvų valdžią – auklėti ir prižiūrėti savo vaikus, įvaikinti ir kt.) </Name>
+                                </BE_XSLT_DS_LIMIT_AREA>
+                            </Limit_Area_List>
+                            <HasRemovedAreas xsi:nil="true"/>
+                            <HasAddedAreas xsi:nil="true"/>
+                        </Carer>
+                    </CarerList>
+                    <DocumentKindID>401</DocumentKindID>
+                    <IdentCode>6666000000</IdentCode>
+                    <CourtName>Testinis teismas</CourtName>
+                    <JugdeFirstName/>
+                    <JugdeLastName/>
+                    <DecisionDate>2018-00-00T00:00:00</DecisionDate>
+                    <DecisionInureDate>2018-00-00T00:00:00</DecisionInureDate>
+                    <UrgentExecution>false</UrgentExecution>
+                    <CivilCaseNo>A-00</CivilCaseNo>
+                    <ProcessCaseNo>A-00-0</ProcessCaseNo>
+                    <FirstCourtName/>
+                    <FirstJugdeFirstName/>
+                    <FirstJugdeLastName/>
+                    <FirstDecisionDate xsi:nil="true"/>
+                    <FirstDecisionInureDate xsi:nil="true"/>
+                    <FirstUrgentExecution>false</FirstUrgentExecution>
+                    <FirstCivilCaseNo/>
+                    <FirstProcessCaseNo/>
+                    <Comments/>
+                    <ProprestrictionKindID xsi:nil="true"/>
+                    <InCapabilityKindID>201</InCapabilityKindID>
+                    <InCapabilityKind>Neveiksniu</InCapabilityKind>
+                    <RegistrationDate>2018-00-00T07:54:17</RegistrationDate>
+                    <FirstRegDate>2018-00-00T07:54:17</FirstRegDate>
+                    <TypeId>101</TypeId>
+                </BE_FULL_doclist>
+            </DocList>
+            <PreorderList/>
+            <ContractList/>
+        </full>
+	<NaudotojoId xmlns="http://NIRVAR.WebService/2012/">0</NaudotojoId>
+	<ProdId xmlns="http://NIRVAR.WebService/2012/">0000</ProdId>
+	<PaieskZurnId xmlns="http://NIRVAR.WebService/2012/">0</PaieskZurnId>
+</RESULT>

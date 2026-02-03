@@ -1,0 +1,97 @@
+<RESULT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.yournamespace.com">
+	<Result xmlns="http://NIRVAR.WebService/2012/">1</Result>
+		<full xmlns="http://NIRVAR.WebService/2012/">
+		<title1>NEVEIKSNIŲ IR RIBOTAI VEIKSNIŲ ASMENŲ REGISTRO IŠRAŠAS</title1>
+		<title2>IŠSAMI INFORMACIJA</title2>
+		<printeddate>2025-06-11 15:46:58</printeddate>
+		<searchparameter1>61600000000</searchparameter1>
+		<searchparameter2>VARDAS</searchparameter2>
+		<searchparameter3>PAVARDĖ</searchparameter3>
+		<DocList>
+			<BE_FULL_doclist>
+				<Actor>
+					<TypeID>1</TypeID>
+					<Code>61600000000</Code>
+					<FirstName>VARDAS</FirstName>
+					<LastName>PAVARDĖ</LastName>
+					<Gender>F</Gender>
+					<BirthDate xsi:nil="true"/>
+					<DeathDate xsi:nil="true"/>
+					<CityDistrict/>
+					<StreetVillage/>
+					<Country/>
+					<DeclaredCityDistrict>Vilnius</DeclaredCityDistrict>
+					<DeclaredStreetVillage>Gatvė g. 0-0</DeclaredStreetVillage>
+					<DeclaredCountry/>
+					<MarriageDate xsi:nil="true"/>
+					<Limit_Area_List>
+						<BE_XSLT_DS_LIMIT_AREA>
+							<Name>Sprendimas priimtas iki 2015 m. gruodžio 31 d., sritys nenustatytos</Name>
+						</BE_XSLT_DS_LIMIT_AREA>
+					</Limit_Area_List>
+				</Actor>
+				<CarerList>
+					<Carer>
+						<ID>00000</ID>
+						<RefId xsi:nil="true"/>
+						<TypeID>3</TypeID>
+						<FirstName>VARDAS1</FirstName>
+						<LastName>PAVARDĖ1</LastName>
+						<FullName>VARDAS1 PAVARDĖ1</FullName>
+						<Country>Lietuva</Country>
+						<BirthDate>1998-00-00T00:00:00</BirthDate>
+						<NarCode>6000000000</NarCode>
+						<DeathDate xsi:nil="true"/>
+						<IsDead/>
+						<CompTypeId xsi:nil="true"/>
+						<CourtName>Kauno miesto apylinkės teismas</CourtName>
+						<DecisionDate>2023-00-00T00:00:00</DecisionDate>
+						<DecisionInureDate>2023-00-00T00:00:00</DecisionInureDate>
+						<UrgentExecution>false</UrgentExecution>
+						<CivilCaseNo>AA-00000000-00</CivilCaseNo>
+						<ProcessCaseNo>BB-00000000-00</ProcessCaseNo>
+						<RegistrationDate>2023-00-00T14:56:44</RegistrationDate>
+						<Limit_Area_List>
+							<BE_XSLT_DS_LIMIT_AREA>
+								<NAR_code>6201600000</NAR_code>
+								<Name>Sprendimas priimtas iki 2015 m. gruodžio 31 d., sritys nenustatytos</Name>
+							</BE_XSLT_DS_LIMIT_AREA>
+						</Limit_Area_List>
+						<HasRemovedAreas xsi:nil="true"/>
+						<HasAddedAreas xsi:nil="true"/>
+					</Carer>
+				</CarerList>
+				<DocumentKindID>401</DocumentKindID>
+				<IdentCode>6666000000</IdentCode>
+				<CourtName>Kauno miesto apylinkės teismas</CourtName>
+				<JugdeFirstName/>
+				<JugdeLastName/>
+				<DecisionDate>2023-00-00T00:00:00</DecisionDate>
+				<DecisionInureDate>2023-00-00T00:00:00</DecisionInureDate>
+				<UrgentExecution>false</UrgentExecution>
+				<CivilCaseNo>A-00000000-00</CivilCaseNo>
+				<ProcessCaseNo>A-00000000-01</ProcessCaseNo>
+				<FirstCourtName/>
+				<FirstJugdeFirstName/>
+				<FirstJugdeLastName/>
+				<FirstDecisionDate xsi:nil="true"/>
+				<FirstDecisionInureDate xsi:nil="true"/>
+				<FirstUrgentExecution>false</FirstUrgentExecution>
+				<FirstCivilCaseNo/>
+				<FirstProcessCaseNo/>
+				<Comments/>
+				<ProprestrictionKindID xsi:nil="true"/>
+				<InCapabilityKindID>201</InCapabilityKindID>
+				<InCapabilityKind>Neveiksniu</InCapabilityKind>
+				<RegistrationDate>2023-00-00T14:56:43</RegistrationDate>
+				<FirstRegDate>2023-00-00T14:56:43</FirstRegDate>
+				<TypeId>101</TypeId>
+			</BE_FULL_doclist>
+		</DocList>
+		<PreorderList/>
+		<ContractList/>
+	</full>
+	<NaudotojoId xmlns="http://NIRVAR.WebService/2012/">0</NaudotojoId>
+	<ProdId xmlns="http://NIRVAR.WebService/2012/">0000</ProdId>
+	<PaieskZurnId xmlns="http://NIRVAR.WebService/2012/">0</PaieskZurnId>
+</RESULT>
