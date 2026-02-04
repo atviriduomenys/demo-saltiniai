@@ -11,6 +11,7 @@ from spyne.service import Service
 
 from apps.address_registry.helpers import construct_countries_xml, construct_country_xml
 from apps.address_registry.models import Country
+from apps.address_registry.rc_examples.helpers import get_xml_file_path
 
 
 class Actions(Enum):
@@ -85,7 +86,7 @@ class Get(Service):
     def GetDataMultiple(self, input: Input) -> list[dict]:  # noqa: N802, A002
         decoded_params = _get_decoded_params(input.Parameters)
 
-        if not self.fake_authenticate(input.ActionType, input.Signature):
+        if not _fake_authenticate(input.ActionType, input.Signature):
             return [
                 {
                     "ResponseCode": "-1",
@@ -108,12 +109,52 @@ class Get(Service):
         return response_data
 
 
+class RcTestingService(Service):
+    __service_name__ = "RcTesting"
+    __port_types__ = ("RcPort",)
+
+    @rpc(Mandatory(Input), _returns=Output, _port_type="RcPort")
+    def rc_test(self, input: Input) -> dict:  # noqa: N802, A002
+
+        xml_file_path = get_xml_file_path(input.ActionType, input.CallerCode)
+        error_message = f"XML example file number {input.CallerCode} for action_type={input.ActionType} does not exist"
+
+        if not xml_file_path:
+            return {
+                "ResponseCode": "-1",
+                "ResponseData": base64.b64encode(error_message.encode("utf-8")).decode("utf-8"),
+                "DecodedParameters": "",
+            }
+
+        with open(xml_file_path, "rb") as f:
+            xml_bytes = f.read()
+
+        return {
+            "ResponseCode": "1",
+            "ResponseData": base64.b64encode(xml_bytes).decode("utf-8"),
+            "DecodedParameters": ""
+        }
+
+
 get_data = csrf_exempt(
     DjangoApplication(
         Application(
             [Get],
             tns="Get",
             name="Get",
+            in_protocol=Soap11(validator="lxml"),
+            out_protocol=Soap11(validator="soft"),
+        )
+    )
+)
+
+
+rc_testing_view = csrf_exempt(
+    DjangoApplication(
+        Application(
+            [RcTestingService],
+            tns="rc_testing_view",
+            name="rc_testing_view",
             in_protocol=Soap11(validator="lxml"),
             out_protocol=Soap11(validator="soft"),
         )

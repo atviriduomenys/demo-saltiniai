@@ -1,0 +1,102 @@
+<RESULT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.yournamespace.com">
+	<Result xmlns="http://NIRVAR.WebService/2012/">1</Result>
+	<full xmlns="http://NIRVAR.WebService/2012/">
+		<title1>NEVEIKSNIŲ IR RIBOTAI VEIKSNIŲ ASMENŲ REGISTRO IŠRAŠAS</title1>
+		<title2>IŠSAMI INFORMACIJA</title2>
+		<printeddate>2025-06-11 15:41:50</printeddate>
+		<searchparameter1>45900000000</searchparameter1>
+		<searchparameter2>VARDAS</searchparameter2>
+		<searchparameter3>PAVARDĖ</searchparameter3>
+		<DocList>
+			<BE_FULL_doclist>
+				<Actor>
+					<TypeID>1</TypeID>
+					<Code>45900000000</Code>
+					<FirstName>VARDAS</FirstName>
+					<LastName>PAVARDĖ</LastName>
+					<Gender>F</Gender>
+					<BirthDate xsi:nil="true"/>
+					<DeathDate xsi:nil="true"/>
+					<CityDistrict/>
+					<StreetVillage/>
+					<Country/>
+					<DeclaredCityDistrict>Kaunas</DeclaredCityDistrict>
+					<DeclaredStreetVillage>Gatvė g. 0-0</DeclaredStreetVillage>
+					<DeclaredCountry>Lietuva</DeclaredCountry>
+					<MarriageDate xsi:nil="true"/>
+					<Limit_Area_List>
+						<BE_XSLT_DS_LIMIT_AREA>
+							<Name>Asmeninių pajamų ir išlaidų tvarkymas</Name>
+						</BE_XSLT_DS_LIMIT_AREA>
+					</Limit_Area_List>
+				</Actor>
+				<CarerList>
+					<Carer>
+						<ID>00000</ID>
+						<RefId>11111</RefId>
+						<TypeID>1</TypeID>
+						<Code>46700000000</Code>
+						<FirstName>VARDAS1</FirstName>
+						<LastName>PAVARDĖ1</LastName>
+						<FullName>VARDAS1 PAVARDĖ1</FullName>
+						<BirthDate>1967-00-00T00:00:00</BirthDate>
+						<DeclaredCityDistrict>Vilniaus r. sav.</DeclaredCityDistrict>
+						<DeclaredStreetVillage>AAA sen., AAA k., Gatvė g. 0</DeclaredStreetVillage>
+						<DeclaredCountry>Lietuva</DeclaredCountry>
+						<NarCode>6000000000</NarCode>
+						<DeathDate xsi:nil="true"/>
+						<IsDead/>
+						<CompTypeId xsi:nil="true"/>
+						<CourtName>Kauno miesto apylinkės teismas</CourtName>
+						<DecisionDate>2023-00-00T00:00:00</DecisionDate>
+						<DecisionInureDate>2023-00-00T00:00:00</DecisionInureDate>
+						<UrgentExecution>false</UrgentExecution>
+						<CivilCaseNo>A-00000000-00</CivilCaseNo>
+						<ProcessCaseNo>A-00000000-01</ProcessCaseNo>
+						<RegistrationDate>2023-00-00T14:20:00</RegistrationDate>
+						<Limit_Area_List>
+							<BE_XSLT_DS_LIMIT_AREA>
+								<NAR_code>6201700000</NAR_code>
+								<Name>Asmeninių pajamų ir išlaidų tvarkymas</Name>
+							</BE_XSLT_DS_LIMIT_AREA>
+						</Limit_Area_List>
+						<HasRemovedAreas xsi:nil="true"/>
+						<HasAddedAreas xsi:nil="true"/>
+					</Carer>
+				</CarerList>
+				<DocumentKindID>407</DocumentKindID>
+				<IdentCode>1111111111</IdentCode>
+				<CourtName>Kauno miesto apylinkės teismas</CourtName>
+				<JugdeFirstName/>
+				<JugdeLastName/>
+				<DecisionDate>2023-00-00T06:33:23</DecisionDate>
+				<DecisionInureDate>2023-00-00T06:33:23</DecisionInureDate>
+				<UrgentExecution>false</UrgentExecution>
+				<CivilCaseNo>AA-00000000-00</CivilCaseNo>
+				<ProcessCaseNo>BB-00000000-00</ProcessCaseNo>
+				<FirstCourtName>Kauno miesto apylinkės teismas</FirstCourtName>
+				<FirstJugdeFirstName>VARDAS2</FirstJugdeFirstName>
+				<FirstJugdeLastName>PAVARDĖ2</FirstJugdeLastName>
+				<FirstDecisionDate>2023-00-00T00:00:00</FirstDecisionDate>
+				<FirstDecisionInureDate>2023-00-00T00:00:00</FirstDecisionInureDate>
+				<FirstUrgentExecution>false</FirstUrgentExecution>
+				<FirstCivilCaseNo>A-00000000-00</FirstCivilCaseNo>
+				<FirstProcessCaseNo>A-00000000-01</FirstProcessCaseNo>
+				<Comments>Pranešimas  </Comments>
+				<ProprestrictionKindID xsi:nil="true"/>
+				<InCapabilityKindID>201</InCapabilityKindID>
+				<InCapabilityKind>Neveiksniu</InCapabilityKind>
+				<DataDefinaBase>Asmens duomenų pasikeitimas</DataDefinaBase>
+				<DataDefineComment>Lietuvos Respublikos gyventojų registre pakeisti asmens duomenys, duomenų keitimo data 2023-00-00</DataDefineComment>
+				<RegistrationDate>2023-00-00T06:33:23</RegistrationDate>
+				<FirstRegDate>2023-00-00T12:35:46</FirstRegDate>
+				<TypeId>101</TypeId>
+			</BE_FULL_doclist>
+		</DocList>
+		<PreorderList/>
+		<ContractList/>
+	</full>
+	<NaudotojoId xmlns="http://NIRVAR.WebService/2012/">0</NaudotojoId>
+	<ProdId xmlns="http://NIRVAR.WebService/2012/">0000</ProdId>
+	<PaieskZurnId xmlns="http://NIRVAR.WebService/2012/">0</PaieskZurnId>
+</RESULT>
