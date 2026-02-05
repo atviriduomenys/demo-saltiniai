@@ -9,6 +9,13 @@ XML_PATH_MAP = {
         "3": examples_path_root / "nirvar/example3.xml",
         "4": examples_path_root / "nirvar/example4.xml",
         "5": examples_path_root / "nirvar/example5.xml",
+    },
+    "249": {
+        "1": examples_path_root / "jadis/example1.xml",
+        "2": examples_path_root / "jadis/example2.xml",
+        "3": examples_path_root / "jadis/example3.xml",
+        "4": examples_path_root / "jadis/example4.xml",
+        "5": examples_path_root / "jadis/example5.xml",
     }
 }
 

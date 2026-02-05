@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Israsas_Response xmlns="http://www.registrucentras.lt/jadis/webservices/schemas">
+	<busena>
+		<kodas>SEKMINGAS</kodas>
+	</busena>
+	<suformavimo_kriterijai>
+		<israso_tipas>AKTUALUS</israso_tipas>
+		<suformavimo_laikas>2025-03-20T12:47:19</suformavimo_laikas>
+	</suformavimo_kriterijai>
+	<israsas>
+		<juridinis_asmuo>
+			<obj_id>000000</obj_id>
+			<ja_kodas>000000000</ja_kodas>
+			<ja_pavadinimas>Uždaroji akcinė bendrovė "Imone"</ja_pavadinimas>
+			<ja_buveines_adresas>Miestas, Gatve g. 0, LT-00000</ja_buveines_adresas>
+		</juridinis_asmuo>
+		<dalyviu_sarasai>
+			<dalyviu_sarasas>
+				<istatiniai_kapitalai>
+					<istatinis_kapitalas>
+						<istatinis_kapitalo_dydis>
+							<verte>4000000</verte>
+							<valiuta>LTL</valiuta>
+						</istatinis_kapitalo_dydis>
+						<registravimo_data>2009-12-17</registravimo_data>
+						<akciju_klases>
+							<akciju_klase>
+								<akciju_klases_tipas>
+									<kodas>110</kodas>
+									<pavadinimas>Vardinių paprastųjų akcijų skaičius</pavadinimas>
+								</akciju_klases_tipas>
+								<skaicius>4000000</skaicius>
+								<nominali_verte>
+									<verte>1</verte>
+									<valiuta>LTL</valiuta>
+								</nominali_verte>
+								<nominalios_vertes_atributas>
+									<kodas>111</kodas>
+									<pavadinimas>Vard. paprast. akcijos nominali vertė</pavadinimas>
+								</nominalios_vertes_atributas>
+							</akciju_klase>
+						</akciju_klases>
+						<istatinio_kapitalo_atributas>
+							<kodas>202</kodas>
+							<pavadinimas>Įstatinio kapitalo dydis</pavadinimas>
+						</istatinio_kapitalo_atributas>
+					</istatinis_kapitalas>
+				</istatiniai_kapitalai>
+				<akcininkai>
+					<akcininkas>
+						<amn_id>11111111</amn_id>
+						<tipas>JURIDINIS</tipas>
+						<kodas>111111111</kodas>
+						<pavadinimas>Uždaroji akcinė bendrovė "Imone1"</pavadinimas>
+						<taikomos_sankcijos>false</taikomos_sankcijos>
+						<data_nuo>2009-11-16</data_nuo>
+						<akcijos>
+							<akciju_grupe>
+								<data_nuo>2009-12-17</data_nuo>
+								<akciju_klases>
+									<akciju_klase>
+										<akciju_klases_tipas>
+											<kodas>110</kodas>
+											<pavadinimas>Vardinių paprastųjų akcijų skaičius</pavadinimas>
+										</akciju_klases_tipas>
+										<skaicius>4000000</skaicius>
+										<nominali_verte>
+											<verte>1</verte>
+											<valiuta>LTL</valiuta>
+										</nominali_verte>
+										<nominalios_vertes_atributas>
+											<kodas>111</kodas>
+											<pavadinimas>Vard. paprast. akcijos nominali vertė</pavadinimas>
+										</nominalios_vertes_atributas>
+									</akciju_klase>
+								</akciju_klases>
+							</akciju_grupe>
+						</akcijos>
+					</akcininkas>
+				</akcininkai>
+			</dalyviu_sarasas>
+		</dalyviu_sarasai>
+		<versijos_data>2015-03-31</versijos_data>
+	</israsas>
+</Israsas_Response>
