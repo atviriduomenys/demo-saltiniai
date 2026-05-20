@@ -1,0 +1,11 @@
+client_id: 81f3c616-37ea-4195-bc5d-6904911e4dc6
+client_name: default
+client_secret_hash: 
+  pbkdf2$sha256$838824$TR_hDTbf-T6sqTQQs6JoTw$eLndF-fmxRnDGiQRRnKMdr6UtYMeD8Gp9SnkcWEVX94
+scopes:
+  - uapi:/:getall
+  - uapi:/:getone
+  - uapi:/:search
+  - uapi:/:changes
+backends: {}
+contract_scopes: {}

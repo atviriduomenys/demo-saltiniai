@@ -1,5 +1,6 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.address_registry.views.rc_broker_views import get_data, rc_testing_view
 from apps.address_registry.views.sodra_views import skola_sodrai_view
@@ -54,4 +55,5 @@ urlpatterns = [
     re_path(r"^sodra/skola-sodrai/", skola_sodrai_view),
     path("<str:app_label>/<str:model_name>/generate/", GenerateTestData.as_view()),
     path("", include(router.urls)),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair')
 ]
