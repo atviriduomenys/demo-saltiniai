@@ -1,0 +1,17 @@
+client_id: a713440a-3b77-48b0-affe-e8d61394e4f3
+client_name: test
+client_secret_hash:
+  pbkdf2$sha256$411698$DJAK_rKHcSWU9VppsoVmOg$REQTR0FfFSs8wbtv70ZxnpuWs4yPfh7z1E5igSSAyP4
+scopes:
+  - uapi:/datasets/gov/vssa/demo/:getone
+  - uapi:/datasets/gov/vssa/demo/:getall
+  - uapi:/datasets/gov/vssa/demo/:search
+  - uapi:/datasets/gov/vssa/demo/:changes
+backends: {}
+contract_scopes:
+  test.adoc:
+    - uapi:/datasets/gov/vssa/demo/:getone
+    - uapi:/datasets/gov/vssa/demo/:getall
+    - uapi:/datasets/gov/vssa/demo/:search
+    - uapi:/datasets/gov/vssa/demo/:changes
+

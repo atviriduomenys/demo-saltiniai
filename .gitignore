@@ -62,3 +62,4 @@ conf/settings_local.py
 
 # Environment variables file
 .env
+/spinta/.python_history

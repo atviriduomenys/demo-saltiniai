@@ -1,0 +1,8 @@
+client_id: c268b7f0-a625-4e49-8eeb-0e2dd9862eac
+client_name: admin
+client_secret_hash: 
+  pbkdf2$sha256$411698$DJAK_rKHcSWU9VppsoVmOg$REQTR0FfFSs8wbtv70ZxnpuWs4yPfh7z1E5igSSAyP4
+scopes:
+  - uapi:/:auth_clients
+backends: {}
+contract_scopes: {}

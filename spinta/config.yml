@@ -1,0 +1,53 @@
+config_path: /app/spinta_config/config
+env: production
+access: protected
+check_contract_scopes: true
+
+keymaps:
+  default:
+    type: redis
+    dsn: redis://redis:6379/1
+
+accesslog:
+  type: file
+  file: stdout
+
+backends:
+  default:
+    type: memory
+
+manifest: default
+manifests:
+  default:
+    type: inline
+    manifest: []
+    backend: default
+    keymap: default
+    mode: external
+    sync:
+      - eval_dsa
+      - simple_json
+      - sql_sdsa
+      - wsdl_rctest
+      - wsdl_sdsa
+      - wsdl_sodra
+  eval_dsa:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/eval/eval_dsa.csv
+  simple_json:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/json/simple_json.csv
+  sql_sdsa:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/sql/sql_sdsa.csv
+  wsdl_rctest:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/wsdl/wsdl_rctest.csv
+  wsdl_sdsa:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/wsdl/wsdl_sdsa.csv
+  wsdl_sodra:
+    type: csv
+    path: /app/manifest/datasets/gov/vssa/demo/wsdl/wsdl_sodra.csv
+
+

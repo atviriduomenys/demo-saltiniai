@@ -1,7 +1,9 @@
 volumes:
     data:
+    keymap:
 services:
-    postgres:
+
+    saltiniai-database:
         image: postgis/postgis:16-3.4
         environment:
             POSTGRES_USER: django
@@ -10,6 +12,7 @@ services:
             - "data:/var/lib/postgresql/data"
         ports:
             - "9432:5432"
+
     django:
         build:
             context: .
@@ -26,8 +29,33 @@ services:
             DB_NAME: django
             DB_USER: django
             DB_PASSWORD: django
-            DB_HOST: postgres
+            DB_HOST: saltiniai-database
             DB_PORT: 5432
             RUN_MODE: "DEVELOPMENT"
         depends_on:
-            - postgres
+            - saltiniai-database
+
+    redis:
+      image: valkey/valkey:9
+      restart: always
+      command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+      ports:
+        - "6379:6379"
+      volumes:
+        - keymap:/data
+
+    spinta:
+      image: vssadevops/spinta:latest
+      environment:
+        - HOME=/app/spinta_config
+        - SPINTA_CONFIG=/app/spinta_config/config.yml
+        - SPINTA_AUTO_UPGRADE=true
+        - _TYPER_STANDARD_TRACEBACK=1
+      ports:
+        - "8080:8000"
+      volumes:
+        - ./spinta:/app/spinta_config
+        - ./manifest:/app/manifest
+      depends_on:
+        - saltiniai-database
+        - django
